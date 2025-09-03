@@ -3,7 +3,12 @@
     "engine": {
         "debug": true,
         "platform": "web-mobile",
-        "customLayers": [],
+        "customLayers": [
+            {
+                "name": "12",
+                "bit": 0
+            }
+        ],
         "sortingLayers": [],
         "macros": {},
         "builtinAssets": [
