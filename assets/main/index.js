@@ -2018,15 +2018,14 @@ System.register("chunks:///_virtual/FreeCamera.ts", ['./rollupPluginModLoBabelHe
   };
 });
 
-System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ClickMoveBinding.ts', './InteractionState.ts', './PointerIds.ts', './RotateYByKeys.ts', './TowerWindowScroller.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Node, input, Input, tween, Vec3, MeshRenderer, geometry, Mat4, Component, PhysicsSystem, ClickMoveBinding, InteractionState, MOUSE_ID, RotateYByKeys, TowerVirtualScroller;
+System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ClickMoveBinding.ts', './InteractionState.ts', './PointerIds.ts', './RotateYByKeys.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Node, input, Input, geometry, PhysicsSystem, Vec3, tween, Component, ClickMoveBinding, InteractionState, MOUSE_ID, RotateYByKeys, TowerLayoutController, TowerScrollController;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
       _inheritsLoose = module.inheritsLoose;
       _initializerDefineProperty = module.initializerDefineProperty;
       _assertThisInitialized = module.assertThisInitialized;
-      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
       _asyncToGenerator = module.asyncToGenerator;
       _regeneratorRuntime = module.regeneratorRuntime;
     }, function (module) {
@@ -2036,13 +2035,11 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
       Node = module.Node;
       input = module.input;
       Input = module.Input;
-      tween = module.tween;
-      Vec3 = module.Vec3;
-      MeshRenderer = module.MeshRenderer;
       geometry = module.geometry;
-      Mat4 = module.Mat4;
-      Component = module.Component;
       PhysicsSystem = module.PhysicsSystem;
+      Vec3 = module.Vec3;
+      tween = module.tween;
+      Component = module.Component;
     }, function (module) {
       ClickMoveBinding = module.ClickMoveBinding;
     }, function (module) {
@@ -2052,67 +2049,43 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
     }, function (module) {
       RotateYByKeys = module.RotateYByKeys;
     }, function (module) {
-      TowerVirtualScroller = module.TowerVirtualScroller;
+      TowerLayoutController = module.TowerLayoutController;
+    }, function (module) {
+      TowerScrollController = module.TowerScrollController;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19;
       cclegacy._RF.push({}, "4bd86blOoRLpq75wEwnh3v5", "GlobalClickManager", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
       function yawFromVecXZ(v) {
         return Math.atan2(v.x, v.z) * 180 / Math.PI;
       }
-      function shortestAngleDeg(delta) {
-        return (delta + 540) % 360 - 180;
+      function wrapDeg(delta) {
+        var d = (delta + 180) % 360;
+        if (d < 0) d += 360;
+        return d - 180;
       }
       var State = /*#__PURE__*/function (State) {
         State["Idle"] = "Idle";
         State["Aligning"] = "Aligning";
         State["SlideOut"] = "SlideOut";
-        State["RotateModelOpen"] = "RotateModelOpen";
         State["LockedOut"] = "LockedOut";
-        State["RotateModelClose"] = "RotateModelClose";
         State["SlideIn"] = "SlideIn";
         return State;
       }(State || {});
       var GlobalClickManager3D = exports('GlobalClickManager3D', (_dec = ccclass('GlobalClickManager3D'), _dec2 = property({
-        type: Camera,
-        tooltip: 'Камера сцены для рейкастов.'
+        type: Camera
       }), _dec3 = property({
-        type: Node,
-        tooltip: 'Корень башни (торта), который вращаем вокруг Y.'
+        type: Node
       }), _dec4 = property({
-        type: RotateYByKeys,
-        tooltip: 'Скрипт ручного поворота башни.'
+        type: RotateYByKeys
       }), _dec5 = property({
-        type: TowerVirtualScroller,
-        tooltip: 'Скроллер башни: используется scrollToNodeLevel(model, opts).'
+        type: TowerLayoutController
       }), _dec6 = property({
-        tooltip: 'Длительность автоповорота башни (сек).'
+        type: TowerScrollController
       }), _dec7 = property({
-        tooltip: 'Длительность центрирования по уровню (сек).'
-      }), _dec8 = property({
-        tooltip: 'Длительность движения кусочка (сек).'
-      }), _dec9 = property({
-        tooltip: 'Длительность поворота МОДЕЛИ (сек).'
-      }), _dec10 = property({
-        tooltip: 'Easing поворота модели.'
-      }), _dec11 = property({
-        tooltip: 'БАЗОВОЕ расстояние выезда в МИРЕ (по XZ к камере). Используется как модуль.'
-      }), _dec12 = property({
-        tooltip: 'От какой оси масштаба зависеть: X/Y/Z'
-      }), _dec13 = property({
-        tooltip: 'Влияние масштаба: 1=полное (×scaleAxis), 0.5=частичное, 0=выкл.'
-      }), _dec14 = property({
-        tooltip: 'Мин. модуль выезда после масштаба. 0 — без минимума.'
-      }), _dec15 = property({
-        tooltip: 'Макс. модуль выезда после масштаба. 0 — без потолка.'
-      }), _dec16 = property({
-        tooltip: 'Лицевая ось кусочка: true — использовать -X вместо +X (для автоповорота башни).'
-      }), _dec17 = property({
-        tooltip: 'Угол модели по Y при ОТКРЫТИИ (градусы).'
-      }), _dec18 = property({
-        tooltip: 'Угол модели по Y при ЗАКРЫТИИ (если нужен форс, иначе стартовый).'
+        tooltip: 'Мировое расстояние выезда (ед.), одинаковое для всех уровней'
       }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(GlobalClickManager3D, _Component);
         function GlobalClickManager3D() {
@@ -2121,52 +2094,51 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          // ------------------------------------------------------------
-          // [References]
-          // ------------------------------------------------------------
+          // refs
           _initializerDefineProperty(_this, "sceneCamera", _descriptor, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "rotatingRoot", _descriptor2, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "rotator", _descriptor3, _assertThisInitialized(_this));
-          // Вертикальный скроллер уровней
-          _initializerDefineProperty(_this, "heightScroll", _descriptor4, _assertThisInitialized(_this));
-          // ------------------------------------------------------------
-          // [Timings]
-          // ------------------------------------------------------------
-          _initializerDefineProperty(_this, "rotateDuration", _descriptor5, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "layoutCtrl", _descriptor4, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "scrollCtrl", _descriptor5, _assertThisInitialized(_this));
+          // timings
           _initializerDefineProperty(_this, "heightCenterDuration", _descriptor6, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "slideDuration", _descriptor7, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "modelRotateDuration", _descriptor8, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "modelRotateEasing", _descriptor9, _assertThisInitialized(_this));
-          // ------------------------------------------------------------
-          // [Slide distance (base) + scale influence]
-          // ------------------------------------------------------------
-          _initializerDefineProperty(_this, "baseSlideDistance", _descriptor10, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "scaleAxis", _descriptor11, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "scaleInfluence", _descriptor12, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "minAbsDistance", _descriptor13, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "maxAbsDistance", _descriptor14, _assertThisInitialized(_this));
-          // ------------------------------------------------------------
-          // [Facing & model/rim]
-          // ------------------------------------------------------------
+          _initializerDefineProperty(_this, "heightNudgeDuration", _descriptor7, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "rotateDuration", _descriptor8, _assertThisInitialized(_this));
+          // bias per level group
+          _initializerDefineProperty(_this, "levelBiasTop", _descriptor9, _assertThisInitialized(_this));
+          // уровни 0..1
+          _initializerDefineProperty(_this, "levelBiasRest", _descriptor10, _assertThisInitialized(_this));
+          // уровни ≥2
+          // slide (компенсируем скейл)
+          _initializerDefineProperty(_this, "openWorldDistance", _descriptor11, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "slideEasing", _descriptor12, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "slideDuration", _descriptor13, _assertThisInitialized(_this));
+          // поворот корня по слоту
+          _initializerDefineProperty(_this, "faceYawLocalDeg", _descriptor14, _assertThisInitialized(_this));
+          // 0=лицо по +Z, 90=по +X
           _initializerDefineProperty(_this, "invertPieceAxis", _descriptor15, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "openYawDeg", _descriptor16, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "closeYawDeg", _descriptor17, _assertThisInitialized(_this));
-          // ------------------------------------------------------------
-          // [State]
-          // ------------------------------------------------------------
+          // +180°
+          _initializerDefineProperty(_this, "slotPhaseShift", _descriptor16, _assertThisInitialized(_this));
+          // поворот МОДЕЛИ при открытии/закрытии
+          _initializerDefineProperty(_this, "modelRotateDeg", _descriptor17, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "modelRotateDuration", _descriptor18, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "modelRotateEasing", _descriptor19, _assertThisInitialized(_this));
+          // state
           _this.fsm = State.Idle;
+          _this.clickedLevel = 0;
+          _this.clickedSlot = 0;
           _this.currentPiece = null;
           _this.currentBinding = null;
-          _this.currentModel = null;
-          _this.currentRim = null;
-          _this.lastDistanceUsed = 0;
-          _this._lastScaleUsed = 1;
+          _this.baseLocalX = new Map();
+          // для target
+          _this.modelBaseYaw = new Map();
+          // для model
+          _this.rotateTween = null;
+          _this.modelTween = null;
           return _this;
         }
         var _proto = GlobalClickManager3D.prototype;
-        // ------------------------------------------------------------
-        // [Input wiring]
-        // ------------------------------------------------------------
+        // input
         _proto.onEnable = function onEnable() {
           input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
           input.on(Input.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
@@ -2176,20 +2148,13 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
           input.off(Input.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
           input.off(Input.EventType.MOUSE_UP, this.onMouseUp, this);
-        }
-
-        // ------------------------------------------------------------
-        // [Input handlers]
-        // ------------------------------------------------------------
-        ;
-
+        };
         _proto.onTouchEnd = function onTouchEnd(e) {
           if (!this.sceneCamera) return;
           if (this.fsm === State.LockedOut) {
-            void this.slideInAndUnlock();
+            void this.closeAndInsert();
             return;
           }
-          if (this.fsm !== State.Idle) return;
           if (InteractionState.inGesture && InteractionState.source === 'mouse') return;
           var _InteractionState$try = InteractionState.tryEndGesture(e.getID(), 'touch'),
             ended = _InteractionState$try.ended,
@@ -2204,160 +2169,213 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         _proto.onMouseUp = function onMouseUp(e) {
           if (!this.sceneCamera || e.getButton() !== 0) return;
           if (this.fsm === State.LockedOut) {
-            void this.slideInAndUnlock();
+            void this.closeAndInsert();
             return;
           }
-          if (this.fsm !== State.Idle) return;
           if (InteractionState.inGesture && InteractionState.source === 'touch') return;
           var res = InteractionState.tryEndGesture(MOUSE_ID, 'mouse');
-          var wasDrag = res.wasDragged || InteractionState.consumeRecentDrag();
-          if (wasDrag) return;
+          if (res.wasDragged || InteractionState.consumeRecentDrag()) return;
           var p = e.getLocation();
           void this.onClick(p.x, p.y);
         }
 
-        // ------------------------------------------------------------
-        // [Click flow]
-        // ------------------------------------------------------------
+        // click flow
         ;
 
         _proto.onClick = /*#__PURE__*/
         function () {
-          var _onClick = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(x, y) {
-            var _binding$model,
-              _rim,
-              _this2 = this,
-              _this$currentBinding$,
-              _this$currentBinding,
-              _this$currentBinding$2,
-              _this$currentBinding2;
-            var ray, hit, n, binding, rotP, levelP, absDist, moveNode, anchorNode, dirXZ, finalWorldPos;
-            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-              while (1) switch (_context2.prev = _context2.next) {
+          var _onClick = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(x, y) {
+            var _picked$binding$model;
+            var picked, model, L, S, bias, step, targetHeight, resolved, owner, b;
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
                 case 0:
-                  if (!(!this.sceneCamera || !this.rotatingRoot)) {
-                    _context2.next = 2;
+                  if (!(!this.sceneCamera || !this.rotatingRoot || !this.layoutCtrl || !this.scrollCtrl)) {
+                    _context.next = 2;
                     break;
                   }
-                  return _context2.abrupt("return");
+                  return _context.abrupt("return");
                 case 2:
-                  // рейкаст
-                  ray = new geometry.Ray();
-                  this.sceneCamera.screenPointToRay(x, y, ray);
-                  if (PhysicsSystem.instance.raycastClosest(ray)) {
-                    _context2.next = 6;
-                    break;
-                  }
-                  return _context2.abrupt("return");
-                case 6:
-                  // биндинг вверх по иерархии
-                  hit = PhysicsSystem.instance.raycastClosestResult;
-                  n = hit.collider.node;
-                  binding = null;
-                  while (n && !binding) {
-                    binding = n.getComponent(ClickMoveBinding) || null;
-                    if (!binding) n = n.parent;
-                  }
-                  if (!(!binding || !n)) {
-                    _context2.next = 12;
-                    break;
-                  }
-                  return _context2.abrupt("return");
-                case 12:
                   if (!(this.fsm !== State.Idle)) {
-                    _context2.next = 14;
+                    _context.next = 4;
                     break;
                   }
-                  return _context2.abrupt("return");
-                case 14:
-                  this.currentPiece = n;
-                  this.currentBinding = binding;
-
-                  // модель строго из ClickMoveBinding.model (если пусто — кусок)
-                  this.currentModel = (_binding$model = binding.model) != null ? _binding$model : n;
-                  this.currentRim = (_rim = binding.rim) != null ? _rim : null;
-                  if (this.currentRim) this.currentRim.active = false;
+                  return _context.abrupt("return");
+                case 4:
+                  picked = this.raycastToBindingNode(x, y);
+                  if (picked) {
+                    _context.next = 7;
+                    break;
+                  }
+                  return _context.abrupt("return");
+                case 7:
+                  model = (_picked$binding$model = picked.binding.model) != null ? _picked$binding$model : picked.n;
+                  L = this.layoutCtrl.getLevelForAny(model);
+                  S = this.layoutCtrl.getSlotForAny(model);
+                  if (!(L == null || S == null)) {
+                    _context.next = 12;
+                    break;
+                  }
+                  return _context.abrupt("return");
+                case 12:
+                  this.clickedLevel = L;
+                  this.clickedSlot = S;
                   this.lockControls();
-
-                  // === 1) Aligning: поворот башни + центрирование ПО УРОВНЮ модели ===
                   this.fsm = State.Aligning;
-                  rotP = this.rotateTowerToFaceCamera(n);
-                  levelP = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-                    var _this2$currentModel, ok, _this2$currentModel$n, _this2$currentModel2;
-                    return _regeneratorRuntime().wrap(function _callee$(_context) {
-                      while (1) switch (_context.prev = _context.next) {
-                        case 0:
-                          if (!_this2.heightScroll) {
-                            _context.next = 5;
-                            break;
-                          }
-                          _context.next = 3;
-                          return _this2.heightScroll.scrollToNodeOrAncestorLevelSafe((_this2$currentModel = _this2.currentModel) != null ? _this2$currentModel : n, {
-                            duration: _this2.heightCenterDuration,
-                            easing: 'quadOut',
-                            clamp: true
-                          });
-                        case 3:
-                          ok = _context.sent;
-                          if (!ok) {
-                            // eslint-disable-next-line no-console
-                            console.warn('[GCM3D] Не удалось определить уровень для модели/родителей:', (_this2$currentModel$n = (_this2$currentModel2 = _this2.currentModel) == null ? void 0 : _this2$currentModel2.name) != null ? _this2$currentModel$n : n.name);
-                          }
-                        case 5:
-                        case "end":
-                          return _context.stop();
-                      }
-                    }, _callee);
-                  }))();
-                  _context2.next = 25;
-                  return Promise.all([rotP, levelP]);
-                case 25:
-                  // === 2) RimOn + SlideOut (К камере по XZ; дистанция со скейлом) ===
-                  this.fsm = State.SlideOut;
-                  if (this.currentRim) this.currentRim.active = true;
-                  this.currentBinding.ensureCaptured();
-                  absDist = this.computeAbsDistanceForPiece(n, Math.abs(this.baseSlideDistance));
-                  this.lastDistanceUsed = absDist; // к камере
-                  moveNode = this.getMoveNodeForBinding(this.currentBinding, n);
-                  anchorNode = this.currentModel || n;
-                  dirXZ = this.computeDirToCameraXZ(anchorNode);
-                  finalWorldPos = this.computeFinalPosForAnchorAlong(moveNode, anchorNode, dirXZ, this.lastDistanceUsed);
-                  (_this$currentBinding$ = (_this$currentBinding = this.currentBinding).logWorld) == null || _this$currentBinding$.call(_this$currentBinding, 'SlideOut START (towards camera on XZ)');
-                  _context2.next = 37;
-                  return this.tweenWorldPositionTo(moveNode, finalWorldPos, this.slideDuration);
-                case 37:
-                  (_this$currentBinding$2 = (_this$currentBinding2 = this.currentBinding).logWorld) == null || _this$currentBinding$2.call(_this$currentBinding2, 'SlideOut END');
 
-                  // === 3) RotateModelOpen ===
-                  this.fsm = State.RotateModelOpen;
-                  if (!this.currentModel) {
-                    _context2.next = 42;
-                    break;
-                  }
-                  _context2.next = 42;
-                  return this.rotateModelTo(this.currentModel, this.openYawDeg, this.modelRotateDuration, this.modelRotateEasing);
-                case 42:
-                  // === 4) LockedOut ===
+                  // 1) высота (с биасом)
+                  bias = L <= 1 ? this.levelBiasTop : this.levelBiasRest;
+                  step = this.layoutCtrl.getLevelStep();
+                  targetHeight = (L + bias) * step;
+                  _context.next = 21;
+                  return this.scrollCtrl.scrollToHeightWithNudgeAsync(targetHeight, this.heightCenterDuration, this.heightNudgeDuration, 'quadOut', true);
+                case 21:
+                  _context.next = 23;
+                  return this.rotateRootToBringSlotToCamera(this.clickedSlot);
+                case 23:
+                  // 3) берём актуальный видимый (на случай рециклинга)
+                  resolved = this.layoutCtrl.findNodeByLevelSlot(this.clickedLevel, this.clickedSlot);
+                  owner = resolved != null ? resolved : picked.n;
+                  b = owner.getComponent(ClickMoveBinding) || owner.getComponentInChildren(ClickMoveBinding) || picked.binding;
+                  this.currentPiece = owner;
+                  this.currentBinding = b;
+
+                  // 4) выезд (мировое расстояние одинаковое) + поворот модели на 90°
+                  _context.next = 30;
+                  return this.slideOutWithScaleComp();
+                case 30:
+                  _context.next = 32;
+                  return this.rotateModelOpen();
+                case 32:
                   this.fsm = State.LockedOut;
-                case 43:
+                case 33:
                 case "end":
-                  return _context2.stop();
+                  return _context.stop();
               }
-            }, _callee2, this);
+            }, _callee, this);
           }));
           function onClick(_x, _x2) {
             return _onClick.apply(this, arguments);
           }
           return onClick;
-        }() // ------------------------------------------------------------
-        // [SlideIn flow]
-        // ------------------------------------------------------------
+        }();
+        _proto.raycastToBindingNode = function raycastToBindingNode(sx, sy) {
+          var ray = new geometry.Ray();
+          this.sceneCamera.screenPointToRay(sx, sy, ray);
+          if (!PhysicsSystem.instance.raycastClosest(ray)) return null;
+          var n = PhysicsSystem.instance.raycastClosestResult.collider.node;
+          var binding = null;
+          while (n && !binding) {
+            binding = n.getComponent(ClickMoveBinding) || null;
+            if (!binding) n = n.parent;
+          }
+          return n && binding ? {
+            n: n,
+            binding: binding
+          } : null;
+        }
+
+        // ==== поворот корня по слоту ====
         ;
 
-        _proto.slideInAndUnlock = /*#__PURE__*/
+        _proto.rotateRootToBringSlotToCamera = function rotateRootToBringSlotToCamera(slotIndex) {
+          var _this2 = this;
+          return new Promise(function (resolve) {
+            var _this2$rotator;
+            if (!_this2.rotatingRoot || !_this2.sceneCamera || !_this2.layoutCtrl) {
+              resolve();
+              return;
+            }
+
+            // yaw камеры относительно корня
+            var root = _this2.rotatingRoot;
+            var rootPos = root.worldPosition;
+            var camPos = _this2.sceneCamera.node.worldPosition;
+            var toCam = new Vec3(camPos.x - rootPos.x, 0, camPos.z - rootPos.z);
+            if (toCam.length() < 1e-4) {
+              resolve();
+              return;
+            }
+            toCam.normalize();
+            var camYaw = yawFromVecXZ(toCam);
+            var stepDeg = _this2.layoutCtrl.spawn.angleStep;
+            var per = Math.max(1, _this2.layoutCtrl.spawn.objectsPerLevel);
+            var sShift = ((slotIndex + _this2.slotPhaseShift) % per + per) % per;
+            var faceLocal = _this2.faceYawLocalDeg + (_this2.invertPieceAxis ? 180 : 0);
+            var targetRootYaw = camYaw - (sShift * stepDeg + faceLocal);
+
+            // нормализация старта и короткой дельты
+            var e0 = root.eulerAngles;
+            var startYaw = (e0.y % 360 + 360) % 360;
+            var delta = wrapDeg(targetRootYaw - startYaw);
+            if (Math.abs(delta) < 0.05 || _this2.rotateDuration <= 0) {
+              root.setRotationFromEuler(e0.x, startYaw + delta, e0.z);
+              resolve();
+              return;
+            }
+            (_this2$rotator = _this2.rotator) == null || _this2$rotator.stopInertia();
+            if (_this2.rotateTween) {
+              _this2.rotateTween.stop();
+              _this2.rotateTween = null;
+            }
+            var drv = {
+              t: 0
+            };
+            _this2.rotateTween = tween(drv).to(_this2.rotateDuration, {
+              t: 1
+            }, {
+              easing: 'quadOut',
+              onUpdate: function onUpdate() {
+                var y = startYaw + delta * drv.t;
+                root.setRotationFromEuler(e0.x, y, e0.z);
+              }
+            }).call(function () {
+              _this2.rotateTween = null;
+              resolve();
+            }).start();
+          });
+        }
+
+        // ==== выезд с компенсацией скейла ====
+        ;
+
+        _proto.slideOutWithScaleComp = /*#__PURE__*/
         function () {
-          var _slideInAndUnlock = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-            var _this$currentBinding$3, _this$currentBinding3, _this$currentBinding$4, _this$currentBinding4;
+          var _slideOutWithScaleComp = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
+            var _this$currentBinding$, _parent$worldScale$x;
+            var target, parent, sx, localDx, baseX, toX;
+            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+              while (1) switch (_context2.prev = _context2.next) {
+                case 0:
+                  if (!(!this.currentPiece || !this.currentBinding)) {
+                    _context2.next = 2;
+                    break;
+                  }
+                  return _context2.abrupt("return");
+                case 2:
+                  target = (_this$currentBinding$ = this.currentBinding.target) != null ? _this$currentBinding$ : this.currentPiece; // мир.смещение = openWorldDistance → локальное ΔX = world / scaleX(parentToWorld)
+                  parent = target.parent;
+                  sx = (_parent$worldScale$x = parent == null ? void 0 : parent.worldScale.x) != null ? _parent$worldScale$x : 1; // у нас скейл равномерен → x=y=z
+                  localDx = this.openWorldDistance / Math.max(1e-6, sx);
+                  if (!this.baseLocalX.has(target)) this.baseLocalX.set(target, target.position.x);
+                  baseX = this.baseLocalX.get(target);
+                  toX = baseX + localDx;
+                  _context2.next = 11;
+                  return this.tweenLocalX(target, toX, this.slideDuration, this.slideEasing);
+                case 11:
+                case "end":
+                  return _context2.stop();
+              }
+            }, _callee2, this);
+          }));
+          function slideOutWithScaleComp() {
+            return _slideOutWithScaleComp.apply(this, arguments);
+          }
+          return slideOutWithScaleComp;
+        }();
+        _proto.closeAndInsert = /*#__PURE__*/function () {
+          var _closeAndInsert = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+            var _this$currentBinding$2, _this$baseLocalX$get, target, baseX;
             return _regeneratorRuntime().wrap(function _callee3$(_context3) {
               while (1) switch (_context3.prev = _context3.next) {
                 case 0:
@@ -2367,107 +2385,58 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   }
                   return _context3.abrupt("return");
                 case 2:
-                  if (this.currentBinding) {
-                    _context3.next = 6;
+                  this.fsm = State.SlideIn;
+
+                  // 1) вернуть модель
+                  _context3.next = 5;
+                  return this.rotateModelClose();
+                case 5:
+                  if (!(this.currentPiece && this.currentBinding)) {
+                    _context3.next = 10;
                     break;
                   }
+                  target = (_this$currentBinding$2 = this.currentBinding.target) != null ? _this$currentBinding$2 : this.currentPiece;
+                  baseX = (_this$baseLocalX$get = this.baseLocalX.get(target)) != null ? _this$baseLocalX$get : target.position.x;
+                  _context3.next = 10;
+                  return this.tweenLocalX(target, baseX, this.slideDuration, this.slideEasing);
+                case 10:
                   this.unlockControls();
-                  this.resetCycle();
-                  return _context3.abrupt("return");
-                case 6:
-                  this.fsm = State.RotateModelClose;
-                  _context3.next = 9;
-                  return this.currentBinding.rotateModelToStart(this.modelRotateDuration, this.modelRotateEasing);
-                case 9:
-                  this.fsm = State.SlideIn;
-                  (_this$currentBinding$3 = (_this$currentBinding3 = this.currentBinding).logWorld) == null || _this$currentBinding$3.call(_this$currentBinding3, 'SlideIn START');
-                  this.currentBinding.moveIn(this.slideDuration);
-                  _context3.next = 14;
-                  return this.delayByTween(this.node, this.slideDuration);
-                case 14:
-                  (_this$currentBinding$4 = (_this$currentBinding4 = this.currentBinding).logWorld) == null || _this$currentBinding$4.call(_this$currentBinding4, 'SlideIn END');
-                  if (this.currentRim) this.currentRim.active = false;
-                  this.unlockControls();
-                  this.resetCycle();
+                  this.currentPiece = null;
+                  this.currentBinding = null;
                   this.fsm = State.Idle;
-                case 19:
+                case 14:
                 case "end":
                   return _context3.stop();
               }
             }, _callee3, this);
           }));
-          function slideInAndUnlock() {
-            return _slideInAndUnlock.apply(this, arguments);
+          function closeAndInsert() {
+            return _closeAndInsert.apply(this, arguments);
           }
-          return slideInAndUnlock;
+          return closeAndInsert;
         }();
-        _proto.resetCycle = function resetCycle() {
-          this.currentPiece = null;
-          this.currentBinding = null;
-          this.currentModel = null;
-          this.currentRim = null;
-          this.lastDistanceUsed = 0;
-        }
-
-        // ------------------------------------------------------------
-        // [Lock / Unlock]
-        // ------------------------------------------------------------
-        ;
-
-        _proto.lockControls = function lockControls() {
-          var _this$rotator;
-          (_this$rotator = this.rotator) == null || _this$rotator.stopInertia();
-          if (this.rotator) this.rotator.enabled = false;
-          InteractionState.hardReset == null || InteractionState.hardReset();
-        };
-        _proto.unlockControls = function unlockControls() {
-          if (this.rotator) this.rotator.enabled = true;
-          InteractionState.hardReset == null || InteractionState.hardReset();
-        }
-
-        // ------------------------------------------------------------
-        // [Distance calc with scale]
-        // ------------------------------------------------------------
-        ;
-
-        _proto.computeAbsDistanceForPiece = function computeAbsDistanceForPiece(pieceNode, baseAbsDistance) {
-          var ws = pieceNode.worldScale;
-          var sAxis = this.scaleAxis === 'X' ? Math.abs(ws.x) : this.scaleAxis === 'Y' ? Math.abs(ws.y) : Math.abs(ws.z);
-          if (sAxis < 1e-4) sAxis = Math.max(Math.abs(ws.x), Math.abs(ws.y), Math.abs(ws.z));
-          var inf = Math.max(0, this.scaleInfluence);
-          var scaledAbs = inf >= 0.999 ? baseAbsDistance * sAxis : baseAbsDistance * (1 + inf * (sAxis - 1));
-          if (this.minAbsDistance > 0) scaledAbs = Math.max(scaledAbs, this.minAbsDistance);
-          if (this.maxAbsDistance > 0) scaledAbs = Math.min(scaledAbs, this.maxAbsDistance);
-          if (scaledAbs < 1e-4) scaledAbs = baseAbsDistance;
-          this._lastScaleUsed = sAxis;
-          return Math.abs(scaledAbs);
-        }
-
-        // ------------------------------------------------------------
-        // [Rotate model tween]
-        // ------------------------------------------------------------
-        ;
-
-        _proto.rotateModelTo = function rotateModelTo(model, targetYawDeg, duration, easingName) {
+        _proto.tweenLocalX = function tweenLocalX(node, toX, duration, easing) {
           return new Promise(function (resolve) {
-            var e = model.eulerAngles;
-            var startY = e.y;
-            var endY = targetYawDeg;
-            if (Math.abs(endY - startY) < 0.01 || duration <= 0) {
-              model.setRotationFromEuler(e.x, endY, e.z);
+            var startX = node.position.x;
+            if (Math.abs(toX - startX) < 1e-4 || duration <= 0) {
+              var p = node.position.clone();
+              p.x = toX;
+              node.setPosition(p);
               resolve();
               return;
             }
-            var driver = {
+            var start = node.position.clone();
+            var drv = {
               t: 0
             };
-            tween(driver).to(duration, {
+            tween(drv).to(duration, {
               t: 1
             }, {
-              easing: easingName,
+              easing: easing,
               onUpdate: function onUpdate() {
-                var y = startY + (endY - startY) * driver.t;
-                model.setRotationFromEuler(e.x, y, e.z);
+                var p = node.position.clone();
+                p.x = start.x + (toX - start.x) * drv.t;
+                node.setPosition(p);
               }
             }).call(function () {
               return resolve();
@@ -2475,377 +2444,127 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           });
         }
 
-        // ------------------------------------------------------------
-        // [Auto-rotate tower to face camera]
-        // ------------------------------------------------------------
+        // ==== поворот МОДЕЛИ на +90° и обратно ====
         ;
 
-        _proto.rotateTowerToFaceCamera = function rotateTowerToFaceCamera(chunkNode) {
-          var _this3 = this;
-          return new Promise(function (resolve) {
-            var _this3$rotator;
-            if (!_this3.rotatingRoot || !_this3.sceneCamera) {
-              resolve();
-              return;
-            }
-            var root = _this3.rotatingRoot;
-            var baseLocal = _this3.invertPieceAxis ? new Vec3(-1, 0, 0) : new Vec3(1, 0, 0);
-            var worldRot = chunkNode.worldRotation;
-            var outwardWorld = new Vec3();
-            Vec3.transformQuat(outwardWorld, baseLocal, worldRot);
-            outwardWorld.y = 0;
-            if (outwardWorld.length() < 1e-4) {
-              Vec3.transformQuat(outwardWorld, new Vec3(0, 0, -1), worldRot);
-              outwardWorld.y = 0;
-              if (outwardWorld.length() < 1e-4) {
-                resolve();
-                return;
-              }
-            }
-            outwardWorld.normalize();
-            var pieceYaw = yawFromVecXZ(outwardWorld);
-            var rootPos = root.worldPosition;
-            var camPos = _this3.sceneCamera.node.worldPosition;
-            var toCam = new Vec3(camPos.x - rootPos.x, 0, camPos.z - rootPos.z);
-            if (toCam.length() < 1e-4) {
-              resolve();
-              return;
-            }
-            toCam.normalize();
-            var camYaw = yawFromVecXZ(toCam);
-            var deltaYawDeg = shortestAngleDeg(camYaw - pieceYaw);
-            if (Math.abs(deltaYawDeg) < 0.1 || _this3.rotateDuration <= 0) {
-              resolve();
-              return;
-            }
-            (_this3$rotator = _this3.rotator) == null || _this3$rotator.stopInertia();
-            var startEuler = root.eulerAngles;
-            var startYaw = startEuler.y;
-            var endYaw = startYaw + deltaYawDeg;
-            var tmp = {
-              t: 0
-            };
-            tween(tmp).to(_this3.rotateDuration, {
-              t: 1
-            }, {
-              easing: 'quadOut',
-              onUpdate: function onUpdate() {
-                var y = startYaw + (endYaw - startYaw) * tmp.t;
-                root.setRotationFromEuler(startEuler.x, y, startEuler.z);
-              }
-            }).call(function () {
-              return resolve();
-            }).start();
-          });
-        }
-
-        // ------------------------------------------------------------
-        // [AABB utils] (нужны для направления к камере)
-        // ------------------------------------------------------------
-        ;
-
-        _proto.computeWorldAABB = function computeWorldAABB(node) {
-          var renderers = node.getComponentsInChildren(MeshRenderer);
-          if (renderers.length === 0) return null;
-          var acc = null;
-          var tmp = new geometry.AABB();
-          var m = new Mat4();
-          for (var _iterator = _createForOfIteratorHelperLoose(renderers), _step; !(_step = _iterator()).done;) {
-            var r = _step.value;
-            var mb = r.modelBounds;
-            if (!mb) continue;
-            r.node.getWorldMatrix(m);
-            geometry.AABB.transform(tmp, mb, m);
-            if (!acc) {
-              acc = new geometry.AABB(tmp.center.x, tmp.center.y, tmp.center.z, tmp.halfExtents.x, tmp.halfExtents.y, tmp.halfExtents.z);
-            } else {
-              geometry.AABB.merge(acc, acc, tmp);
-            }
-          }
-          return acc;
-        };
-        _proto.getAnchorCenterWorld = function getAnchorCenterWorld(targetNode) {
-          var aabb = this.computeWorldAABB(targetNode);
-          if (aabb) return new Vec3(aabb.center.x, aabb.center.y, aabb.center.z);
-          return targetNode.worldPosition.clone();
-        }
-
-        // ------------------------------------------------------------
-        // [World move helpers for "fixed distance on XZ"]
-        // ------------------------------------------------------------
-        ;
-
-        _proto.getMoveNodeForBinding = function getMoveNodeForBinding(binding, piece) {
-          var anyBinding = binding;
-          return anyBinding.target || piece;
-        };
-        _proto.computeDirToCameraXZ = function computeDirToCameraXZ(anchorNode) {
-          var camPos = this.sceneCamera.node.worldPosition;
-          var anchor = this.getAnchorCenterWorld(anchorNode);
-          var v = new Vec3(camPos.x - anchor.x, 0, camPos.z - anchor.z);
-          if (v.length() < 1e-6) return new Vec3(0, 0, 1);
-          v.normalize();
-          return v;
-        };
-        _proto.computeFinalPosForAnchorAlong = function computeFinalPosForAnchorAlong(moveNode, _anchorNode, dirXZ, distance) {
-          var delta = new Vec3(dirXZ.x * distance, 0, dirXZ.z * distance);
-          var start = moveNode.worldPosition;
-          return new Vec3(start.x + delta.x, start.y + delta.y, start.z + delta.z);
-        };
-        _proto.tweenWorldPositionTo = function tweenWorldPositionTo(node, targetWorld, duration) {
-          return new Promise(function (resolve) {
-            var start = node.worldPosition.clone();
-            var driver = {
-              t: 0
-            };
-            tween(driver).to(duration, {
-              t: 1
-            }, {
-              easing: 'quadOut',
-              onUpdate: function onUpdate() {
-                var p = new Vec3(start.x + (targetWorld.x - start.x) * driver.t, start.y + (targetWorld.y - start.y) * driver.t, start.z + (targetWorld.z - start.z) * driver.t);
-                node.setWorldPosition(p);
-              }
-            }).call(function () {
-              node.setWorldPosition(targetWorld);
-              resolve();
-            }).start();
-          });
-        }
-
-        // ------------------------------------------------------------
-        // [Tween delay helper]
-        // ------------------------------------------------------------
-        ;
-
-        _proto.delayByTween = function delayByTween(target, seconds) {
-          return new Promise(function (resolve) {
-            tween(target).delay(seconds).call(function () {
-              return resolve();
-            }).start();
-          });
-        }
-
-        // === [PUBLIC] Открыть конкретный кусок без клика ===
-        ;
-
-        _proto.openPieceDirect = /*#__PURE__*/
+        _proto.rotateModelOpen = /*#__PURE__*/
         function () {
-          var _openPieceDirect = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(piece) {
-            var _binding$model2,
-              _rim2,
-              _this4 = this,
-              _this$currentBinding$5,
-              _this$currentBinding5,
-              _this$currentBinding$6,
-              _this$currentBinding6;
-            var n, binding, rotP, levelP, absDist, moveNode, anchorNode, dirXZ, finalWorldPos;
+          var _rotateModelOpen = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
+            var model, base;
+            return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+              while (1) switch (_context4.prev = _context4.next) {
+                case 0:
+                  if (this.currentBinding) {
+                    _context4.next = 2;
+                    break;
+                  }
+                  return _context4.abrupt("return");
+                case 2:
+                  model = this.currentBinding.model;
+                  if (model) {
+                    _context4.next = 5;
+                    break;
+                  }
+                  return _context4.abrupt("return");
+                case 5:
+                  if (!this.modelBaseYaw.has(model)) this.modelBaseYaw.set(model, model.eulerAngles.y);
+                  base = this.modelBaseYaw.get(model);
+                  _context4.next = 9;
+                  return this.rotateModelTo(model, base + this.modelRotateDeg, this.modelRotateDuration, this.modelRotateEasing);
+                case 9:
+                case "end":
+                  return _context4.stop();
+              }
+            }, _callee4, this);
+          }));
+          function rotateModelOpen() {
+            return _rotateModelOpen.apply(this, arguments);
+          }
+          return rotateModelOpen;
+        }();
+        _proto.rotateModelClose = /*#__PURE__*/function () {
+          var _rotateModelClose = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
+            var _this$modelBaseYaw$ge;
+            var model, base;
             return _regeneratorRuntime().wrap(function _callee5$(_context5) {
               while (1) switch (_context5.prev = _context5.next) {
                 case 0:
-                  if (!(this.fsm !== State.Idle)) {
+                  if (this.currentBinding) {
                     _context5.next = 2;
                     break;
                   }
-                  return _context5.abrupt("return", false);
+                  return _context5.abrupt("return");
                 case 2:
-                  if (piece) {
-                    _context5.next = 4;
+                  model = this.currentBinding.model;
+                  if (model) {
+                    _context5.next = 5;
                     break;
                   }
-                  return _context5.abrupt("return", false);
-                case 4:
-                  // биндинг
-                  n = piece;
-                  binding = null;
-                  while (n && !binding) {
-                    binding = n.getComponent(ClickMoveBinding) || null;
-                    if (!binding) n = n.parent;
-                  }
-                  if (!(!binding || !n)) {
-                    _context5.next = 9;
-                    break;
-                  }
-                  return _context5.abrupt("return", false);
-                case 9:
-                  this.currentPiece = n;
-                  this.currentBinding = binding;
-                  this.currentModel = (_binding$model2 = binding.model) != null ? _binding$model2 : n;
-                  this.currentRim = (_rim2 = binding.rim) != null ? _rim2 : null;
-                  if (this.currentRim) this.currentRim.active = false;
-                  this.lockControls();
-
-                  // 1) Align (поворот + уровень)
-                  this.fsm = State.Aligning;
-                  rotP = this.rotateTowerToFaceCamera(n);
-                  levelP = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
-                    var _this4$currentModel, ok, _this4$currentModel$n, _this4$currentModel2;
-                    return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                      while (1) switch (_context4.prev = _context4.next) {
-                        case 0:
-                          if (!_this4.heightScroll) {
-                            _context4.next = 5;
-                            break;
-                          }
-                          _context4.next = 3;
-                          return _this4.heightScroll.scrollToNodeOrAncestorLevelSafe((_this4$currentModel = _this4.currentModel) != null ? _this4$currentModel : n, {
-                            duration: _this4.heightCenterDuration,
-                            easing: 'quadOut',
-                            clamp: true
-                          });
-                        case 3:
-                          ok = _context4.sent;
-                          if (!ok) {
-                            // eslint-disable-next-line no-console
-                            console.warn('[GCM3D] Не удалось определить уровень для модели/родителей:', (_this4$currentModel$n = (_this4$currentModel2 = _this4.currentModel) == null ? void 0 : _this4$currentModel2.name) != null ? _this4$currentModel$n : n.name);
-                          }
-                        case 5:
-                        case "end":
-                          return _context4.stop();
-                      }
-                    }, _callee4);
-                  }))();
-                  _context5.next = 20;
-                  return Promise.all([rotP, levelP]);
-                case 20:
-                  // 2) RimOn + SlideOut (к камере)
-                  this.fsm = State.SlideOut;
-                  if (this.currentRim) this.currentRim.active = true;
-                  this.currentBinding.ensureCaptured();
-                  absDist = this.computeAbsDistanceForPiece(n, Math.abs(this.baseSlideDistance));
-                  this.lastDistanceUsed = absDist;
-                  moveNode = this.getMoveNodeForBinding(this.currentBinding, n);
-                  anchorNode = this.currentModel || n;
-                  dirXZ = this.computeDirToCameraXZ(anchorNode);
-                  finalWorldPos = this.computeFinalPosForAnchorAlong(moveNode, anchorNode, dirXZ, this.lastDistanceUsed);
-                  (_this$currentBinding$5 = (_this$currentBinding5 = this.currentBinding).logWorld) == null || _this$currentBinding$5.call(_this$currentBinding5, 'SlideOut START (towards camera on XZ)');
-                  _context5.next = 32;
-                  return this.tweenWorldPositionTo(moveNode, finalWorldPos, this.slideDuration);
-                case 32:
-                  (_this$currentBinding$6 = (_this$currentBinding6 = this.currentBinding).logWorld) == null || _this$currentBinding$6.call(_this$currentBinding6, 'SlideOut END');
-
-                  // 3) RotateModelOpen
-                  this.fsm = State.RotateModelOpen;
-                  if (!this.currentModel) {
-                    _context5.next = 37;
-                    break;
-                  }
-                  _context5.next = 37;
-                  return this.rotateModelTo(this.currentModel, this.openYawDeg, this.modelRotateDuration, this.modelRotateEasing);
-                case 37:
-                  // 4) LockedOut
-                  this.fsm = State.LockedOut;
-                  return _context5.abrupt("return", true);
-                case 39:
+                  return _context5.abrupt("return");
+                case 5:
+                  base = (_this$modelBaseYaw$ge = this.modelBaseYaw.get(model)) != null ? _this$modelBaseYaw$ge : model.eulerAngles.y;
+                  _context5.next = 8;
+                  return this.rotateModelTo(model, base, this.modelRotateDuration, this.modelRotateEasing);
+                case 8:
                 case "end":
                   return _context5.stop();
               }
             }, _callee5, this);
           }));
-          function openPieceDirect(_x3) {
-            return _openPieceDirect.apply(this, arguments);
+          function rotateModelClose() {
+            return _rotateModelClose.apply(this, arguments);
           }
-          return openPieceDirect;
-        }() // === [PUBLIC] Закрыть если выдвинуто → открыть случайный ===
+          return rotateModelClose;
+        }();
+        _proto.rotateModelTo = function rotateModelTo(model, targetYaw, duration, easing) {
+          var _this3 = this;
+          return new Promise(function (resolve) {
+            var e0 = model.eulerAngles;
+            var startYaw = (e0.y % 360 + 360) % 360;
+            var delta = wrapDeg(targetYaw - startYaw);
+            if (Math.abs(delta) < 0.05 || duration <= 0) {
+              model.setRotationFromEuler(e0.x, startYaw + delta, e0.z);
+              resolve();
+              return;
+            }
+            if (_this3.modelTween) {
+              _this3.modelTween.stop();
+              _this3.modelTween = null;
+            }
+            var drv = {
+              t: 0
+            };
+            _this3.modelTween = tween(drv).to(duration, {
+              t: 1
+            }, {
+              easing: easing,
+              onUpdate: function onUpdate() {
+                var y = startYaw + delta * drv.t;
+                model.setRotationFromEuler(e0.x, y, e0.z);
+              }
+            }).call(function () {
+              _this3.modelTween = null;
+              resolve();
+            }).start();
+          });
+        }
+
+        // utils
         ;
 
-        _proto.toggleOrOpenRandom = /*#__PURE__*/
-        function () {
-          var _toggleOrOpenRandom = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(root) {
-            var candidates, pick;
-            return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-              while (1) switch (_context6.prev = _context6.next) {
-                case 0:
-                  if (root) {
-                    _context6.next = 2;
-                    break;
-                  }
-                  return _context6.abrupt("return", false);
-                case 2:
-                  if (!(this.fsm === State.LockedOut)) {
-                    _context6.next = 5;
-                    break;
-                  }
-                  _context6.next = 5;
-                  return this.slideInAndUnlock();
-                case 5:
-                  if (!(this.fsm !== State.Idle)) {
-                    _context6.next = 7;
-                    break;
-                  }
-                  return _context6.abrupt("return", false);
-                case 7:
-                  candidates = root.children.filter(function (c) {
-                    if (!c.activeInHierarchy) return false;
-                    return !!(c.getComponent(ClickMoveBinding) || c.getComponentsInChildren(ClickMoveBinding).length > 0);
-                  });
-                  if (!(candidates.length === 0)) {
-                    _context6.next = 10;
-                    break;
-                  }
-                  return _context6.abrupt("return", false);
-                case 10:
-                  pick = candidates[Math.floor(Math.random() * candidates.length)];
-                  return _context6.abrupt("return", this.openPieceDirect(pick));
-                case 12:
-                case "end":
-                  return _context6.stop();
-              }
-            }, _callee6, this);
-          }));
-          function toggleOrOpenRandom(_x4) {
-            return _toggleOrOpenRandom.apply(this, arguments);
-          }
-          return toggleOrOpenRandom;
-        }();
-        _proto.toggleOrOpen = /*#__PURE__*/function () {
-          var _toggleOrOpen = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7(root) {
-            var candidates, pick;
-            return _regeneratorRuntime().wrap(function _callee7$(_context7) {
-              while (1) switch (_context7.prev = _context7.next) {
-                case 0:
-                  if (root) {
-                    _context7.next = 2;
-                    break;
-                  }
-                  return _context7.abrupt("return", false);
-                case 2:
-                  if (!(this.fsm === State.LockedOut)) {
-                    _context7.next = 5;
-                    break;
-                  }
-                  _context7.next = 5;
-                  return this.slideInAndUnlock();
-                case 5:
-                  if (!(this.fsm !== State.Idle)) {
-                    _context7.next = 7;
-                    break;
-                  }
-                  return _context7.abrupt("return", false);
-                case 7:
-                  candidates = root.children.filter(function (c) {
-                    if (!c.activeInHierarchy) return false;
-                    return !!(c.getComponent(ClickMoveBinding) || c.getComponentsInChildren(ClickMoveBinding).length > 0);
-                  });
-                  if (!(candidates.length === 0)) {
-                    _context7.next = 10;
-                    break;
-                  }
-                  return _context7.abrupt("return", false);
-                case 10:
-                  pick = candidates[2];
-                  return _context7.abrupt("return", this.openPieceDirect(pick));
-                case 12:
-                case "end":
-                  return _context7.stop();
-              }
-            }, _callee7, this);
-          }));
-          function toggleOrOpen(_x5) {
-            return _toggleOrOpen.apply(this, arguments);
-          }
-          return toggleOrOpen;
-        }();
+        _proto.lockControls = function lockControls() {
+          var _this$rotator, _this$scrollCtrl;
+          (_this$rotator = this.rotator) == null || _this$rotator.stopInertia();
+          if (this.rotator) this.rotator.enabled = false;
+          (_this$scrollCtrl = this.scrollCtrl) == null || _this$scrollCtrl.setInputEnabled(true); // пусть колесо/клавиши не мешают, но твин рулит
+          InteractionState.hardReset == null || InteractionState.hardReset();
+        };
+        _proto.unlockControls = function unlockControls() {
+          var _this$scrollCtrl2;
+          if (this.rotator) this.rotator.enabled = true;
+          (_this$scrollCtrl2 = this.scrollCtrl) == null || _this$scrollCtrl2.setInputEnabled(true);
+          InteractionState.hardReset == null || InteractionState.hardReset();
+        };
         return GlobalClickManager3D;
       }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "sceneCamera", [_dec2], {
         configurable: true,
@@ -2868,103 +2587,117 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "heightScroll", [_dec5], {
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "layoutCtrl", [_dec5], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "rotateDuration", [_dec6], {
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "scrollCtrl", [_dec6], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "heightCenterDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.35;
         }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "heightCenterDuration", [_dec7], {
+      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "heightNudgeDuration", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.10;
+        }
+      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "rotateDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.35;
         }
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "slideDuration", [_dec8], {
+      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "levelBiasTop", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 0.25;
+          return -3;
         }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateDuration", [_dec9], {
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "levelBiasRest", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 0.25;
+          return -4;
         }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateEasing", [_dec10], {
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "openWorldDistance", [_dec7], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.6;
+        }
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "slideEasing", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 'quadOut';
         }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "baseSlideDistance", [_dec11], {
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "slideDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 1;
+          return 0.25;
         }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "scaleAxis", [_dec12], {
+      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "faceYawLocalDeg", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 'Y';
+          return 0;
         }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "scaleInfluence", [_dec13], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1.0;
-        }
-      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "minAbsDistance", [_dec14], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.0;
-        }
-      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "maxAbsDistance", [_dec15], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.0;
-        }
-      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "invertPieceAxis", [_dec16], {
+      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "invertPieceAxis", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return false;
         }
-      }), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "openYawDeg", [_dec17], {
+      }), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "slotPhaseShift", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0;
+        }
+      }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateDeg", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 90;
         }
-      }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "closeYawDeg", [_dec18], {
+      }), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 0;
+          return 0.25;
+        }
+      }), _descriptor19 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateEasing", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 'quadOut';
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
@@ -3106,9 +2839,9 @@ System.register("chunks:///_virtual/InteractionState.ts", ['cc'], function (expo
   };
 });
 
-System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './CakeApiExample.ts', './CenterOnTargetAtStart.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './FreeCamera.ts', './GlobalClickManager.ts', './InteractionState.ts', './PieceSpawner.ts', './PointerIds.ts', './RandomOpenButton.ts', './RotateYByKeys.ts', './ScreenShotExample.ts', './StartApp.ts', './TowerWindowScroller.ts', './UIScaleBounce.ts', './VerticalMoveAroundTarget.ts'], function () {
+System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './CakeApiExample.ts', './CenterOnTargetAtStart.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './FreeCamera.ts', './GlobalClickManager.ts', './InteractionState.ts', './PieceSpawner.ts', './PointerIds.ts', './RandomOpenButton.ts', './RotateYByKeys.ts', './ScaleCameraFOV.ts', './ScreenShotExample.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './UIScaleBounce.ts', './VerticalMoveAroundTarget.ts'], function () {
   return {
-    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
   };
 });
@@ -4002,6 +3735,145 @@ System.register("chunks:///_virtual/RotateYByKeys.ts", ['./rollupPluginModLoBabe
   };
 });
 
+System.register("chunks:///_virtual/ScaleCameraFOV.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Camera, view, game, Game, Component, Vec2;
+  return {
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _inheritsLoose = module.inheritsLoose;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _assertThisInitialized = module.assertThisInitialized;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      Camera = module.Camera;
+      view = module.view;
+      game = module.game;
+      Game = module.Game;
+      Component = module.Component;
+      Vec2 = module.Vec2;
+    }],
+    execute: function () {
+      var _dec, _dec2, _dec3, _dec4, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
+      cclegacy._RF.push({}, "8080ccyIBNDNIrJBl23jNo2", "ScaleCameraFOV", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+      var ScaleCameraKeepWidth = exports('ScaleCameraKeepWidth', (_dec = ccclass('ScaleCameraKeepWidth'), _dec2 = property({
+        type: Camera
+      }), _dec3 = property({
+        tooltip: '����������� ���������� (W,H) � ����� ��������� ������'
+      }), _dec4 = property({
+        tooltip: '������������ FOV �� ��������� (� ��������)'
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(ScaleCameraKeepWidth, _Component);
+        function ScaleCameraKeepWidth() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "camera", _descriptor, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "refResolution", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "refVertFOV", _descriptor3, _assertThisInitialized(_this));
+          // (�����������) ��������� ���������� ������� FOV
+          _initializerDefineProperty(_this, "minVertFOV", _descriptor4, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "maxVertFOV", _descriptor5, _assertThisInitialized(_this));
+          _this.apply = function () {
+            var _rect$width, _rect$height;
+            if (!_this.camera) return;
+
+            // ������� ������ ������ ���� ��������������, ���� �������� ������
+            var frame = view.getFrameSize();
+            var rect = _this.camera.rect; // normalized [0..1]
+            var curW = Math.max(1, frame.width * ((_rect$width = rect == null ? void 0 : rect.width) != null ? _rect$width : 1));
+            var curH = Math.max(1, frame.height * ((_rect$height = rect == null ? void 0 : rect.height) != null ? _rect$height : 1));
+            var curAspect = curW / curH;
+
+            // ����������� ������ � ����
+            var refAspect = _this.refResolution.x / _this.refResolution.y;
+            var vRef = _this.deg2rad(_this.refVertFOV);
+
+            // hFOV ���������: tan(h/2) = aspect * tan(v/2)
+            var tanHalfHRef = refAspect * Math.tan(vRef / 2);
+
+            // ������ �������������� FOV ����������:
+            // tan(vCur/2) = tan(hRef/2) / curAspect
+            var tanHalfVcur = tanHalfHRef / curAspect;
+            var vCur = 2 * Math.atan(tanHalfVcur);
+            var vDeg = _this.rad2deg(vCur);
+
+            // ������ �� ������ ������
+            vDeg = Math.min(_this.maxVertFOV, Math.max(_this.minVertFOV, vDeg));
+            _this.camera.fov = vDeg;
+            // �� ������ ������ � ������������� �������
+            _this.camera.rect = {
+              x: 0,
+              y: 0,
+              width: 1,
+              height: 1
+            };
+          };
+          return _this;
+        }
+        var _proto = ScaleCameraKeepWidth.prototype;
+        _proto.onEnable = function onEnable() {
+          this.apply();
+          game.on(Game.EVENT_RESIZE, this.apply, this);
+        };
+        _proto.onDisable = function onDisable() {
+          game.off(Game.EVENT_RESIZE, this.apply, this);
+        };
+        _proto.start = function start() {
+          this.apply();
+        };
+        _proto.deg2rad = function deg2rad(d) {
+          return d * Math.PI / 180;
+        };
+        _proto.rad2deg = function rad2deg(r) {
+          return r * 180 / Math.PI;
+        };
+        return ScaleCameraKeepWidth;
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "camera", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "refResolution", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return new Vec2(1960, 1200);
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "refVertFOV", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 60;
+        }
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "minVertFOV", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 10;
+        }
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "maxVertFOV", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 110;
+        }
+      })), _class2)) || _class));
+      cclegacy._RF.pop();
+    }
+  };
+});
+
 System.register("chunks:///_virtual/ScreenShotExample.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
   var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Sprite, log, find, Node, UITransform, Component, SpriteFrame, view, RenderTexture, director, Director, warn, error;
   return {
@@ -4201,78 +4073,71 @@ System.register("chunks:///_virtual/StartApp.ts", ['./rollupPluginModLoBabelHelp
   };
 });
 
-System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ClickMoveBinding.ts', './ColorLibrary.ts', './InteractionState.ts', './PointerIds.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _initializerDefineProperty, _inheritsLoose, _assertThisInitialized, _createForOfIteratorHelperLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Prefab, Label, input, Input, instantiate, Vec3, tween, KeyCode, Component, ClickMoveBinding, ColorTextureLibrary, InteractionState, MOUSE_ID$1;
+System.register("chunks:///_virtual/TowerScrollController.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './InteractionState.ts', './PointerIds.ts'], function (exports) {
+  var _applyDecoratedDescriptor, _initializerDefineProperty, _inheritsLoose, _assertThisInitialized, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, EventTarget, input, Input, tween, KeyCode, Component, InteractionState, MOUSE_ID$1;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
       _initializerDefineProperty = module.initializerDefineProperty;
       _inheritsLoose = module.inheritsLoose;
       _assertThisInitialized = module.assertThisInitialized;
-      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+      _createClass = module.createClass;
       _asyncToGenerator = module.asyncToGenerator;
       _regeneratorRuntime = module.regeneratorRuntime;
     }, function (module) {
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
-      Prefab = module.Prefab;
-      Label = module.Label;
+      EventTarget = module.EventTarget;
       input = module.input;
       Input = module.Input;
-      instantiate = module.instantiate;
-      Vec3 = module.Vec3;
       tween = module.tween;
       KeyCode = module.KeyCode;
       Component = module.Component;
-    }, function (module) {
-      ClickMoveBinding = module.ClickMoveBinding;
-    }, function (module) {
-      ColorTextureLibrary = module.ColorTextureLibrary;
     }, function (module) {
       InteractionState = module.InteractionState;
     }, function (module) {
       MOUSE_ID$1 = module.MOUSE_ID;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _class4, _class5, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _dec32, _dec33, _dec34, _class7, _class8, _descriptor33, _descriptor34;
-      cclegacy._RF.push({}, "d5a97BCq2NCfJoxNmjFR4k/", "TowerWindowScroller", undefined);
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _dec17, _dec18, _class4, _class5, _descriptor16;
+      cclegacy._RF.push({}, "10ce5Y/EABEKJf4+gRbbg26", "TowerScrollController", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
 
-      // fallback, если нет PointerIds
+      // fallback, ���� ��� PointerIds
       var MOUSE_ID = MOUSE_ID$1;
 
-      /** ------- ГРУППА: Scroll ------- */
+      /** ������ ������� */
       var TVS_Scroll = exports('TVS_Scroll', (_dec = ccclass('TVS_Scroll'), _dec2 = property({
-        tooltip: 'Стартовый offset (ед.)'
+        tooltip: '��������� offset (��.)'
       }), _dec3 = property({
-        tooltip: 'Мин. offset'
+        tooltip: '���. offset'
       }), _dec4 = property({
-        tooltip: 'Макс. offset'
+        tooltip: '����. offset'
       }), _dec5 = property({
-        tooltip: 'Ед. offset на пиксель драга'
+        tooltip: '��. offset �� ������� �����'
       }), _dec6 = property({
-        tooltip: 'Ед. offset на шаг колёсика (120 тиков)'
+        tooltip: '��. offset �� ��� ������� (120 �����)'
       }), _dec7 = property({
-        tooltip: 'Порог пикселей, после которого считаем drag и захватываем жест'
+        tooltip: '����� ��������, ����� �������� ������� drag � ����������� ����'
       }), _dec8 = property({
-        tooltip: 'Включить инерционный доезд'
+        tooltip: '�������� ����������� �����'
       }), _dec9 = property({
-        tooltip: 'Коэф. трения (1/сек): больше — быстрее останавливается'
+        tooltip: '����. ������ (1/���): ������ � ������� ���������������'
       }), _dec10 = property({
-        tooltip: 'Порог остановки (ед./сек)'
+        tooltip: '����� ��������� (��./���)'
       }), _dec11 = property({
-        tooltip: 'Сила «пинка» от колеса (в скорость)'
+        tooltip: '���� ������ �� ������ (� ��������)'
       }), _dec12 = property({
-        tooltip: 'Максимальная скорость инерции/клавиш (ед./сек)'
+        tooltip: '������������ �������� �������/������ (��./���)'
       }), _dec13 = property({
-        tooltip: 'Deadzone для колеса (ед. offset), пока не наберём — скролл не стартует'
+        tooltip: 'Deadzone ��� ������ (��. offset)'
       }), _dec14 = property({
-        tooltip: 'Сброс deadzone, если колёсико молчит (мс)'
+        tooltip: '����� deadzone, ���� ������� ������ (��)'
       }), _dec15 = property({
-        tooltip: 'Ускорение при удержании W/S (ед./сек^2)'
+        tooltip: '��������� ��� ��������� W/S (��./���^2)'
       }), _dec16 = property({
-        tooltip: 'Макс. скорость от W/S (если нужно меньше maxInertiaSpeed)'
+        tooltip: '����. �������� �� W/S'
       }), _dec(_class = (_class2 = function TVS_Scroll() {
         _initializerDefineProperty(this, "startOffset", _descriptor, this);
         _initializerDefineProperty(this, "minOffset", _descriptor2, this);
@@ -4285,10 +4150,10 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
         _initializerDefineProperty(this, "stopVelocity", _descriptor9, this);
         _initializerDefineProperty(this, "wheelKick", _descriptor10, this);
         _initializerDefineProperty(this, "maxInertiaSpeed", _descriptor11, this);
-        // --- Колесо: deadzone ---
+        // ������: deadzone
         _initializerDefineProperty(this, "wheelDeadzoneUnits", _descriptor12, this);
         _initializerDefineProperty(this, "wheelDeadzoneResetMs", _descriptor13, this);
-        // --- Клавиши W/S: профиль разгона ---
+        // ������� W/S
         _initializerDefineProperty(this, "keyAccel", _descriptor14, this);
         _initializerDefineProperty(this, "keyMaxSpeed", _descriptor15, this);
       }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "startOffset", [_dec2], {
@@ -4398,233 +4263,63 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
         }
       })), _class2)) || _class));
 
-      /** ------- ГРУППА: Spawn & Layout ------- */
-      var TVS_SpawnLayout = exports('TVS_SpawnLayout', (_dec17 = ccclass('TVS_SpawnLayout'), _dec18 = property({
-        type: Prefab
-      }), _dec19 = property({
-        tooltip: 'Базовый масштаб геометрии префаба (Node.scale = 1 → это baseScale префаба)'
-      }), _dec20 = property({
-        tooltip: 'Базовая геометрическая высота куска (до масштабов префаба и Node.scale)'
-      }), _dec21 = property({
-        tooltip: 'Целевой экранный масштаб «базового» куска'
-      }), _dec22 = property({
-        tooltip: 'Визуальный зазор между уровнями (в ед.: baseHeight * Node.scale)'
-      }), _dec23 = property({
-        tooltip: 'Якорь Y (локально) — центр окна'
-      }), _dec24 = property({
-        tooltip: 'Интенсивность градиента масштаба (0..1). 0 — одинаковые; 1 — максимум.'
-      }), _dec25 = property({
-        tooltip: 'Коэф. по слоям r: r<1 — вниз мельче; r>1 — вниз крупнее.'
-      }), _dec26 = property({
-        tooltip: 'Включить кламп масштаба каждого куска'
-      }), _dec27 = property({
-        tooltip: 'Минимальный Node.scale'
-      }), _dec28 = property({
-        tooltip: 'Максимальный Node.scale'
-      }), _dec29 = property({
-        tooltip: 'Индекс материала внутри MeshRenderer'
-      }), _dec30 = property({
-        tooltip: 'Фолбэк: число наборов в библиотеке, если она сама не сообщает'
-      }), _dec31 = property({
-        type: Label,
-        tooltip: 'Куда выводить глобальный счётчик пройденных кусочков'
-      }), _dec17(_class4 = (_class5 = function TVS_SpawnLayout() {
-        _initializerDefineProperty(this, "prefab", _descriptor16, this);
-        _initializerDefineProperty(this, "objectsPerLevel", _descriptor17, this);
-        _initializerDefineProperty(this, "visibleLevels", _descriptor18, this);
-        _initializerDefineProperty(this, "angleStep", _descriptor19, this);
-        _initializerDefineProperty(this, "baseScale", _descriptor20, this);
-        _initializerDefineProperty(this, "baseHeight", _descriptor21, this);
-        _initializerDefineProperty(this, "targetVisualScale", _descriptor22, this);
-        _initializerDefineProperty(this, "levelPaddingVisual", _descriptor23, this);
-        _initializerDefineProperty(this, "anchorY", _descriptor24, this);
-        _initializerDefineProperty(this, "scaleInWindow", _descriptor25, this);
-        _initializerDefineProperty(this, "r", _descriptor26, this);
-        _initializerDefineProperty(this, "enableScaleClamp", _descriptor27, this);
-        _initializerDefineProperty(this, "minScale", _descriptor28, this);
-        _initializerDefineProperty(this, "maxScale", _descriptor29, this);
-        _initializerDefineProperty(this, "materialIndex", _descriptor30, this);
-        _initializerDefineProperty(this, "colorSetsFallback", _descriptor31, this);
-        _initializerDefineProperty(this, "counterLabel", _descriptor32, this);
-      }, (_descriptor16 = _applyDecoratedDescriptor(_class5.prototype, "prefab", [_dec18], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor17 = _applyDecoratedDescriptor(_class5.prototype, "objectsPerLevel", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 8;
-        }
-      }), _descriptor18 = _applyDecoratedDescriptor(_class5.prototype, "visibleLevels", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 8;
-        }
-      }), _descriptor19 = _applyDecoratedDescriptor(_class5.prototype, "angleStep", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 45;
-        }
-      }), _descriptor20 = _applyDecoratedDescriptor(_class5.prototype, "baseScale", [_dec19], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1;
-        }
-      }), _descriptor21 = _applyDecoratedDescriptor(_class5.prototype, "baseHeight", [_dec20], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 2;
-        }
-      }), _descriptor22 = _applyDecoratedDescriptor(_class5.prototype, "targetVisualScale", [_dec21], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.6;
-        }
-      }), _descriptor23 = _applyDecoratedDescriptor(_class5.prototype, "levelPaddingVisual", [_dec22], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.0;
-        }
-      }), _descriptor24 = _applyDecoratedDescriptor(_class5.prototype, "anchorY", [_dec23], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
-        }
-      }), _descriptor25 = _applyDecoratedDescriptor(_class5.prototype, "scaleInWindow", [_dec24], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1;
-        }
-      }), _descriptor26 = _applyDecoratedDescriptor(_class5.prototype, "r", [_dec25], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.9;
-        }
-      }), _descriptor27 = _applyDecoratedDescriptor(_class5.prototype, "enableScaleClamp", [_dec26], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return true;
-        }
-      }), _descriptor28 = _applyDecoratedDescriptor(_class5.prototype, "minScale", [_dec27], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.4;
-        }
-      }), _descriptor29 = _applyDecoratedDescriptor(_class5.prototype, "maxScale", [_dec28], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.8;
-        }
-      }), _descriptor30 = _applyDecoratedDescriptor(_class5.prototype, "materialIndex", [_dec29], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
-        }
-      }), _descriptor31 = _applyDecoratedDescriptor(_class5.prototype, "colorSetsFallback", [_dec30], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 16;
-        }
-      }), _descriptor32 = _applyDecoratedDescriptor(_class5.prototype, "counterLabel", [_dec31], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      })), _class5)) || _class4));
-
       /**
-       * TowerVirtualScroller — виртуальный «бесконечный» скролл башни.
+       * TowerScrollController � �������� ������ �� ����/�������/�������� � �������� offset.
+       * ������ �������:
+       *  - 'offset-changed': (offset:number)=>void
+       *  - 'scroll-start'
+       *  - 'scroll-end'
        */
-      var TowerVirtualScroller = exports('TowerVirtualScroller', (_dec32 = ccclass('TowerVirtualScroller'), _dec33 = property({
+      var TowerScrollController = exports('TowerScrollController', (_dec17 = ccclass('TowerScrollController'), _dec18 = property({
         type: TVS_Scroll
-      }), _dec34 = property({
-        type: TVS_SpawnLayout
-      }), _dec32(_class7 = (_class8 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(TowerVirtualScroller, _Component);
-        function TowerVirtualScroller() {
+      }), _dec17(_class4 = (_class5 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(TowerScrollController, _Component);
+        function TowerScrollController() {
           var _this;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          // -------- Параметры в инспекторе (группы) --------
-          _initializerDefineProperty(_this, "scroll", _descriptor33, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "spawn", _descriptor34, _assertThisInitialized(_this));
-          // -------- Внутреннее: SPAWN/LAYOUT --------
-          _this.pool = [];
-          _this.lastKeyByNode = new Map();
-          _this.lastTopBase = Number.NaN;
-          _this.passedPieces = 0;
-          // карта уровней для узлов пула
-          _this.nodeLevelInfo = new Map();
-          // -------- Внутреннее: SCROLL & inertia --------
-          _this.offset = 0;
-          // жест мыши
+          _initializerDefineProperty(_this, "scroll", _descriptor16, _assertThisInitialized(_this));
+          /** ���� ������� */
+          _this.events = new EventTarget();
+          // === ��������� ===
+          _this._offset = 0;
+          _this.velocity = 0;
+          // ��./���
+          _this.inertiaActive = false;
+          // ���������� ���������� ������� �����
+          _this._inputEnabled = true;
+          // mouse
           _this.mouseHeld = false;
           _this.mouseStartY = null;
           _this.mouseLastY = null;
           _this.mouseDragging = false;
           _this.mouseActive = false;
           _this.mouseClaimed = false;
-          // жест тач
+          // touch
           _this.touchId = null;
           _this.touchStartY = null;
           _this.touchLastY = null;
           _this.touchDragging = false;
           _this.touchActive = false;
           _this.touchClaimed = false;
-          // инерция / скорость
-          _this.velocity = 0;
-          // ед./сек
-          _this.inertiaActive = false;
-          // семплы для расчёта начальной инерции после драга
+          // ������� ����� �����
           _this.moveSamples = [];
           _this.maxSamples = 6;
-          // колесо: накопление для deadzone
+          // ������
           _this.wheelAccumUnits = 0;
           _this.wheelDeadzoneLastTs = 0;
-          // клавиши
+          // ����������
           _this.keyHeldW = false;
           _this.keyHeldS = false;
+          // tween
           _this.scrollTween = null;
+          _this._tweenDriver = null;
+          _this._pendingResolve = null;
           return _this;
         }
-        var _proto = TowerVirtualScroller.prototype;
+        var _proto = TowerScrollController.prototype;
         // ===== lifecycle =====
         _proto.onEnable = function onEnable() {
           InteractionState.hardReset();
@@ -4652,61 +4347,284 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
         };
         _proto.start = function start() {
-          this.buildPool();
-          this.offset = this.clamp(this.scroll.startOffset, this.scroll.minOffset, this.scroll.maxOffset);
-          this.layoutByOffset(true);
+          this.setOffset(this.clamp(this.scroll.startOffset, this.scroll.minOffset, this.scroll.maxOffset), true);
         };
         _proto.update = function update(dt) {
-          // если сейчас идёт жест мышью/тачем — скоростью не управляем (скролл идёт из onMove)
+          // ���� ������ ������������� � ������ ����� �������
+          if (!this._inputEnabled) {
+            this.inertiaActive = false;
+            this.velocity = 0;
+            return;
+          }
           var interacting = this.mouseHeld || this.mouseDragging || this.mouseActive || this.touchId !== null || this.touchDragging || this.touchActive;
           if (interacting) {
             this.inertiaActive = false;
             return;
           }
 
-          // ---- клавиатура: разгон по удержанию ----
+          // �������
           var inputAccel = 0;
           if (this.keyHeldW) inputAccel -= this.scroll.keyAccel;
           if (this.keyHeldS) inputAccel += this.scroll.keyAccel;
-
-          // если есть ускорение от клавиш — включаем «круиз» через скорость
           if (inputAccel !== 0) {
             this.velocity += inputAccel * dt;
             var vmax = Math.min(this.scroll.keyMaxSpeed, this.scroll.maxInertiaSpeed);
             this.velocity = this.clamp(this.velocity, -vmax, vmax);
             this.inertiaActive = true;
+            // ����� ������� � ����� ������� ������� �������
+            this.events.emit('scroll-start');
           }
-
-          // если нет инерции и скорости — нечего обновлять
           if (!this.inertiaActive && Math.abs(this.velocity) < this.scroll.stopVelocity) return;
+          var prev = this._offset;
+          var next = this._offset + this.velocity * dt;
+          next = this.clamp(next, this.scroll.minOffset, this.scroll.maxOffset);
+          if (next <= this.scroll.minOffset && this.velocity < 0) this.velocity = 0;
+          if (next >= this.scroll.maxOffset && this.velocity > 0) this.velocity = 0;
 
-          // интеграция позиции
-          var prev = this.offset;
-          this.offset = this.clamp(this.offset + this.velocity * dt, this.scroll.minOffset, this.scroll.maxOffset);
-
-          // если упёрлись в границы — гасим скорость наружу, чтобы не дрожало
-          if (this.offset <= this.scroll.minOffset && this.velocity < 0) this.velocity = 0;
-          if (this.offset >= this.scroll.maxOffset && this.velocity > 0) this.velocity = 0;
-
-          // затухание скорости (трение)
+          // ������
           var decay = Math.exp(-this.scroll.friction * dt);
           this.velocity *= decay;
-
-          // условие остановки (только если не удерживаем клавиши)
           if (inputAccel === 0 && Math.abs(this.velocity) < this.scroll.stopVelocity) {
             this.velocity = 0;
-            this.inertiaActive = false;
+            if (this.inertiaActive) {
+              this.inertiaActive = false;
+              this.events.emit('scroll-end');
+            }
           }
-          if (this.offset !== prev) this.layoutByOffset(false);
+          if (next !== prev) this.setOffset(next, true);
         }
 
-        // =========================================================================
-        // =                           SCROLL + GЕСТURES                            =
-        // =========================================================================
-        // ===== mouse =====
+        // ===== ��������� ������ =====
+        /** ���������� ��������� offset (� �������). */;
+        _proto.setOffset = function setOffset(height, emit) {
+          if (emit === void 0) {
+            emit = true;
+          }
+          var clamped = this.clamp(height, this.scroll.minOffset, this.scroll.maxOffset);
+          if (clamped === this._offset) return;
+          this._offset = clamped;
+          if (emit) this.events.emit('offset-changed', this._offset);
+        }
+
+        /** �������������/�������������� ���������������� ����. ��� ����� � ����� ������� � ������������� �����. */;
+        _proto.setInputEnabled = function setInputEnabled(enabled) {
+          if (this._inputEnabled === enabled) return;
+          this._inputEnabled = enabled;
+          if (!enabled) this.stopAll();
+        }
+
+        /** ��������� ����������: �������, �����, �����. */;
+        _proto.stopAll = function stopAll() {
+          this.inertiaActive = false;
+          this.velocity = 0;
+          if (this.scrollTween) {
+            this.scrollTween.stop();
+            this.scrollTween = null;
+          }
+          this._tweenDriver = null;
+          if (this._pendingResolve) {
+            this._pendingResolve();
+            this._pendingResolve = null;
+          }
+          // ����� ������
+          this.mouseHeld = false;
+          this.mouseDragging = false;
+          this.mouseActive = false;
+          this.mouseClaimed = false;
+          this.touchId = null;
+          this.touchDragging = false;
+          this.touchActive = false;
+          this.touchClaimed = false;
+          InteractionState.hardReset == null || InteractionState.hardReset();
+        }
+
+        /** ������ � ���������� ������ (� ��� �� ��������, ��� offset). */;
+        _proto.scrollToHeight = function scrollToHeight(height, opts) {
+          var _this2 = this;
+          if (opts === void 0) {
+            opts = {};
+          }
+          var _opts = opts,
+            _opts$duration = _opts.duration,
+            duration = _opts$duration === void 0 ? 0 : _opts$duration,
+            _opts$easing = _opts.easing,
+            easing = _opts$easing === void 0 ? 'quadOut' : _opts$easing,
+            _opts$clamp = _opts.clamp,
+            doClamp = _opts$clamp === void 0 ? true : _opts$clamp;
+          this.inertiaActive = false;
+          this.velocity = 0;
+          if (this.scrollTween) {
+            this.scrollTween.stop();
+            this.scrollTween = null;
+          }
+          var target = doClamp ? this.clamp(height, this.scroll.minOffset, this.scroll.maxOffset) : height;
+          if (duration <= 0) {
+            this._offset = target;
+            this.events.emit('offset-changed', this._offset);
+            this.events.emit('scroll-end');
+            return;
+          }
+          var easeFn = typeof easing === 'function' ? easing : this._getEase(easing);
+          this._tweenDriver = {
+            value: this._offset
+          };
+          this.events.emit('scroll-start');
+          this.scrollTween = tween(this._tweenDriver).to(duration, {
+            value: target
+          }, {
+            progress: function progress(start, end, _current, t) {
+              var et = easeFn(Math.max(0, Math.min(1, t)));
+              return start + (end - start) * et;
+            },
+            onUpdate: function onUpdate() {
+              _this2._offset = doClamp ? _this2.clamp(_this2._tweenDriver.value, _this2.scroll.minOffset, _this2.scroll.maxOffset) : _this2._tweenDriver.value;
+              _this2.events.emit('offset-changed', _this2._offset);
+            }
+          }).call(function () {
+            _this2.scrollTween = null;
+            _this2._tweenDriver = null;
+            _this2.events.emit('scroll-end');
+          }).start();
+        }
+
+        /** Promise-������ scrollToHeight. */;
+        _proto.scrollToHeightAsync = function scrollToHeightAsync(height, opts) {
+          var _this3 = this;
+          if (opts === void 0) {
+            opts = {};
+          }
+          return new Promise(function (resolve) {
+            // ���� ��� ���� ������ ������ � ��������� ���, ����� �� �������
+            if (_this3._pendingResolve) {
+              _this3._pendingResolve();
+              _this3._pendingResolve = null;
+            }
+            var _opts2 = opts,
+              _opts2$duration = _opts2.duration,
+              duration = _opts2$duration === void 0 ? 0 : _opts2$duration,
+              _opts2$easing = _opts2.easing,
+              easing = _opts2$easing === void 0 ? 'quadOut' : _opts2$easing,
+              _opts2$clamp = _opts2.clamp,
+              doClamp = _opts2$clamp === void 0 ? true : _opts2$clamp;
+            _this3.inertiaActive = false;
+            _this3.velocity = 0;
+            if (_this3.scrollTween) {
+              _this3.scrollTween.stop();
+              _this3.scrollTween = null;
+            }
+            var target = doClamp ? _this3.clamp(height, _this3.scroll.minOffset, _this3.scroll.maxOffset) : height;
+            if (duration <= 0) {
+              _this3._offset = target;
+              _this3.events.emit('offset-changed', _this3._offset);
+              _this3.events.emit('scroll-end');
+              resolve();
+              return;
+            }
+            var easeFn = typeof easing === 'function' ? easing : _this3._getEase(easing);
+            _this3._tweenDriver = {
+              value: _this3._offset
+            };
+            _this3.events.emit('scroll-start');
+            _this3._pendingResolve = resolve;
+            _this3.scrollTween = tween(_this3._tweenDriver).to(duration, {
+              value: target
+            }, {
+              progress: function progress(start, end, _current, t) {
+                var et = easeFn(Math.max(0, Math.min(1, t)));
+                return start + (end - start) * et;
+              },
+              onUpdate: function onUpdate() {
+                _this3._offset = doClamp ? _this3.clamp(_this3._tweenDriver.value, _this3.scroll.minOffset, _this3.scroll.maxOffset) : _this3._tweenDriver.value;
+                _this3.events.emit('offset-changed', _this3._offset);
+              }
+            }).call(function () {
+              _this3.scrollTween = null;
+              _this3._tweenDriver = null;
+              _this3.events.emit('scroll-end');
+              var r = _this3._pendingResolve;
+              _this3._pendingResolve = null;
+              r == null || r();
+            }).start();
+          });
+        }
+
+        /** ��� �����: �������� ������ + �������� ����� ��� ������� ���������. */;
+        _proto.scrollToHeightWithNudgeAsync = /*#__PURE__*/
+        function () {
+          var _scrollToHeightWithNudgeAsync = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(height, mainDuration, nudgeDuration, easing, clamp) {
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  if (mainDuration === void 0) {
+                    mainDuration = 0.35;
+                  }
+                  if (nudgeDuration === void 0) {
+                    nudgeDuration = 0.1;
+                  }
+                  if (easing === void 0) {
+                    easing = 'quadOut';
+                  }
+                  if (clamp === void 0) {
+                    clamp = true;
+                  }
+                  _context.next = 6;
+                  return this.scrollToHeightAsync(height, {
+                    duration: mainDuration,
+                    easing: easing,
+                    clamp: clamp
+                  });
+                case 6:
+                  if (!(nudgeDuration > 0.01)) {
+                    _context.next = 9;
+                    break;
+                  }
+                  _context.next = 9;
+                  return this.scrollToHeightAsync(height, {
+                    duration: nudgeDuration,
+                    easing: easing,
+                    clamp: clamp
+                  });
+                case 9:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, this);
+          }));
+          function scrollToHeightWithNudgeAsync(_x, _x2, _x3, _x4, _x5) {
+            return _scrollToHeightWithNudgeAsync.apply(this, arguments);
+          }
+          return scrollToHeightWithNudgeAsync;
+        }();
+        _proto.scrollByHeight = function scrollByHeight(dHeight, opts) {
+          if (opts === void 0) {
+            opts = {};
+          }
+          this.scrollToHeight(this._offset + dHeight, opts);
+        };
+        _proto.scrollByHeightAsync = function scrollByHeightAsync(dHeight, opts) {
+          if (opts === void 0) {
+            opts = {};
+          }
+          return this.scrollToHeightAsync(this._offset + dHeight, opts);
+        };
+        _proto.stopScrollTween = function stopScrollTween() {
+          if (this.scrollTween) {
+            this.scrollTween.stop();
+            this.scrollTween = null;
+          }
+          if (this._pendingResolve) {
+            this._pendingResolve();
+            this._pendingResolve = null;
+          }
+          this._tweenDriver = null;
+          this.events.emit('scroll-end');
+        }
+
+        // ===== gestures =====
         ;
 
         _proto.onMouseDown = function onMouseDown(e) {
+          if (!this._inputEnabled) return;
           if (e.getButton() !== 0) return;
           if (InteractionState.inGesture && InteractionState.source === 'mouse') return;
           this.mouseHeld = true;
@@ -4722,38 +4640,32 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           this.pushSample(y);
         };
         _proto.onMouseMove = function onMouseMove(e) {
+          if (!this._inputEnabled) return;
           if (!this.mouseHeld || this.mouseLastY === null || this.mouseStartY === null) return;
           var y = e.getLocationY();
           var dy = y - this.mouseLastY;
           var total = y - this.mouseStartY;
           this.mouseLastY = y;
           this.pushSample(y);
-
-          // --- до порога НИЧЕГО не двигаем ---
           if (!this.mouseDragging) {
-            if (Math.abs(total) >= this.scroll.dragThreshold) {
-              this.mouseDragging = true;
-            } else {
-              return; // не прошли deadzone → выходим без applyDeltaUnits
-            }
+            if (Math.abs(total) >= this.scroll.dragThreshold) this.mouseDragging = true;else return;
           }
-
           if (dy === 0) return;
           if (!this.mouseActive) {
             this.mouseActive = true;
             if (!InteractionState.inGesture) {
               InteractionState.beginGesture(MOUSE_ID, 'mouse');
               this.mouseClaimed = true;
+              this.events.emit('scroll-start');
             } else {
               return;
             }
             InteractionState.markDrag(MOUSE_ID);
           }
-          if (this.mouseClaimed) {
-            this.applyDeltaUnits(dy * this.scroll.unitsPerPixel);
-          }
+          if (this.mouseClaimed) this.applyDeltaUnits(dy * this.scroll.unitsPerPixel);
         };
         _proto.onMouseUp = function onMouseUp(e) {
+          if (!this._inputEnabled) return;
           if (e.getButton() !== 0) return;
           if (this.mouseClaimed) InteractionState.tryEndGesture(MOUSE_ID, 'mouse');
           this.mouseHeld = false;
@@ -4761,39 +4673,29 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           this.mouseDragging = false;
           this.mouseActive = false;
           this.mouseClaimed = false;
-          if (this.moveSamples.length >= 2) this.startInertiaFromSamples();
-        }
-
-        // --- колесо: deadzone + инерция через скорость (без мгновенных скачков) ---
-        ;
-
+          if (this.moveSamples.length >= 2) this.startInertiaFromSamples();else this.events.emit('scroll-end');
+        };
         _proto.onWheel = function onWheel(e) {
+          if (!this._inputEnabled) return;
           var delta = -e.getScrollY();
           if (delta === 0) return;
           var stepUnits = delta / 120 * this.scroll.unitsPerWheelTick;
           var now = this.nowMs();
-          if (now - this.wheelDeadzoneLastTs > this.scroll.wheelDeadzoneResetMs) {
-            this.wheelAccumUnits = 0; // давний простой — копим заново
-          }
-
+          if (now - this.wheelDeadzoneLastTs > this.scroll.wheelDeadzoneResetMs) this.wheelAccumUnits = 0;
           this.wheelDeadzoneLastTs = now;
           this.wheelAccumUnits += stepUnits;
           var absAccum = Math.abs(this.wheelAccumUnits);
           var dz = Math.max(0, this.scroll.wheelDeadzoneUnits);
           if (absAccum < dz) return;
-
-          // прошли deadzone → преобразуем в «пинок» скорости, без резкого сдвига offset
           var move = this.wheelAccumUnits - Math.sign(this.wheelAccumUnits) * dz;
           this.wheelAccumUnits = 0;
           var kick = this.clamp(move * this.scroll.wheelKick, -this.scroll.maxInertiaSpeed, this.scroll.maxInertiaSpeed);
           this.velocity = this.clamp(this.velocity + kick, -this.scroll.maxInertiaSpeed, this.scroll.maxInertiaSpeed);
           this.inertiaActive = Math.abs(this.velocity) >= this.scroll.stopVelocity;
-        }
-
-        // ===== touch =====
-        ;
-
+          this.events.emit('scroll-start');
+        };
         _proto.onTouchStart = function onTouchStart(e) {
+          if (!this._inputEnabled) return;
           if (InteractionState.inGesture && InteractionState.source === 'touch') return;
           if (this.touchId !== null) return;
           var id = e.getID();
@@ -4810,6 +4712,7 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           this.pushSample(y);
         };
         _proto.onTouchMove = function onTouchMove(e) {
+          if (!this._inputEnabled) return;
           var id = e.getID();
           if (this.touchId !== id || this.touchLastY === null || this.touchStartY === null) return;
           if (InteractionState.inGesture && InteractionState.source === 'touch' && !this.touchClaimed) return;
@@ -4818,33 +4721,25 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           var total = y - this.touchStartY;
           this.touchLastY = y;
           this.pushSample(y);
-
-          // --- до порога НИЧЕГО не двигаем ---
           if (!this.touchDragging) {
-            if (Math.abs(total) >= this.scroll.dragThreshold) {
-              this.touchDragging = true;
-            } else {
-              return; // не прошли deadzone → выходим без applyDeltaUnits
-            }
+            if (Math.abs(total) >= this.scroll.dragThreshold) this.touchDragging = true;else return;
           }
-
           if (dy === 0) return;
           if (!this.touchActive) {
-            // включаемся только когда реально начался drag (после порога)
             if (!InteractionState.inGesture) {
               this.touchActive = true;
               InteractionState.beginGesture(id, 'touch');
               this.touchClaimed = true;
+              this.events.emit('scroll-start');
               InteractionState.markDrag(id);
             } else {
               return;
             }
           }
-          if (this.touchClaimed) {
-            this.applyDeltaUnits(dy * this.scroll.unitsPerPixel);
-          }
+          if (this.touchClaimed) this.applyDeltaUnits(dy * this.scroll.unitsPerPixel);
         };
         _proto.onTouchEnd = function onTouchEnd(e) {
+          if (!this._inputEnabled) return;
           var id = e.getID();
           if (this.touchId !== id) return;
           if (this.touchClaimed) InteractionState.tryEndGesture(id, 'touch');
@@ -4853,9 +4748,10 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           this.touchDragging = false;
           this.touchActive = false;
           this.touchClaimed = false;
-          if (this.moveSamples.length >= 2) this.startInertiaFromSamples();
+          if (this.moveSamples.length >= 2) this.startInertiaFromSamples();else this.events.emit('scroll-end');
         };
         _proto.onTouchCancel = function onTouchCancel(e) {
+          if (!this._inputEnabled) return;
           var id = e.getID();
           if (this.touchId !== id) return;
           if (this.touchClaimed) InteractionState.tryEndGesture(id, 'touch');
@@ -4864,10 +4760,10 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           this.touchDragging = false;
           this.touchActive = false;
           this.touchClaimed = false;
-          if (this.moveSamples.length >= 2) this.startInertiaFromSamples();
+          if (this.moveSamples.length >= 2) this.startInertiaFromSamples();else this.events.emit('scroll-end');
         }
 
-        // ===== inertia helpers =====
+        // helpers
         ;
 
         _proto.nowMs = function nowMs() {
@@ -4890,6 +4786,7 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
         _proto.startInertiaFromSamples = function startInertiaFromSamples() {
           if (!this.scroll.enableInertia) {
             this.moveSamples.length = 0;
+            this.events.emit('scroll-end');
             return;
           }
           if (this.moveSamples.length >= 2) {
@@ -4900,18 +4797,434 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
             var vUnitsPerSec = vPxPerSec * this.scroll.unitsPerPixel;
             this.velocity = this.clamp(vUnitsPerSec, -this.scroll.maxInertiaSpeed, this.scroll.maxInertiaSpeed);
             this.inertiaActive = Math.abs(this.velocity) >= this.scroll.stopVelocity;
+            if (!this.inertiaActive) this.events.emit('scroll-end');
           }
           this.moveSamples.length = 0;
         };
         _proto.applyDeltaUnits = function applyDeltaUnits(dUnits) {
-          var prev = this.offset;
-          this.offset = this.clamp(this.offset + dUnits, this.scroll.minOffset, this.scroll.maxOffset);
-          if (this.offset !== prev) this.layoutByOffset(false);
+          var prev = this._offset;
+          var next = this.clamp(prev + dUnits, this.scroll.minOffset, this.scroll.maxOffset);
+          if (next !== prev) this.setOffset(next, true);
+        };
+        _proto.clamp = function clamp(v, a, b) {
+          return Math.min(b, Math.max(a, v));
+        };
+        _proto._getEase = function _getEase(name) {
+          switch (name) {
+            case 'linear':
+              return function (t) {
+                return t;
+              };
+            case 'quadIn':
+              return function (t) {
+                return t * t;
+              };
+            case 'quadOut':
+              return function (t) {
+                return 1 - (1 - t) * (1 - t);
+              };
+            case 'quadInOut':
+              return function (t) {
+                return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+              };
+            case 'cubicIn':
+              return function (t) {
+                return t * t * t;
+              };
+            case 'cubicOut':
+              return function (t) {
+                return 1 - Math.pow(1 - t, 3);
+              };
+            case 'cubicInOut':
+              return function (t) {
+                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+              };
+            case 'quartIn':
+              return function (t) {
+                return t * t * t * t;
+              };
+            case 'quartOut':
+              return function (t) {
+                return 1 - Math.pow(1 - t, 4);
+              };
+            case 'quartInOut':
+              return function (t) {
+                return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
+              };
+            default:
+              return function (t) {
+                return 1 - (1 - t) * (1 - t);
+              };
+            // quadOut
+          }
         }
 
-        // =========================================================================
-        // =                               SPAWN/LAYOUT                             =
-        // =========================================================================
+        // �������
+        ;
+
+        _proto.onKeyDown = function onKeyDown(e) {
+          if (!this._inputEnabled) return;
+          if (e.keyCode === KeyCode.KEY_W) this.keyHeldW = true;
+          if (e.keyCode === KeyCode.KEY_S) this.keyHeldS = true;
+        };
+        _proto.onKeyUp = function onKeyUp(e) {
+          if (!this._inputEnabled) return;
+          if (e.keyCode === KeyCode.KEY_W) this.keyHeldW = false;
+          if (e.keyCode === KeyCode.KEY_S) this.keyHeldS = false;
+        };
+        _createClass(TowerScrollController, [{
+          key: "offset",
+          get:
+          // ��.
+          function get() {
+            return this._offset;
+          }
+        }, {
+          key: "inputEnabled",
+          get: function get() {
+            return this._inputEnabled;
+          }
+        }, {
+          key: "isBusy",
+          get:
+          // ������� ����
+          function get() {
+            return !!this.scrollTween || this.inertiaActive || Math.abs(this.velocity) > this.scroll.stopVelocity;
+          }
+        }]);
+        return TowerScrollController;
+      }(Component), _descriptor16 = _applyDecoratedDescriptor(_class5.prototype, "scroll", [_dec18], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return new TVS_Scroll();
+        }
+      }), _class5)) || _class4));
+      cclegacy._RF.pop();
+    }
+  };
+});
+
+System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ClickMoveBinding.ts', './ColorLibrary.ts', './TowerScrollController.ts'], function (exports) {
+  var _applyDecoratedDescriptor, _initializerDefineProperty, _inheritsLoose, _assertThisInitialized, _createForOfIteratorHelperLoose, cclegacy, _decorator, Prefab, Label, instantiate, Vec3, Component, ClickMoveBinding, ColorTextureLibrary, TowerScrollController;
+  return {
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _inheritsLoose = module.inheritsLoose;
+      _assertThisInitialized = module.assertThisInitialized;
+      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      Prefab = module.Prefab;
+      Label = module.Label;
+      instantiate = module.instantiate;
+      Vec3 = module.Vec3;
+      Component = module.Component;
+    }, function (module) {
+      ClickMoveBinding = module.ClickMoveBinding;
+    }, function (module) {
+      ColorTextureLibrary = module.ColorTextureLibrary;
+    }, function (module) {
+      TowerScrollController = module.TowerScrollController;
+    }],
+    execute: function () {
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _dec16, _dec17, _dec18, _class4, _class5, _descriptor18, _descriptor19;
+      cclegacy._RF.push({}, "368ffNUv4lFSZtXbbDm9TB3", "TVS_SpawnLayout", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+
+      /** Конфиг спавна/раскладки */
+      var TVS_SpawnLayout = exports('TVS_SpawnLayout', (_dec = ccclass('TVS_SpawnLayout'), _dec2 = property({
+        type: Prefab
+      }), _dec3 = property({
+        tooltip: 'Базовый масштаб геометрии префаба (Node.scale = 1 → это baseScale префаба)'
+      }), _dec4 = property({
+        tooltip: 'Базовая геометрическая высота куска (до масштабов префаба и Node.scale)'
+      }), _dec5 = property({
+        tooltip: 'Целевой экранный масштаб «базового» куска'
+      }), _dec6 = property({
+        tooltip: 'Визуальный зазор между уровнями (в ед.: baseHeight * Node.scale)'
+      }), _dec7 = property({
+        tooltip: 'Якорь Y (локально) — центр окна'
+      }), _dec8 = property({
+        tooltip: 'Интенсивность градиента масштаба (0..1). 0 — одинаковые; 1 — максимум.'
+      }), _dec9 = property({
+        tooltip: 'Коэф. по слоям r: r<1 — вниз мельче; r>1 — вниз крупнее.'
+      }), _dec10 = property({
+        tooltip: 'Включить кламп масштаба каждого куска'
+      }), _dec11 = property({
+        tooltip: 'Минимальный Node.scale'
+      }), _dec12 = property({
+        tooltip: 'Максимальный Node.scale'
+      }), _dec13 = property({
+        tooltip: 'Индекс материала внутри MeshRenderer'
+      }), _dec14 = property({
+        tooltip: 'Фолбэк: число наборов в библиотеке, если она сама не сообщает'
+      }), _dec15 = property({
+        type: Label,
+        tooltip: 'Куда выводить глобальный счётчик пройденных кусочков'
+      }), _dec(_class = (_class2 = function TVS_SpawnLayout() {
+        _initializerDefineProperty(this, "prefab", _descriptor, this);
+        _initializerDefineProperty(this, "objectsPerLevel", _descriptor2, this);
+        _initializerDefineProperty(this, "visibleLevels", _descriptor3, this);
+        _initializerDefineProperty(this, "angleStep", _descriptor4, this);
+        _initializerDefineProperty(this, "baseScale", _descriptor5, this);
+        _initializerDefineProperty(this, "baseHeight", _descriptor6, this);
+        _initializerDefineProperty(this, "targetVisualScale", _descriptor7, this);
+        _initializerDefineProperty(this, "levelPaddingVisual", _descriptor8, this);
+        _initializerDefineProperty(this, "anchorY", _descriptor9, this);
+        _initializerDefineProperty(this, "scaleInWindow", _descriptor10, this);
+        _initializerDefineProperty(this, "r", _descriptor11, this);
+        _initializerDefineProperty(this, "enableScaleClamp", _descriptor12, this);
+        _initializerDefineProperty(this, "minScale", _descriptor13, this);
+        _initializerDefineProperty(this, "maxScale", _descriptor14, this);
+        _initializerDefineProperty(this, "materialIndex", _descriptor15, this);
+        _initializerDefineProperty(this, "colorSetsFallback", _descriptor16, this);
+        _initializerDefineProperty(this, "counterLabel", _descriptor17, this);
+      }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "prefab", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "objectsPerLevel", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 8;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "visibleLevels", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 8;
+        }
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "angleStep", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 45;
+        }
+      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "baseScale", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 1;
+        }
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "baseHeight", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 2;
+        }
+      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "targetVisualScale", [_dec5], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.6;
+        }
+      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "levelPaddingVisual", [_dec6], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.0;
+        }
+      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "anchorY", [_dec7], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0;
+        }
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "scaleInWindow", [_dec8], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 1;
+        }
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "r", [_dec9], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.9;
+        }
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "enableScaleClamp", [_dec10], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "minScale", [_dec11], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.4;
+        }
+      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "maxScale", [_dec12], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.8;
+        }
+      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "materialIndex", [_dec13], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0;
+        }
+      }), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "colorSetsFallback", [_dec14], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 16;
+        }
+      }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "counterLabel", [_dec15], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      })), _class2)) || _class));
+
+      /**
+       * TowerLayoutController — только спавн/раскладка/цвета/уровни.
+       * Подписывается на TowerScrollController.events('offset-changed').
+       */
+      var TowerLayoutController = exports('TowerLayoutController', (_dec16 = ccclass('TowerLayoutController'), _dec17 = property({
+        type: TVS_SpawnLayout
+      }), _dec18 = property({
+        type: TowerScrollController,
+        tooltip: 'Ссылка на контроллер скролла'
+      }), _dec16(_class4 = (_class5 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(TowerLayoutController, _Component);
+        function TowerLayoutController() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "spawn", _descriptor18, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "scrollCtrl", _descriptor19, _assertThisInitialized(_this));
+          // внутреннее
+          _this.pool = [];
+          _this.lastKeyByNode = new Map();
+          _this.nodeLevelInfo = new Map();
+          _this.lastTopBase = Number.NaN;
+          _this.passedPieces = 0;
+          return _this;
+        }
+        var _proto = TowerLayoutController.prototype;
+        _proto.onLoad = function onLoad() {
+          if (!this.scrollCtrl) console.warn('[TowerLayoutController] scrollCtrl не назначен в инспекторе');
+        };
+        _proto.onEnable = function onEnable() {
+          var _this$scrollCtrl;
+          this.buildPool();
+          var initOff = this.scrollCtrl ? this.scrollCtrl.offset : 0;
+          this.layoutByOffset(initOff);
+          (_this$scrollCtrl = this.scrollCtrl) == null || _this$scrollCtrl.events.on('offset-changed', this._onOffsetChanged, this);
+        };
+        _proto.onDisable = function onDisable() {
+          var _this$scrollCtrl2;
+          (_this$scrollCtrl2 = this.scrollCtrl) == null || _this$scrollCtrl2.events.off('offset-changed', this._onOffsetChanged, this);
+        };
+        _proto._onOffsetChanged = function _onOffsetChanged(offset) {
+          this.layoutByOffset(offset);
+        }
+
+        // ======= публичные API =======
+        /** ТЕКУЩИЙ шаг уровня в единицах offset. */;
+        _proto.getLevelStep = function getLevelStep() {
+          return Math.max(1e-6, this.levelStepConst());
+        }
+
+        /** Узнать абсолютный уровень узла из пула. null — если узел сейчас не привязан. */;
+        _proto.getNodeLevel = function getNodeLevel(node) {
+          var info = this.nodeLevelInfo.get(node);
+          return info ? info.level : null;
+        }
+
+        /** Найти ближайшего предка, который отслеживается в nodeLevelInfo (узел пула). */;
+        _proto.findMappedAncestor = function findMappedAncestor(node) {
+          var cur = node;
+          while (cur) {
+            if (this.nodeLevelInfo.has(cur)) return cur;
+            cur = cur.parent;
+          }
+          return null;
+        }
+
+        /** Получить уровень для ЛЮБОЙ ноды (самой или её предка из пула). */;
+        _proto.getLevelForAny = function getLevelForAny(node) {
+          var owner = this.findMappedAncestor(node);
+          if (!owner) return null;
+          var info = this.nodeLevelInfo.get(owner);
+          return info.level;
+        }
+
+        /** Получить слот для ЛЮБОЙ ноды (самой или её предка из пула). */;
+        _proto.getSlotForAny = function getSlotForAny(node) {
+          var owner = this.findMappedAncestor(node);
+          if (!owner) return null;
+          var info = this.nodeLevelInfo.get(owner);
+          return info ? info.slot : null;
+        };
+        _proto.findNodeByLevelSlot = function findNodeByLevelSlot(level, slot) {
+          for (var _iterator = _createForOfIteratorHelperLoose(this.nodeLevelInfo), _step; !(_step = _iterator()).done;) {
+            var _step$value = _step.value,
+              n = _step$value[0],
+              info = _step$value[1];
+            if (!n.activeInHierarchy) continue;
+            if (info.level === level && info.slot === slot) return n;
+          }
+          return null;
+        }
+
+        /** Прокрутить к уровню L через связанный ScrollController. */;
+        _proto.scrollToLevel = function scrollToLevel(level, opts) {
+          var _this$scrollCtrl3;
+          var step = this.getLevelStep();
+          (_this$scrollCtrl3 = this.scrollCtrl) == null || _this$scrollCtrl3.scrollToHeight(level * step, opts != null ? opts : {});
+        }
+
+        /** Прокрутить к уровню узла. */;
+        _proto.scrollToNodeLevel = function scrollToNodeLevel(node, opts) {
+          var L = this.getNodeLevel(node);
+          if (L == null) {
+            console.warn('[TowerLayout] scrollToNodeLevel: node has no tracked level (not visible yet?)', node == null ? void 0 : node.name);
+            return false;
+          }
+          this.scrollToLevel(L, opts);
+          return true;
+        }
+
+        /** Прокрутить к уровню ЛЮБОЙ ноды (сама или предок из пула). */;
+        _proto.scrollToNodeOrAncestorLevel = function scrollToNodeOrAncestorLevel(node, opts) {
+          var owner = this.findMappedAncestor(node);
+          if (!owner) return false;
+          return this.scrollToNodeLevel(owner, opts);
+        }
+
+        // ======= layout =======
         ;
 
         _proto.levelStepConst = function levelStepConst() {
@@ -4919,12 +5232,12 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
           var baseVisualHeight = this.spawn.baseHeight * this.spawn.baseScale * basePiece;
           return baseVisualHeight + this.spawn.levelPaddingVisual;
         };
-        _proto.layoutByOffset = function layoutByOffset(_force) {
+        _proto.layoutByOffset = function layoutByOffset(offset) {
           var _this2 = this;
           var stepConst = Math.max(1e-6, this.levelStepConst());
 
           // depth = offset / stepConst; при depth = целое, уровень depth оказывается на anchorY
-          var depth = this.offset / stepConst;
+          var depth = offset / stepConst;
           var topBase = Math.max(0, Math.floor(depth));
           var frac = depth - topBase;
           var per = Math.max(1, this.spawn.objectsPerLevel);
@@ -5003,18 +5316,23 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
         };
         _proto.buildPool = function buildPool() {
           if (!this.spawn.prefab) {
-            console.warn('TowerVirtualScroller: prefab не назначен');
+            console.warn('TowerLayoutController: prefab не назначен');
             return;
           }
           var need = Math.max(1, this.spawn.visibleLevels) * Math.max(1, this.spawn.objectsPerLevel);
-          for (var i = 0; i < need; i++) {
-            var n = instantiate(this.spawn.prefab);
-            n.setParent(this.node);
-            n.active = true;
-            this.pool.push(n);
+          if (this.pool.length === 0) {
+            for (var i = 0; i < need; i++) {
+              var n = instantiate(this.spawn.prefab);
+              n.setParent(this.node);
+              n.active = true;
+              this.pool.push(n);
+            }
           }
-        };
-        // ===== ВСПОМОГАТЕЛЬНОЕ: цвета =====
+        }
+
+        // ===== цвета =====
+        ;
+
         _proto.hash32str = function hash32str(s) {
           var h = 2166136261 >>> 0;
           for (var i = 0; i < s.length; i++) {
@@ -5031,306 +5349,36 @@ System.register("chunks:///_virtual/TowerWindowScroller.ts", ['./rollupPluginMod
         _proto.applySetIndex = function applySetIndex(mr, materialIndex, setIndex) {
           var lib = ColorTextureLibrary.instance;
           if (!lib) return;
-          if (typeof lib.applySetByIndex === 'function') {
-            lib.applySetByIndex(mr, materialIndex, setIndex);
-          } else {
-            // безопасный фолбэк
-            lib.applyRandomSet(mr, materialIndex);
-          }
+          if (typeof lib.applySetByIndex === 'function') lib.applySetByIndex(mr, materialIndex, setIndex);else lib.applyRandomSet(mr, materialIndex);
         };
         _proto.colorAllPiecesForKey = function colorAllPiecesForKey(root, key) {
           var bindings = root.getComponentsInChildren(ClickMoveBinding);
           var count = this.getSetsCount();
           var k = 0;
-          for (var _iterator = _createForOfIteratorHelperLoose(bindings), _step; !(_step = _iterator()).done;) {
-            var b = _step.value;
+          for (var _iterator2 = _createForOfIteratorHelperLoose(bindings), _step2; !(_step2 = _iterator2()).done;) {
+            var b = _step2.value;
             var mr = b == null ? void 0 : b.meshRenderer;
             if (!mr) continue;
             var idx = count <= 1 ? 0 : this.hash32str(key + "#" + k++) % count;
             this.applySetIndex(mr, this.spawn.materialIndex, idx);
           }
-        }
-
-        // ===== util =====
-        ;
-
-        _proto.clamp = function clamp(v, a, b) {
-          return Math.min(b, Math.max(a, v));
         };
-        _proto.getPassedPieces = function getPassedPieces() {
-          return this.passedPieces;
-        }
-
-        /** ТЕКУЩИЙ шаг уровня в единицах offset. */;
-        _proto.getLevelStep = function getLevelStep() {
-          return Math.max(1e-6, this.levelStepConst());
-        }
-
-        // ===================== ПУБЛИЧНЫЕ API ДЛЯ СКРОЛЛА =========================
-        /** Прокрутка к абсолютной высоте (та же шкала, что this.offset). */;
-        _proto.scrollToHeight = function scrollToHeight(height, opts) {
-          var _this3 = this;
-          if (opts === void 0) {
-            opts = {};
-          }
-          var _opts = opts,
-            _opts$duration = _opts.duration,
-            duration = _opts$duration === void 0 ? 0 : _opts$duration,
-            _opts$easing = _opts.easing,
-            easing = _opts$easing === void 0 ? 'quadOut' : _opts$easing,
-            _opts$clamp = _opts.clamp,
-            doClamp = _opts$clamp === void 0 ? true : _opts$clamp;
-
-          // при программном скролле выключаем текущую инерцию/скорость
-          this.inertiaActive = false;
-          this.velocity = 0;
-          if (this.scrollTween) {
-            this.scrollTween.stop();
-            this.scrollTween = null;
-          }
-          var target = doClamp ? this.clamp(height, this.scroll.minOffset, this.scroll.maxOffset) : height;
-          if (duration <= 0) {
-            this.offset = target;
-            this.layoutByOffset(false);
-            return;
-          }
-          var easeFn = typeof easing === 'function' ? easing : this._getEase(easing);
-          var proxy = {
-            value: this.offset
-          };
-          this.scrollTween = tween(proxy).to(duration, {
-            value: target
-          }, {
-            progress: function progress(start, end, _current, t) {
-              var et = easeFn(Math.max(0, Math.min(1, t)));
-              return start + (end - start) * et;
-            },
-            onUpdate: function onUpdate() {
-              _this3.offset = doClamp ? _this3.clamp(proxy.value, _this3.scroll.minOffset, _this3.scroll.maxOffset) : proxy.value;
-              _this3.layoutByOffset(false);
-            }
-          }).call(function () {
-            _this3.scrollTween = null;
-          }).start();
-        }
-
-        /** Прокрутка на относительную Δ-высоту. */;
-        _proto.scrollByHeight = function scrollByHeight(dHeight, opts) {
-          if (opts === void 0) {
-            opts = {};
-          }
-          this.scrollToHeight(this.offset + dHeight, opts);
-        }
-
-        /** Прокрутка к N уровням (N может быть дробным). */;
-        _proto.scrollToLevels = function scrollToLevels(levels, opts) {
-          if (opts === void 0) {
-            opts = {};
-          }
-          var step = Math.max(1e-6, this.levelStepConst());
-          this.scrollToHeight(levels * step, opts);
-        }
-
-        /** Узнать абсолютный уровень узла из пула. null — если узел сейчас не привязан. */;
-        _proto.getNodeLevel = function getNodeLevel(node) {
-          var info = this.nodeLevelInfo.get(node);
-          return info ? info.level : null;
-        }
-
-        /** Прокрутить так, чтобы уровень L оказался на якоре (центр окна). */;
-        _proto.scrollToLevel = function scrollToLevel(level, opts) {
-          if (opts === void 0) {
-            opts = {};
-          }
-          this.scrollToLevels(level, opts);
-        }
-
-        /** Прокрутить к уровню узла. Возвращает false, если узел не в пуле/неактивен. */;
-        _proto.scrollToNodeLevel = function scrollToNodeLevel(node, opts) {
-          if (opts === void 0) {
-            opts = {};
-          }
-          var L = this.getNodeLevel(node);
-          if (L == null) {
-            console.warn('[TowerVirtualScroller] scrollToNodeLevel: node has no tracked level (not visible yet?)', node == null ? void 0 : node.name);
-            return false;
-          }
-          this.scrollToLevel(L, opts);
-          return true;
-        }
-
-        /** Остановить текущую анимацию скролла. */;
-        _proto.stopScrollTween = function stopScrollTween() {
-          if (this.scrollTween) {
-            this.scrollTween.stop();
-            this.scrollTween = null;
-          }
-        }
-
-        /** Простые easing-функции. */;
-        _proto._getEase = function _getEase(name) {
-          switch (name) {
-            case 'linear':
-              return function (t) {
-                return t;
-              };
-            case 'quadIn':
-              return function (t) {
-                return t * t;
-              };
-            case 'quadOut':
-              return function (t) {
-                return 1 - (1 - t) * (1 - t);
-              };
-            case 'quadInOut':
-              return function (t) {
-                return t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
-              };
-            case 'cubicIn':
-              return function (t) {
-                return t * t * t;
-              };
-            case 'cubicOut':
-              return function (t) {
-                return 1 - Math.pow(1 - t, 3);
-              };
-            case 'cubicInOut':
-              return function (t) {
-                return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
-              };
-            case 'quartIn':
-              return function (t) {
-                return t * t * t * t;
-              };
-            case 'quartOut':
-              return function (t) {
-                return 1 - Math.pow(1 - t, 4);
-              };
-            case 'quartInOut':
-              return function (t) {
-                return t < 0.5 ? 8 * t * t * t * t : 1 - Math.pow(-2 * t + 2, 4) / 2;
-              };
-            default:
-              return function (t) {
-                return 1 - (1 - t) * (1 - t);
-              };
-            // quadOut
-          }
-        }
-
-        /** Найти ближайшего предка, который отслеживается в nodeLevelInfo (узел пула). */;
-        _proto.findMappedAncestor = function findMappedAncestor(node) {
-          var cur = node;
-          while (cur) {
-            if (this.nodeLevelInfo.has(cur)) return cur;
-            cur = cur.parent;
-          }
-          return null;
-        }
-
-        /** Получить уровень для ЛЮБОЙ ноды (самой или её предка из пула). */;
-        _proto.getLevelForAny = function getLevelForAny(node) {
-          var owner = this.findMappedAncestor(node);
-          if (!owner) return null;
-          var info = this.nodeLevelInfo.get(owner);
-          return info.level;
-        }
-
-        /** Прокрутить к уровню ЛЮБОЙ ноды (самой или её предка из пула). */;
-        _proto.scrollToNodeOrAncestorLevel = function scrollToNodeOrAncestorLevel(node, opts) {
-          if (opts === void 0) {
-            opts = {};
-          }
-          var owner = this.findMappedAncestor(node);
-          if (!owner) return false;
-          return this.scrollToNodeLevel(owner, opts);
-        }
-
-        /** Безопасный вариант с ожиданием до 3 кадров, если узел ещё не в пуле. */;
-        _proto.scrollToNodeOrAncestorLevelSafe = /*#__PURE__*/
-        function () {
-          var _scrollToNodeOrAncestorLevelSafe = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(node, opts) {
-            var _this4 = this;
-            var tryOnce, i;
-            return _regeneratorRuntime().wrap(function _callee$(_context) {
-              while (1) switch (_context.prev = _context.next) {
-                case 0:
-                  if (opts === void 0) {
-                    opts = {};
-                  }
-                  tryOnce = function tryOnce() {
-                    return _this4.scrollToNodeOrAncestorLevel(node, opts);
-                  };
-                  if (!tryOnce()) {
-                    _context.next = 4;
-                    break;
-                  }
-                  return _context.abrupt("return", true);
-                case 4:
-                  i = 0;
-                case 5:
-                  if (!(i < 3)) {
-                    _context.next = 13;
-                    break;
-                  }
-                  _context.next = 8;
-                  return new Promise(function (res) {
-                    return tween(_this4.node).delay(0).call(function () {
-                      return res();
-                    }).start();
-                  });
-                case 8:
-                  if (!tryOnce()) {
-                    _context.next = 10;
-                    break;
-                  }
-                  return _context.abrupt("return", true);
-                case 10:
-                  i++;
-                  _context.next = 5;
-                  break;
-                case 13:
-                  console.warn('[TVS] scrollToNodeOrAncestorLevelSafe: не нашли уровень для', node == null ? void 0 : node.name);
-                  return _context.abrupt("return", false);
-                case 15:
-                case "end":
-                  return _context.stop();
-              }
-            }, _callee);
-          }));
-          function scrollToNodeOrAncestorLevelSafe(_x, _x2) {
-            return _scrollToNodeOrAncestorLevelSafe.apply(this, arguments);
-          }
-          return scrollToNodeOrAncestorLevelSafe;
-        }() // ===== клавиши W/S =====
-        ;
-
-        _proto.onKeyDown = function onKeyDown(e) {
-          if (e.keyCode === KeyCode.KEY_W) this.keyHeldW = true;
-          if (e.keyCode === KeyCode.KEY_S) this.keyHeldS = true;
-        };
-        _proto.onKeyUp = function onKeyUp(e) {
-          if (e.keyCode === KeyCode.KEY_W) this.keyHeldW = false;
-          if (e.keyCode === KeyCode.KEY_S) this.keyHeldS = false;
-          // отпустили — инерция продолжает гаситься сама (update)
-        };
-
-        return TowerVirtualScroller;
-      }(Component), (_descriptor33 = _applyDecoratedDescriptor(_class8.prototype, "scroll", [_dec33], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return new TVS_Scroll();
-        }
-      }), _descriptor34 = _applyDecoratedDescriptor(_class8.prototype, "spawn", [_dec34], {
+        return TowerLayoutController;
+      }(Component), (_descriptor18 = _applyDecoratedDescriptor(_class5.prototype, "spawn", [_dec17], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return new TVS_SpawnLayout();
         }
-      })), _class8)) || _class7));
+      }), _descriptor19 = _applyDecoratedDescriptor(_class5.prototype, "scrollCtrl", [_dec18], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      })), _class5)) || _class4));
       cclegacy._RF.pop();
     }
   };

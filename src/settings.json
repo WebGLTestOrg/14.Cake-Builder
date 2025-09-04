@@ -71,8 +71,8 @@
     "screen": {
         "exactFitScreen": true,
         "designResolution": {
-            "width": 1920,
-            "height": 1080,
+            "width": 748,
+            "height": 1624,
             "policy": 2
         },
         "orientation": "auto"
