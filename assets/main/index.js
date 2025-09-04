@@ -2240,15 +2240,17 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   this.currentPiece = owner;
                   this.currentBinding = b;
 
-                  // 4) выезд (мировое расстояние одинаковое) + поворот модели на 90°
+                  // 4) выезд (компенсация скейла) + включение бортика + поворот модели
                   _context.next = 30;
                   return this.slideOutWithScaleComp();
                 case 30:
-                  _context.next = 32;
+                  // включаем “бортик” сразу после начала открытия (можно перенести выше — по вкусу)
+                  this.setRimActive(true);
+                  _context.next = 33;
                   return this.rotateModelOpen();
-                case 32:
-                  this.fsm = State.LockedOut;
                 case 33:
+                  this.fsm = State.LockedOut;
+                case 34:
                 case "end":
                   return _context.stop();
               }
@@ -2373,6 +2375,15 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           }
           return slideOutWithScaleComp;
         }();
+        _proto.setRimActive = function setRimActive(active) {
+          var _this$currentBinding;
+          var rim = (_this$currentBinding = this.currentBinding) == null ? void 0 : _this$currentBinding.rim;
+          if (rim && rim.active !== active) rim.active = active;
+        };
+        _proto.setRimActiveFor = function setRimActiveFor(binding, active) {
+          var rim = binding == null ? void 0 : binding.rim;
+          if (rim && rim.active !== active) rim.active = active;
+        };
         _proto.closeAndInsert = /*#__PURE__*/function () {
           var _closeAndInsert = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
             var _this$currentBinding$2, _this$baseLocalX$get, target, baseX;
@@ -2387,24 +2398,28 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                 case 2:
                   this.fsm = State.SlideIn;
 
-                  // 1) вернуть модель
+                  // 1) вернуть модель в базовый угол
                   _context3.next = 5;
                   return this.rotateModelClose();
                 case 5:
+                  // 2) выключить “бортик”
+                  this.setRimActive(false);
+
+                  // 3) задвинуть назад
                   if (!(this.currentPiece && this.currentBinding)) {
-                    _context3.next = 10;
+                    _context3.next = 11;
                     break;
                   }
                   target = (_this$currentBinding$2 = this.currentBinding.target) != null ? _this$currentBinding$2 : this.currentPiece;
                   baseX = (_this$baseLocalX$get = this.baseLocalX.get(target)) != null ? _this$baseLocalX$get : target.position.x;
-                  _context3.next = 10;
+                  _context3.next = 11;
                   return this.tweenLocalX(target, baseX, this.slideDuration, this.slideEasing);
-                case 10:
+                case 11:
                   this.unlockControls();
                   this.currentPiece = null;
                   this.currentBinding = null;
                   this.fsm = State.Idle;
-                case 14:
+                case 15:
                 case "end":
                   return _context3.stop();
               }
