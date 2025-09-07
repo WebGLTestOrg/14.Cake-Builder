@@ -1,3 +1,170 @@
+System.register("chunks:///_virtual/AddCake.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Component;
+  return {
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _inheritsLoose = module.inheritsLoose;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _assertThisInitialized = module.assertThisInitialized;
+      _asyncToGenerator = module.asyncToGenerator;
+      _regeneratorRuntime = module.regeneratorRuntime;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      Component = module.Component;
+    }],
+    execute: function () {
+      var _dec, _dec2, _dec3, _dec4, _class, _class2, _descriptor, _descriptor2, _descriptor3;
+      cclegacy._RF.push({}, "bf9e8dig6dG5784T9aSK/VS", "AddCake", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+      var CakeCreator = exports('CakeCreator', (_dec = ccclass('CakeCreator'), _dec2 = property({
+        tooltip: '������ URL �� ��������� API (�������� �����)'
+      }), _dec3 = property({
+        tooltip: '����. id ������� (�������� 1..N)'
+      }), _dec4 = property({
+        tooltip: '��������� �� # ����� ������ (��� � ������� "#999999")'
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(CakeCreator, _Component);
+        function CakeCreator() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "endpoint", _descriptor, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "maxFillingId", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "hexWithHash", _descriptor3, _assertThisInitialized(_this));
+          return _this;
+        }
+        var _proto = CakeCreator.prototype;
+        _proto.start = function start() {
+          // ������������ ������� ��� ������
+          this.createCake();
+        };
+        _proto.createCake = /*#__PURE__*/function () {
+          var _createCake = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            var payload, res, data;
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  if (this.endpoint) {
+                    _context.next = 3;
+                    break;
+                  }
+                  console.error('�� ������ endpoint');
+                  return _context.abrupt("return");
+                case 3:
+                  payload = {
+                    user_id: this.uuidV4(),
+                    // ����������, ������ UUID v4
+                    hex_color: this.randHexColor(this.hexWithHash),
+                    // ����������
+                    // ���� � �� ������������ ����, �� �������� ��������
+                    name: this.pickRandom(['����', '���', '����', '����', '����', '������', '���']),
+                    title: this.pickRandom(['���������� ����', '���������� ����', '��������� ����', '������� ����', '����������� ����']),
+                    greeting_text: this.pickRandom(['����������!', '������� � �������!', '����� ������� ������������...', '����� ���������� �����!', '������� �����!']),
+                    filling_id: this.randInt(1, Math.max(1, Math.floor(this.maxFillingId))) // �����������
+                    // file � �� ����������
+                  };
+
+                  _context.prev = 4;
+                  _context.next = 7;
+                  return fetch(this.endpoint, {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(payload)
+                  });
+                case 7:
+                  res = _context.sent;
+                  _context.next = 10;
+                  return res.json()["catch"](function () {
+                    return {};
+                  });
+                case 10:
+                  data = _context.sent;
+                  console.log('����� API:', data);
+                  _context.next = 17;
+                  break;
+                case 14:
+                  _context.prev = 14;
+                  _context.t0 = _context["catch"](4);
+                  console.error('������ ��� �������� �����:', _context.t0);
+                case 17:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, this, [[4, 14]]);
+          }));
+          function createCake() {
+            return _createCake.apply(this, arguments);
+          }
+          return createCake;
+        }() // ===== ������� =====
+        ;
+
+        _proto.pickRandom = function pickRandom(arr) {
+          return arr[Math.floor(Math.random() * arr.length)];
+        };
+        _proto.randInt = function randInt(min, max) {
+          return Math.floor(Math.random() * (max - min + 1)) + min;
+        };
+        _proto.randHexColor = function randHexColor(withHash) {
+          if (withHash === void 0) {
+            withHash = true;
+          }
+          var hex = '0123456789ABCDEF';
+          var out = withHash ? '#' : '';
+          for (var i = 0; i < 6; i++) out += hex[Math.floor(Math.random() * 16)];
+          return out;
+        };
+        _proto.uuidV4 = function uuidV4() {
+          if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+            return crypto.randomUUID();
+          }
+          // �������� ��� padStart
+          var bytes = [];
+          for (var i = 0; i < 16; i++) bytes.push(Math.floor(Math.random() * 256));
+          bytes[6] = bytes[6] & 0x0f | 0x40; // version 4
+          bytes[8] = bytes[8] & 0x3f | 0x80; // variant
+
+          var b2h = function b2h(b) {
+            var s = b.toString(16);
+            return s.length === 1 ? '0' + s : s;
+          };
+          var hex = bytes.map(b2h).join('');
+          return hex.slice(0, 8) + '-' + hex.slice(8, 12) + '-' + hex.slice(12, 16) + '-' + hex.slice(16, 20) + '-' + hex.slice(20);
+        };
+        return CakeCreator;
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "endpoint", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return '';
+        }
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "maxFillingId", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 10;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "hexWithHash", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      })), _class2)) || _class));
+      cclegacy._RF.pop();
+    }
+  };
+});
+
 System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
   var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _createClass, cclegacy, _decorator, Enum, JsonAsset, Texture2D, Material, Color, Layers, MeshRenderer, Vec3, gfx, Mesh, math, Component;
   return {
@@ -886,6 +1053,140 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
   };
 });
 
+System.register("chunks:///_virtual/AutoScaleCameraPosition.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Vec3, view, game, screen, Component, Size;
+  return {
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _inheritsLoose = module.inheritsLoose;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _assertThisInitialized = module.assertThisInitialized;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      Vec3 = module.Vec3;
+      view = module.view;
+      game = module.game;
+      screen = module.screen;
+      Component = module.Component;
+      Size = module.Size;
+    }],
+    execute: function () {
+      var _dec, _dec2, _dec3, _dec4, _class, _class2, _descriptor, _descriptor2, _descriptor3;
+      cclegacy._RF.push({}, "127bfVhJ3NP/LBgnQxROUZd", "AutoScaleCameraPosition", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+      var AutoScaleCameraPositionWithLogs = exports('AutoScaleCameraPositionWithLogs', (_dec = ccclass('AutoScaleCameraPositionWithLogs'), _dec2 = property({
+        tooltip: 'Референсное разрешение (под которое выставлена камера в редакторе)'
+      }), _dec3 = property({
+        tooltip: 'Режим вычисления коэффициента масштаба: average/min/max'
+      }), _dec4 = property({
+        tooltip: 'Включить подробные логи в консоль'
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(AutoScaleCameraPositionWithLogs, _Component);
+        function AutoScaleCameraPositionWithLogs() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "refResolution", _descriptor, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "scaleMode", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "debugLogs", _descriptor3, _assertThisInitialized(_this));
+          _this._basePos = new Vec3();
+          _this._lastScale = 0;
+          _this._onResize = function (tag) {
+            return function () {
+              _this._log("[event] " + tag);
+              _this._updateCameraPosition(tag);
+            };
+          };
+          return _this;
+        }
+        var _proto = AutoScaleCameraPositionWithLogs.prototype;
+        _proto.onEnable = function onEnable() {
+          this._basePos.set(this.node.position);
+          this._log('[onEnable] basePos =', this._basePos);
+
+          // события изменения экрана/окна
+          view.on('design-resolution-changed', this._onResize('design-resolution-changed'), this);
+          game.on(game.EVENT_GAME_RESIZE, this._onResize('EVENT_GAME_RESIZE'), this);
+          if (screen && screen.on) {
+            // cocos 3.8+: глобальные события экрана
+            screen.on('window-resize', this._onResize('window-resize'), this);
+            screen.on('orientation-change', this._onResize('orientation-change'), this);
+          }
+
+          // первичный пересчёт
+          this._updateCameraPosition('initial');
+        };
+        _proto.onDisable = function onDisable() {
+          view.off('design-resolution-changed', this._onResize('design-resolution-changed'), this);
+          game.off(game.EVENT_GAME_RESIZE, this._onResize('EVENT_GAME_RESIZE'), this);
+          if (screen && screen.off) {
+            screen.off('window-resize', this._onResize('window-resize'), this);
+            screen.off('orientation-change', this._onResize('orientation-change'), this);
+          }
+        };
+        _proto._updateCameraPosition = function _updateCameraPosition(source) {
+          var visible = view.getVisibleSize(); // логическая видимая область
+          var frame = view.getFrameSize(); // физический размер окна/экрана
+          var scaleX = visible.width / this.refResolution.width;
+          var scaleY = visible.height / this.refResolution.height;
+          var scale = 1;
+          switch (this.scaleMode) {
+            case 'min':
+              scale = Math.min(scaleX, scaleY);
+              break;
+            case 'max':
+              scale = Math.max(scaleX, scaleY);
+              break;
+            default:
+              scale = (scaleX + scaleY) * 0.5;
+              break;
+            // average
+          }
+
+          var newPos = new Vec3(this._basePos.x * scale, this._basePos.y * scale, this._basePos.z * scale);
+          this.node.setPosition(newPos);
+          this._log("[update from: " + source + "]", '\n  visible =', visible.width + "x" + visible.height, '\n  frame   =', frame.width + "x" + frame.height, '\n  ref     =', this.refResolution.width + "x" + this.refResolution.height, '\n  scaleX  =', scaleX.toFixed(4), '\n  scaleY  =', scaleY.toFixed(4), '\n  mode    =', this.scaleMode, '\n  scale   =', scale.toFixed(4), '\n  basePos =', this._basePos, '\n  newPos  =', newPos, this._lastScale !== scale ? '\n  (scale changed ✅)' : '\n  (scale unchanged)');
+          this._lastScale = scale;
+        };
+        _proto._log = function _log() {
+          var _console;
+          for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
+            args[_key2] = arguments[_key2];
+          }
+          if (this.debugLogs) (_console = console).log.apply(_console, ['[AutoScaleCameraPosition]'].concat(args));
+        };
+        return AutoScaleCameraPositionWithLogs;
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "refResolution", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return new Size(1920, 1080);
+        }
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "scaleMode", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 'average';
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "debugLogs", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      })), _class2)) || _class));
+      cclegacy._RF.pop();
+    }
+  };
+});
+
 System.register("chunks:///_virtual/CakeApiExample.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
   var _inheritsLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Component;
   return {
@@ -910,7 +1211,7 @@ System.register("chunks:///_virtual/CakeApiExample.ts", ['./rollupPluginModLoBab
         var _proto = CakeApiExample.prototype;
         _proto.start = /*#__PURE__*/function () {
           var _start = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-            var response, data;
+            var response, text, data, rawItems, keys, normalized;
             return _regeneratorRuntime().wrap(function _callee$(_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
@@ -921,49 +1222,76 @@ System.register("chunks:///_virtual/CakeApiExample.ts", ['./rollupPluginModLoBab
                     headers: {
                       "Content-Type": "application/json"
                     },
-                    body: JSON.stringify({}) // ���� ��������� ������������ - ������ ��� ������� �������
+                    body: JSON.stringify({})
                   });
-
                 case 3:
                   response = _context.sent;
                   if (response.ok) {
-                    _context.next = 12;
+                    _context.next = 10;
                     break;
                   }
-                  _context.t0 = console;
-                  _context.t1 = response.status;
-                  _context.next = 9;
-                  return response.text();
-                case 9:
-                  _context.t2 = _context.sent;
-                  _context.t0.error.call(_context.t0, "������ �������:", _context.t1, _context.t2);
+                  _context.next = 7;
+                  return safeReadText(response);
+                case 7:
+                  text = _context.sent;
+                  console.error("Ошибка запроса:", response.status, text);
                   return _context.abrupt("return");
+                case 10:
+                  _context.next = 12;
+                  return response.json()["catch"](function () {
+                    return null;
+                  });
                 case 12:
-                  _context.next = 14;
-                  return response.json();
-                case 14:
                   data = _context.sent;
-                  console.log("����� �� API:", data);
+                  console.log('Сырой ответ API:', data);
 
-                  // ���� � ������ ������ � ����� ���������:
-                  if (Array.isArray(data)) {
-                    data.forEach(function (item, i) {
-                      console.log("\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD\uFFFD " + (i + 1) + ":", item);
-                    });
-                  } else {
-                    console.log("������ �� ������, � ������:", data);
+                  // <-- ДОБАВИЛИ cakes
+                  rawItems = Array.isArray(data) ? data : Array.isArray(data == null ? void 0 : data.cakes) ? data.cakes : Array.isArray(data == null ? void 0 : data.items) ? data.items : Array.isArray(data == null ? void 0 : data.data) ? data.data : Array.isArray(data == null ? void 0 : data.result) ? data.result : [];
+                  if (!(!Array.isArray(rawItems) || rawItems.length === 0)) {
+                    _context.next = 19;
+                    break;
                   }
-                  _context.next = 22;
-                  break;
+                  keys = data && typeof data === 'object' ? Object.keys(data) : [];
+                  console.warn('Не нашли массив элементов. Ключи корня ответа:', keys);
+                  return _context.abrupt("return");
                 case 19:
-                  _context.prev = 19;
-                  _context.t3 = _context["catch"](0);
-                  console.error("������ ����������:", _context.t3);
-                case 22:
+                  normalized = rawItems.map(function (raw, idx) {
+                    var n = normalizeCakePiece(raw);
+                    if (!n.user_id) {
+                      console.warn("[item " + idx + "] user_id \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u0438\u043B\u0438 \u043D\u0435 UUID. \u0418\u0441\u0445\u043E\u0434\u043D\u043E\u0435:", pick(raw, 'user_id', 'uniq_id', 'userId', 'userID', 'user.id', 'attributes.user_id', 'attributes.userId'));
+                    }
+                    if (!n.hex_color) {
+                      console.warn("[item " + idx + "] hex_color \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442 \u0438\u043B\u0438 \u043D\u0435 HEX. \u0418\u0441\u0445\u043E\u0434\u043D\u043E\u0435:", pick(raw, 'hex_color', 'hexColor', 'color', 'attributes.hex_color', 'attributes.color'));
+                    }
+                    return n;
+                  });
+                  console.log("Нормализованные элементы (отсутствующие поля = null):", normalized);
+                  try {
+                    // @ts-ignore
+                    console.table(normalized.map(function (x, i) {
+                      return {
+                        '#': i,
+                        user_id: x.user_id,
+                        hex_color: x.hex_color,
+                        name: x.name,
+                        title: x.title,
+                        greeting_text: x.greeting_text,
+                        filling_id: x.filling_id,
+                        file_present: x.file ? 'yes' : 'no'
+                      };
+                    }));
+                  } catch (_unused) {}
+                  _context.next = 27;
+                  break;
+                case 24:
+                  _context.prev = 24;
+                  _context.t0 = _context["catch"](0);
+                  console.error("Ошибка соединения:", _context.t0);
+                case 27:
                 case "end":
                   return _context.stop();
               }
-            }, _callee, null, [[0, 19]]);
+            }, _callee, null, [[0, 24]]);
           }));
           function start() {
             return _start.apply(this, arguments);
@@ -972,66 +1300,113 @@ System.register("chunks:///_virtual/CakeApiExample.ts", ['./rollupPluginModLoBab
         }();
         return CakeApiExample;
       }(Component)) || _class));
-      cclegacy._RF.pop();
-    }
-  };
-});
 
-System.register("chunks:///_virtual/CenterOnTargetAtStart.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Node, Vec3, Component;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Node = module.Node;
-      Vec3 = module.Vec3;
-      Component = module.Component;
-    }],
-    execute: function () {
-      var _dec, _dec2, _class, _class2, _descriptor;
-      cclegacy._RF.push({}, "b86c0rFad9D9o+ZG/MSFLc8", "CenterOnTargetAtStart", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var CenterOnTargetAtStart = exports('CenterOnTargetAtStart', (_dec = ccclass('CenterOnTargetAtStart'), _dec2 = property({
-        type: Node,
-        tooltip: '���� ����� (������), �� ������� ������� ��� ������.'
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(CenterOnTargetAtStart, _Component);
-        function CenterOnTargetAtStart() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "target", _descriptor, _assertThisInitialized(_this));
-          return _this;
+      /* ================ Helpers ================ */
+      function safeReadText(_x) {
+        return _safeReadText.apply(this, arguments);
+      } // Достаём значение по альтернативным путям (поддержка вложенности через '.')
+      function _safeReadText() {
+        _safeReadText = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(resp) {
+          return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+            while (1) switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.prev = 0;
+                _context2.next = 3;
+                return resp.text();
+              case 3:
+                return _context2.abrupt("return", _context2.sent);
+              case 6:
+                _context2.prev = 6;
+                _context2.t0 = _context2["catch"](0);
+                return _context2.abrupt("return", "");
+              case 9:
+              case "end":
+                return _context2.stop();
+            }
+          }, _callee2, null, [[0, 6]]);
+        }));
+        return _safeReadText.apply(this, arguments);
+      }
+      function pick(raw) {
+        for (var _len = arguments.length, paths = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+          paths[_key - 1] = arguments[_key];
         }
-        var _proto = CenterOnTargetAtStart.prototype;
-        _proto.start = function start() {
-          if (!this.target) {
-            console.error('[CenterOnTargetAtStart] Target �� �����!');
-            return;
-          }
+        for (var _i = 0, _paths = paths; _i < _paths.length; _i++) {
+          var p = _paths[_i];
+          var v = p.split('.').reduce(function (acc, k) {
+            return acc ? acc[k] : undefined;
+          }, raw);
+          if (v !== undefined) return v;
+        }
+        return undefined;
+      }
+      function strOrNull(v) {
+        if (typeof v === 'string') {
+          var s = v.trim();
+          return s.length ? s : null;
+        }
+        return null;
+      }
+      function numOrNull(v) {
+        if (typeof v === 'number' && Number.isFinite(v)) return v;
+        if (typeof v === 'string') {
+          var s = v.trim();
+          if (s === '') return null;
+          var n = Number(s);
+          return Number.isFinite(n) ? n : null;
+        }
+        return null;
+      }
 
-          // ��������� ������� ������ ������, ������������ ������ �� ����������� � �����.
-          var camPos = this.node.worldPosition;
-          var tgt = this.target.worldPosition;
-          this.node.lookAt(new Vec3(tgt.x, camPos.y, tgt.z));
+      // UUID 8-4-4-4-12 (версии не проверяем строго)
+      function isUuidLoose(v) {
+        var s = v.trim();
+        return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+      }
+
+      // HEX: #RGB / #RRGGBB или без '#'
+      function isHexColor(v) {
+        return /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v.trim());
+      }
+      function normalizeHex(v) {
+        var s = (v.startsWith('#') ? v.slice(1) : v).trim().toLowerCase();
+        if (s.length === 3) return '#' + s.split('').map(function (ch) {
+          return ch + ch;
+        }).join('').toUpperCase();
+        if (s.length === 6) return '#' + s.toUpperCase();
+        return s ? '#' + s.slice(0, 6).toUpperCase() : '#000000';
+      }
+      function normalizeCakePiece(raw) {
+        // <-- ДОБАВИЛИ uniq_id как источник user_id
+        var user_idRaw = pick(raw, 'user_id', 'uniq_id', 'userId', 'userID', 'user.id', 'attributes.user_id', 'attributes.userId');
+        var hexColorRaw = pick(raw, 'hex_color', 'hexColor', 'color', 'attributes.hex_color', 'attributes.color');
+        var nameRaw = pick(raw, 'name', 'nickname', 'user_name', 'attributes.name');
+        var titleRaw = pick(raw, 'title', 'label', 'attributes.title');
+        var greetingRaw = pick(raw, 'greeting_text', 'greetingText', 'greeting', 'attributes.greeting_text');
+        var fillingRaw = pick(raw, 'filling_id', 'fillingId', 'attributes.filling_id');
+        var fileRaw = pick(raw, 'file', 'file_base64', 'attributes.file');
+        var user_id = strOrNull(user_idRaw);
+        if (user_id && !isUuidLoose(user_id)) {
+          console.warn('user_id не прошёл UUID-проверку → null:', user_id);
+          user_id = null;
+        }
+        var hex_color = strOrNull(hexColorRaw);
+        if (hex_color && isHexColor(hex_color)) {
+          hex_color = normalizeHex(hex_color);
+        } else {
+          if (hex_color) console.warn('hex_color не прошёл HEX-проверку → null:', hex_color);
+          hex_color = null;
+        }
+        return {
+          user_id: user_id,
+          hex_color: hex_color,
+          name: strOrNull(nameRaw),
+          title: strOrNull(titleRaw),
+          greeting_text: strOrNull(greetingRaw),
+          filling_id: numOrNull(fillingRaw),
+          file: strOrNull(fileRaw)
         };
-        return CenterOnTargetAtStart;
-      }(Component), _descriptor = _applyDecoratedDescriptor(_class2.prototype, "target", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _class2)) || _class));
+      }
       cclegacy._RF.pop();
     }
   };
@@ -1058,7 +1433,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
     }],
     execute: function () {
       var _dec, _dec2, _dec3, _dec4, _dec5, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
-      cclegacy._RF.push({}, "06269Z0iQNODJORRQsOuBPu", "ClickMoveBinding", undefined);
+      cclegacy._RF.push({}, "a3b9f30vchC9aP2MSuw/5Bg", "ClickMoveBinding", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
       var ClickMoveBinding = exports('ClickMoveBinding', (_dec = ccclass('ClickMoveBinding'), _dec2 = property({
@@ -1571,446 +1946,6 @@ System.register("chunks:///_virtual/ColorLibrary.ts", ['./rollupPluginModLoBabel
         writable: true,
         initializer: function initializer() {
           return 0;
-        }
-      })), _class2)) || _class));
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/FreeCamera.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './VerticalMoveAroundTarget.ts', './InteractionState.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, cclegacy, _decorator, Node, input, Input, clamp, Vec2, Vec3, Component, VerticalMoveAroundTarget, InteractionState;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Node = module.Node;
-      input = module.input;
-      Input = module.Input;
-      clamp = module.clamp;
-      Vec2 = module.Vec2;
-      Vec3 = module.Vec3;
-      Component = module.Component;
-    }, function (module) {
-      VerticalMoveAroundTarget = module.VerticalMoveAroundTarget;
-    }, function (module) {
-      InteractionState = module.InteractionState;
-    }],
-    execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18;
-      cclegacy._RF.push({}, "15f6cp12VhM7IGhUEx42YWM", "FreeCamera", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var VerticalZoomAroundTargetXZ = exports('VerticalZoomAroundTargetXZ', (_dec = ccclass('VerticalZoomAroundTargetXZ'), _dec2 = property({
-        type: Node,
-        tooltip: 'Таргет: и вертикаль (Y), и точка зума (XZ).'
-      }), _dec3 = property({
-        tooltip: 'Азимут (yaw) вокруг таргета в градусах. 0° = +Z, 90° = +X.'
-      }), _dec4 = property({
-        tooltip: 'Стартовая дистанция (по XZ).'
-      }), _dec5 = property({
-        tooltip: 'Плавность зума (сек). Меньше — резче.'
-      }), _dec6 = property({
-        tooltip: 'Высота по умолчанию, если нет VerticalMoveAroundTarget.'
-      }), _dec7 = property({
-        tooltip: 'Шаг зума от колёсика.'
-      }), _dec8 = property({
-        tooltip: 'Инвертировать колесо: к себе — приближение.'
-      }), _dec9 = property({
-        tooltip: 'Порог изменения межпальцевого расстояния (px) для старта щипка.'
-      }), _dec10 = property({
-        tooltip: 'Чувствительность щипка: изменение дистанции на 1 пиксель.'
-      }), _dec11 = property({
-        tooltip: 'Инвертировать щипок: сводим пальцы — приближение.'
-      }), _dec12 = property({
-        tooltip: 'Брать базовую высоту из VerticalMoveAroundTarget.startHeight.'
-      }), _dec13 = property({
-        tooltip: 'Базовая высота (если не берём из VerticalMoveAroundTarget).'
-      }), _dec14 = property({
-        tooltip: 'MIN дистанция на базовой высоте.'
-      }), _dec15 = property({
-        tooltip: 'MAX дистанция на базовой высоте.'
-      }), _dec16 = property({
-        tooltip: 'Насколько меняется MIN на +1 высоты (вверх уменьшает min).'
-      }), _dec17 = property({
-        tooltip: 'Насколько меняется MAX на +1 высоты (вверх уменьшает max).'
-      }), _dec18 = property({
-        tooltip: 'Жёсткие пределы, чтобы не улететь в ноль/бесконечность. MIN.'
-      }), _dec19 = property({
-        tooltip: 'Жёсткие пределы, чтобы не улететь в ноль/бесконечность. MAX.'
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(VerticalZoomAroundTargetXZ, _Component);
-        function VerticalZoomAroundTargetXZ() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "target", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "yawDeg", _descriptor2, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "distance", _descriptor3, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "zoomSmoothTime", _descriptor4, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "fallbackHeight", _descriptor5, _assertThisInitialized(_this));
-          // ===== колесо
-          _initializerDefineProperty(_this, "zoomStep", _descriptor6, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "invertWheel", _descriptor7, _assertThisInitialized(_this));
-          // ===== pinch (тач)
-          _initializerDefineProperty(_this, "pinchThresholdPx", _descriptor8, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "pinchUnitsPerPixel", _descriptor9, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "invertPinch", _descriptor10, _assertThisInitialized(_this));
-          // ===== ЛИНЕЙНЫЕ ДИНАМИЧЕСКИЕ ГРАНИЦЫ ОТ ВЫСОТЫ =====
-          _initializerDefineProperty(_this, "useBaselineFromVertical", _descriptor11, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "baselineHeight", _descriptor12, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "minDistAtBaseline", _descriptor13, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "maxDistAtBaseline", _descriptor14, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "minPerHeight", _descriptor15, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "maxPerHeight", _descriptor16, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "hardMin", _descriptor17, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "hardMax", _descriptor18, _assertThisInitialized(_this));
-          // ===== внутреннее
-          _this.targetDistance = 0;
-          _this.currentDistance = 0;
-          _this.pendingDeltaDist = 0;
-          // pinch state
-          _this.pinchId1 = null;
-          _this.pinchId2 = null;
-          _this.pinchStartGap = 0;
-          _this.pinchLastGap = 0;
-          _this.pinchAccumPx = 0;
-          _this.pinchActive = false;
-          _this.pinchClaimed = false;
-          // актуальные динамические границы на кадр
-          _this.dynMin = 2;
-          _this.dynMax = 50;
-          return _this;
-        }
-        var _proto = VerticalZoomAroundTargetXZ.prototype;
-        _proto.onEnable = function onEnable() {
-          input.on(Input.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
-          input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-          input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-          input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-          input.on(Input.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-        };
-        _proto.onDisable = function onDisable() {
-          input.off(Input.EventType.MOUSE_WHEEL, this.onMouseWheel, this);
-          input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
-          input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-          input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-          input.off(Input.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-        };
-        _proto.start = function start() {
-          if (!this.target) {
-            console.error('[VerticalZoomAroundTargetXZ] Target не задан!');
-            return;
-          }
-          // первичная установка лимитов
-          this._updateDynamicLimits();
-          this.targetDistance = clamp(this.distance, this.dynMin, this.dynMax);
-          this.currentDistance = this.targetDistance;
-          this.applyTransform();
-        }
-
-        // ---------- колесо ----------
-        ;
-
-        _proto.onMouseWheel = function onMouseWheel(e) {
-          var sign = this.invertWheel ? -1 : 1;
-          this.pendingDeltaDist += sign * e.getScrollY() * this.zoomStep * 0.1;
-        }
-
-        // ---------- pinch ----------
-        ;
-
-        _proto.onTouchStart = function onTouchStart(e) {
-          var id = e.getID();
-          if (this.pinchId1 === null) this.pinchId1 = id;else if (this.pinchId2 === null && id !== this.pinchId1) {
-            this.pinchId2 = id;
-            var p1 = this._touchPos(this.pinchId1, e);
-            var p2 = this._touchPos(this.pinchId2, e);
-            if (p1 && p2) {
-              this.pinchStartGap = this._gap(p1, p2);
-              this.pinchLastGap = this.pinchStartGap;
-              this.pinchAccumPx = 0;
-              this.pinchActive = false;
-              this.pinchClaimed = false;
-            }
-          }
-        };
-        _proto.onTouchMove = function onTouchMove(e) {
-          if (this.pinchId1 === null || this.pinchId2 === null) return;
-          var p1 = this._touchPos(this.pinchId1, e);
-          var p2 = this._touchPos(this.pinchId2, e);
-          if (!p1 || !p2) return;
-          var gap = this._gap(p1, p2);
-          var gapIncPx = gap - this.pinchLastGap;
-          var totalPx = gap - this.pinchStartGap;
-          this.pinchLastGap = gap;
-          if (!this.pinchActive) {
-            this.pinchAccumPx += gapIncPx;
-            if (Math.abs(totalPx) >= this.pinchThresholdPx) {
-              this.pinchActive = true;
-              if (!InteractionState.inGesture) {
-                InteractionState.beginGesture(this.pinchId1, 'touch');
-                this.pinchClaimed = true;
-              }
-              InteractionState.markDrag(this.pinchId1);
-            } else {
-              return;
-            }
-          }
-          if (gapIncPx !== 0) {
-            var sign = this.invertPinch ? -1 : 1;
-            this.pendingDeltaDist += gapIncPx * this.pinchUnitsPerPixel * sign;
-          }
-        };
-        _proto.onTouchEnd = function onTouchEnd(e) {
-          var id = e.getID();
-          if (id === this.pinchId1 || id === this.pinchId2) {
-            if (this.pinchClaimed) InteractionState.tryEndGesture(this.pinchId1, 'touch');
-            this._resetPinch();
-          }
-        };
-        _proto.onTouchCancel = function onTouchCancel(e) {
-          var id = e.getID();
-          if (id === this.pinchId1 || id === this.pinchId2) {
-            if (this.pinchClaimed) InteractionState.tryEndGesture(this.pinchId1, 'touch');
-            this._resetPinch();
-          }
-        };
-        _proto._resetPinch = function _resetPinch() {
-          this.pinchId1 = this.pinchId2 = null;
-          this.pinchStartGap = this.pinchLastGap = 0;
-          this.pinchAccumPx = 0;
-          this.pinchActive = false;
-          this.pinchClaimed = false;
-        };
-        _proto._touchPos = function _touchPos(id, evt) {
-          var all = evt.getAllTouches == null ? void 0 : evt.getAllTouches();
-          if (all && all.length > 0) {
-            for (var _iterator = _createForOfIteratorHelperLoose(all), _step; !(_step = _iterator()).done;) {
-              var t = _step.value;
-              if (t.getID() === id) return new Vec2(t.getLocationX(), t.getLocationY());
-            }
-            return null;
-          }
-          if (evt.getID() === id) return new Vec2(evt.getLocationX(), evt.getLocationY());
-          return null;
-        };
-        _proto._gap = function _gap(a, b) {
-          var dx = a.x - b.x,
-            dy = a.y - b.y;
-          return Math.sqrt(dx * dx + dy * dy);
-        }
-
-        // ---------- динамические лимиты: linear от базовой высоты ----------
-        ;
-
-        _proto._getOffsetY = function _getOffsetY() {
-          var vm = this.getComponent(VerticalMoveAroundTarget);
-          return vm ? vm.offsetY : this.fallbackHeight;
-        };
-        _proto._getBaseline = function _getBaseline() {
-          if (this.useBaselineFromVertical) {
-            var vm = this.getComponent(VerticalMoveAroundTarget);
-            if (vm && typeof vm.startHeight === 'number') return vm.startHeight;
-          }
-          return this.baselineHeight;
-        }
-
-        /** Считает dynMin/dynMax линейно от (offsetY - baseline).
-         *  Выше базы -> границы уменьшаются; ниже -> увеличиваются.
-         */;
-        _proto._updateDynamicLimits = function _updateDynamicLimits() {
-          var h = this._getOffsetY();
-          var h0 = this._getBaseline();
-          var dh = h - h0; // +вверх, -вниз
-
-          // min/max на текущей высоте:
-          var minDyn = this.minDistAtBaseline - this.minPerHeight * dh;
-          var maxDyn = this.maxDistAtBaseline - this.maxPerHeight * dh;
-
-          // жёсткие пределы и корректность
-          minDyn = clamp(minDyn, this.hardMin, this.hardMax);
-          maxDyn = clamp(maxDyn, this.hardMin, this.hardMax);
-          if (maxDyn < minDyn) {
-            var mid = 0.5 * (minDyn + maxDyn);
-            minDyn = mid - 0.001;
-            maxDyn = mid + 0.001;
-          }
-          this.dynMin = minDyn;
-          this.dynMax = maxDyn;
-        }
-
-        // ---------- апдейт ----------
-        ;
-
-        _proto.update = function update(dt) {
-          if (!this.target) return;
-
-          // 1) обновим линейные динамические лимиты от высоты
-          this._updateDynamicLimits();
-
-          // 2) применим накопленное изменение дистанции (колесо/щипок)
-          if (this.pendingDeltaDist !== 0) {
-            this.targetDistance += this.pendingDeltaDist;
-            this.pendingDeltaDist = 0;
-          }
-
-          // 3) клампим таргет по динамическим лимитам
-          this.targetDistance = clamp(this.targetDistance, this.dynMin, this.dynMax);
-
-          // 4) плавно тянем current к target
-          var k = this.zoomSmoothTime > 0 ? 1 - Math.exp(-dt / this.zoomSmoothTime) : 1;
-          this.currentDistance += (this.targetDistance - this.currentDistance) * k;
-
-          // защитный кламп current (если лимиты сдвинулись резко из-за изменения высоты)
-          this.currentDistance = clamp(this.currentDistance, this.dynMin, this.dynMax);
-          this.applyTransform();
-        };
-        _proto.applyTransform = function applyTransform() {
-          var tgt = this.target.worldPosition;
-          var offsetY = this._getOffsetY(); // текущая высота камеры от VerticalMoveAroundTarget
-
-          var yaw = this.yawDeg * Math.PI / 180;
-          var offX = Math.sin(yaw) * this.currentDistance;
-          var offZ = Math.cos(yaw) * this.currentDistance;
-          var camPos = new Vec3(tgt.x + offX, tgt.y + offsetY, tgt.z + offZ);
-          this.node.setWorldPosition(camPos);
-          this.node.lookAt(new Vec3(tgt.x, camPos.y, tgt.z));
-        };
-        return VerticalZoomAroundTargetXZ;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "target", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "yawDeg", [_dec3], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
-        }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "distance", [_dec4], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 10;
-        }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "zoomSmoothTime", [_dec5], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.15;
-        }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "fallbackHeight", [_dec6], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 2;
-        }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "zoomStep", [_dec7], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 2;
-        }
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "invertWheel", [_dec8], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return true;
-        }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "pinchThresholdPx", [_dec9], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 12;
-        }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "pinchUnitsPerPixel", [_dec10], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.02;
-        }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "invertPinch", [_dec11], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return true;
-        }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "useBaselineFromVertical", [_dec12], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return true;
-        }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "baselineHeight", [_dec13], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 2;
-        }
-      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "minDistAtBaseline", [_dec14], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 6;
-        }
-      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "maxDistAtBaseline", [_dec15], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 60;
-        }
-      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "minPerHeight", [_dec16], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.6;
-        }
-      }), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "maxPerHeight", [_dec17], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1.2;
-        }
-      }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "hardMin", [_dec18], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.25;
-        }
-      }), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "hardMax", [_dec19], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1000;
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
@@ -2854,26 +2789,27 @@ System.register("chunks:///_virtual/InteractionState.ts", ['cc'], function (expo
   };
 });
 
-System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './CakeApiExample.ts', './CenterOnTargetAtStart.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './FreeCamera.ts', './GlobalClickManager.ts', './InteractionState.ts', './PieceSpawner.ts', './PointerIds.ts', './RandomOpenButton.ts', './RotateYByKeys.ts', './ScaleCameraFOV.ts', './ScreenShotExample.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './UIScaleBounce.ts', './VerticalMoveAroundTarget.ts'], function () {
+System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './AddCake.ts', './AutoScaleCameraPosition.ts', './CakeApiExample.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './GlobalClickManager.ts', './InteractionState.ts', './PointerIds.ts', './RotateYByKeys.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './PieceSpawner.ts'], function () {
   return {
-    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
   };
 });
 
 System.register("chunks:///_virtual/PieceSpawner.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ColorLibrary.ts', './ClickMoveBinding.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Prefab, Node, instantiate, Vec3, Component, ColorTextureLibrary, ClickMoveBinding;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _createClass, cclegacy, _decorator, Prefab, instantiate, Vec3, Component, ColorTextureLibrary, ClickMoveBinding;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
       _inheritsLoose = module.inheritsLoose;
       _initializerDefineProperty = module.initializerDefineProperty;
       _assertThisInitialized = module.assertThisInitialized;
+      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+      _createClass = module.createClass;
     }, function (module) {
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
       Prefab = module.Prefab;
-      Node = module.Node;
       instantiate = module.instantiate;
       Vec3 = module.Vec3;
       Component = module.Component;
@@ -2883,24 +2819,47 @@ System.register("chunks:///_virtual/PieceSpawner.ts", ['./rollupPluginModLoBabel
       ClickMoveBinding = module.ClickMoveBinding;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14;
-      cclegacy._RF.push({}, "afb06F8c6dL7IKM2pPDv/LO", "PieceSpawner", undefined);
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13;
+      cclegacy._RF.push({}, "7c11fA6KKdNXKI0ygDDYDbj", "PieceSpawner", undefined);
       var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var PieceSpawner = exports('PieceSpawner', (_dec = ccclass('PieceSpawner'), _dec2 = property({
+        property = _decorator.property,
+        executeInEditMode = _decorator.executeInEditMode,
+        menu = _decorator.menu;
+      var PieceSpawner = exports('PieceSpawner', (_dec = ccclass('PieceSpawner'), _dec2 = executeInEditMode(), _dec3 = menu('Custom/Piece Spawner'), _dec4 = property({
         type: Prefab
-      }), _dec3 = property({
-        tooltip: 'Максимум объектов во всей башне (ёмкость). Скролл вниз упирается в это значение.'
-      }), _dec4 = property({
-        type: Node,
-        tooltip: 'Нода камеры (смотрим worldPosition.y)'
       }), _dec5 = property({
-        tooltip: 'Гистерезис срабатывания'
+        type: ColorTextureLibrary,
+        tooltip: 'Библиотека цветов/текстур'
       }), _dec6 = property({
-        tooltip: 'Имя переменной цвета у материала (albedo/baseColor/…)'
-      }), _dec7 = property({
         tooltip: 'Индекс материала в MeshRenderer'
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+      }), _dec7 = property({
+        group: {
+          name: 'Editor'
+        }
+      }), _dec8 = property({
+        group: {
+          name: 'Editor'
+        }
+      }), _dec9 = property({
+        group: {
+          name: 'Editor'
+        }
+      }), _dec10 = property({
+        visible: true,
+        group: {
+          name: 'Editor'
+        }
+      }), _dec11 = property({
+        visible: true,
+        group: {
+          name: 'Editor'
+        }
+      }), _dec12 = property({
+        visible: true,
+        group: {
+          name: 'Editor'
+        }
+      }), _dec(_class = _dec2(_class = _dec3(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(PieceSpawner, _Component);
         function PieceSpawner() {
           var _this;
@@ -2908,289 +2867,131 @@ System.register("chunks:///_virtual/PieceSpawner.ts", ['./rollupPluginModLoBabel
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          // === параметры ===
           _initializerDefineProperty(_this, "prefab", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "totalObjects", _descriptor2, _assertThisInitialized(_this));
-          // Сколько реально инстансим в пул
-          _initializerDefineProperty(_this, "maxTotalObjects", _descriptor3, _assertThisInitialized(_this));
-          // Лимит «всей башни»
+          // 👇 Добавляем явную ссылку на библиотеку цветов (перетащить в инспекторе)
+          _initializerDefineProperty(_this, "colorLib", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "totalObjects", _descriptor3, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "objectsPerLevel", _descriptor4, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "angleStep", _descriptor5, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "baseScale", _descriptor6, _assertThisInitialized(_this));
-          // scale(0)
           _initializerDefineProperty(_this, "levelScaleFactor", _descriptor7, _assertThisInitialized(_this));
-          // scale(n+1) = scale(n) / levelScaleFactor  (масштаб растёт вниз)
           _initializerDefineProperty(_this, "baseHeight", _descriptor8, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "levelPadding", _descriptor9, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "topY", _descriptor10, _assertThisInitialized(_this));
-          // верхняя граница (вершина)
-          _initializerDefineProperty(_this, "cameraNode", _descriptor11, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "recycleMargin", _descriptor12, _assertThisInitialized(_this));
-          // опционально: цвет/текстуры
-          _initializerDefineProperty(_this, "colorUniform", _descriptor13, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "materialIndex", _descriptor14, _assertThisInitialized(_this));
-          // === внутреннее состояние (пул) ===
-          /** Кольцо полных уровней (каждый по objectsPerLevel). */
-          _this.fullRing = [];
-          /** Неполный верхний «резерв» — показывается только на абсолютной вершине (offset==0). */
-          _this.reserveTop = [];
-          _this.K = 0;
-          // число полных уровней в пуле
-          _this.reserveCount = 0;
-          // размер неполного уровня из пула
-          _this.ringTopAbsOffset = 0;
-          // сколько уровней «ушли вниз» от вершины
-          // === разбиение максимальной башни (для лимита) ===
-          _this.Kmax = 0;
-          _this.reserveMax = 0;
-          // — кэш для формул —
-          _this.r = 1;
-          // r = 1 / levelScaleFactor
-          _this.h0 = 0;
-          // h0 = baseHeight * baseScale
-          _this.oneMinusR = 0;
+          _initializerDefineProperty(_this, "materialIndex", _descriptor10, _assertThisInitialized(_this));
+          // ==== Псевдо-кнопки в инспекторе ====
+          _initializerDefineProperty(_this, "_spawnNow", _descriptor11, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "_clearNow", _descriptor12, _assertThisInitialized(_this));
+          // необязательно, но удобно: перекрасить без пересоздания
+          _initializerDefineProperty(_this, "_recolorNow", _descriptor13, _assertThisInitialized(_this));
           return _this;
         }
         var _proto = PieceSpawner.prototype;
-        // 1 - r
-        // === lifecycle ===
+        // ==== конец блока псевдо-кнопок ====
         _proto.start = function start() {
-          this.initMath();
-          this.buildInitialPool();
-        }
-
-        // === оптимизированный update: максимум 1 рецикл за кадр ===
-        ;
-
-        _proto.update = function update() {
-          if (!this.cameraNode) return;
-          var camY = this.cameraNode.worldPosition.y;
-          var topAbs = this.isAtApex() ? 0 : this.ringTopAbsOffset;
-
-          // СПУСК: шаг вниз, если не дошли до «дна» макс-башни
-          if (camY < this.levelBottomY(topAbs) - this.recycleMargin) {
-            this.scrollDownOneLevel();
-            this.applyTransforms(); // пересчитали трансформы и выведем «сколько осталось»
-            return;
-          }
-
-          // ПОДЪЁМ: шаг вверх (не выше вершины)
-          if (this.ringTopAbsOffset > 0) {
-            var prevAbs = this.ringTopAbsOffset - 1;
-            if (camY > this.levelTopY(prevAbs) + this.recycleMargin) {
-              this.scrollUpOneLevel();
-              this.applyTransforms();
-              return;
-            }
-          }
-        }
-
-        // === математика (O(1) формулы) ===
-        ;
-
-        _proto.initMath = function initMath() {
-          this.r = this.levelScaleFactor > 0 ? 1 / this.levelScaleFactor : 1;
-          this.h0 = this.baseHeight * this.baseScale;
-          this.oneMinusR = 1 - this.r;
+          this.spawnObjects();
         };
-        _proto.isAtApex = function isAtApex() {
-          return this.ringTopAbsOffset === 0;
-        }
-
-        /** scale(abs) = baseScale * r^abs */;
-        _proto.levelScaleAbs = function levelScaleAbs(abs) {
-          return this.baseScale * Math.pow(this.r, abs);
-        }
-        /** Толщина уровня (включая паддинг) */;
-        _proto.levelThicknessAbs = function levelThicknessAbs(abs) {
-          return this.baseHeight * this.levelScaleAbs(abs) + this.levelPadding;
-        }
-        /**
-         * S(n): смещение от вершины до верха уровня n (по верхним граням), n >= 0.
-         * r != 1: S(n) = h0 * (1 - r^n) / (1 - r) + n * levelPadding
-         * r == 1: S(n) = n * (h0 + levelPadding)
-         */;
-        _proto.cumulativeYOffsetAbs = function cumulativeYOffsetAbs(n) {
-          if (n <= 0) return 0;
-          if (this.r === 1 || this.oneMinusR === 0) {
-            return n * (this.h0 + this.levelPadding);
-          }
-          var rn = Math.pow(this.r, n);
-          return this.h0 * (1 - rn) / this.oneMinusR + n * this.levelPadding;
+        _proto.clearSpawned = function clearSpawned() {
+          this.node.removeAllChildren();
         };
-        _proto.levelTopY = function levelTopY(abs) {
-          return this.topY - this.cumulativeYOffsetAbs(abs);
+        _proto.levelYOffset = function levelYOffset(level) {
+          if (level <= 0) return 0;
+          var H0 = this.baseHeight * this.baseScale;
+          var f = this.levelScaleFactor;
+          var sumHeights = Math.abs(1 - f) < 1e-6 ? level * H0 : H0 * (1 - Math.pow(f, level)) / (1 - f);
+          return sumHeights + level * this.levelPadding;
         };
-        _proto.levelBottomY = function levelBottomY(abs) {
-          return this.topY - this.cumulativeYOffsetAbs(abs + 1);
-        }
-
-        // === построение пула ===
-        ;
-
-        _proto.buildInitialPool = function buildInitialPool() {
+        _proto.getLib = function getLib() {
+          var _ref, _this$colorLib;
+          return (_ref = (_this$colorLib = this.colorLib) != null ? _this$colorLib : ColorTextureLibrary.instance) != null ? _ref : null;
+        };
+        _proto.spawnObjects = function spawnObjects() {
           if (!this.prefab) {
             console.warn('Prefab не назначен!');
             return;
           }
-          var per = Math.max(1, this.objectsPerLevel);
-
-          // Пул (реально создаваемые объекты)
-          this.K = Math.floor(this.totalObjects / per);
-          this.reserveCount = this.totalObjects % per;
-
-          // Максимальная башня (для лимита)
-          var maxTotalClamped = Math.max(this.maxTotalObjects, this.totalObjects);
-          this.Kmax = Math.floor(maxTotalClamped / per);
-          this.reserveMax = maxTotalClamped % per;
-          this.fullRing = Array.from({
-            length: this.K
-          }, function () {
-            return [];
-          });
-          this.reserveTop = [];
-
-          // Инстанцируем пул
-          var all = [];
           for (var i = 0; i < this.totalObjects; i++) {
+            var level = Math.floor(i / this.objectsPerLevel);
+            var scale = this.baseScale * Math.pow(this.levelScaleFactor, level);
             var obj = instantiate(this.prefab);
+            obj.name = "Piece_" + i;
             obj.setParent(this.node);
-            obj.active = true;
-            var binding = obj.getComponent(ClickMoveBinding);
-            if (binding != null && binding.meshRenderer && ColorTextureLibrary.instance) {
-              ColorTextureLibrary.instance.applyRandomSet(binding.meshRenderer, this.materialIndex);
-            }
-            all.push(obj);
-          }
-
-          // Разложить: сначала неполный верх, затем полные уровни
-          var p = 0;
-          for (var _i = 0; _i < this.reserveCount; _i++) this.reserveTop.push(all[p++]);
-          for (var L = 0; L < this.K; L++) {
-            var arr = [];
-            for (var j = 0; j < per; j++) arr.push(all[p++]);
-            this.fullRing[L] = arr;
-          }
-          this.ringTopAbsOffset = 0;
-          this.applyTransforms();
-        }
-
-        // === «дно» по максимальной башне ===
-        ;
-
-        _proto.totalAbsoluteLevelsMax = function totalAbsoluteLevelsMax() {
-          return this.Kmax + (this.reserveMax > 0 ? 1 : 0); // Kmax полных + (возможный) неполный верх
-        }
-        /** Максимальный допустимый offset вниз (с учётом окна размера K из пула). */;
-        _proto.maxRingOffset = function maxRingOffset() {
-          if (this.K === 0) return 0; // нет полных уровней в пуле — листать вниз нельзя
-          return Math.max(0, this.totalAbsoluteLevelsMax() - this.K);
-        }
-
-        // === прокрутка по 1 уровню ===
-        ;
-
-        _proto.scrollDownOneLevel = function scrollDownOneLevel() {
-          var maxOffset = this.maxRingOffset();
-          if (this.ringTopAbsOffset >= maxOffset) return; // достигли «дна»
-
-          if (this.isAtApex()) {
-            this.ringTopAbsOffset = 1; // ушли с вершины
-            return;
-          }
-          if (this.K > 0 && this.fullRing.length > 0) {
-            var moved = this.fullRing.shift();
-            if (moved) this.fullRing.push(moved);
-            this.ringTopAbsOffset = Math.min(this.ringTopAbsOffset + 1, maxOffset);
-          } else {
-            this.ringTopAbsOffset = Math.min(this.ringTopAbsOffset + 1, maxOffset);
+            var y = this.levelYOffset(level);
+            obj.setPosition(new Vec3(0, y, 0));
+            obj.setRotationFromEuler(new Vec3(0, i * this.angleStep, 0));
+            obj.setScale(scale, scale, scale);
+            this.applyColorToNode(obj);
           }
         };
-        _proto.scrollUpOneLevel = function scrollUpOneLevel() {
-          if (this.ringTopAbsOffset <= 0) return;
-          if (this.ringTopAbsOffset === 1) {
-            this.ringTopAbsOffset = 0; // возвращаемся к вершине (резерв снова виден)
-            return;
+        _proto.applyColorsToChildren = function applyColorsToChildren() {
+          for (var _iterator = _createForOfIteratorHelperLoose(this.node.children), _step; !(_step = _iterator()).done;) {
+            var child = _step.value;
+            this.applyColorToNode(child);
           }
-          if (this.K > 0 && this.fullRing.length > 0) {
-            var moved = this.fullRing.pop();
-            if (moved) this.fullRing.unshift(moved);
-            this.ringTopAbsOffset = Math.max(0, this.ringTopAbsOffset - 1);
-          } else {
-            this.ringTopAbsOffset = 0;
-          }
-        }
-
-        // === применение трансформов + единичный лог «сколько осталось до лимита» ===
-        ;
-
-        _proto.applyTransforms = function applyTransforms() {
-          var per = Math.max(1, this.objectsPerLevel);
-
-          // Резерв вершины (виден только на вершине)
-          if (this.reserveTop.length > 0) {
-            var active = this.isAtApex();
-            var abs = 0;
-            var yTop = this.levelTopY(abs);
-            var s = this.levelScaleAbs(abs);
-            for (var i = 0; i < this.reserveTop.length; i++) {
-              var obj = this.reserveTop[i];
-              obj.active = active;
-              if (active) {
-                obj.setPosition(new Vec3(0, yTop, 0));
-                obj.setRotationFromEuler(new Vec3(0, i * this.angleStep, 0));
-                obj.setScale(s, s, s);
-              }
-            }
-          }
-
-          // Полные уровни
-          for (var _i2 = 0; _i2 < this.fullRing.length; _i2++) {
-            var _abs = this.isAtApex() ? 1 + _i2 : this.ringTopAbsOffset + _i2;
-            var _yTop = this.levelTopY(_abs);
-            var _s = this.levelScaleAbs(_abs);
-            var nodes = this.fullRing[_i2];
-            for (var j = 0; j < nodes.length; j++) {
-              var _obj = nodes[j];
-              _obj.active = true;
-              _obj.setPosition(new Vec3(0, _yTop, 0));
-              _obj.setRotationFromEuler(new Vec3(0, j * this.angleStep, 0));
-              _obj.setScale(_s, _s, _s);
-            }
-          }
-
-          // === единственный лог: сколько объектов осталось до лимита ===
-          // нижний видимый абсолютный уровень:
-          var bottomAbs = this.isAtApex() ? this.fullRing.length // резерв (abs=0) + full[0..len-1] => нижний abs = len
-          : this.ringTopAbsOffset + this.fullRing.length - 1;
-
-          // сколько «покрыто» объектов от вершины до текущего низа:
-          //   резерв даёт reserveCount на abs=0, дальше каждый уровень по per на abs=1..bottomAbs
-          var usedObjects = this.reserveCount + Math.max(0, bottomAbs) * per;
-          var left = Math.max(0, Math.max(this.maxTotalObjects, this.totalObjects) - usedObjects);
-          console.log("\u041E\u0441\u0442\u0430\u043B\u043E\u0441\u044C \u0434\u043E \u043B\u0438\u043C\u0438\u0442\u0430: " + left);
         };
+        _proto.applyColorToNode = function applyColorToNode(n) {
+          var binding = n.getComponent(ClickMoveBinding);
+          var lib = this.getLib();
+          if (!(binding != null && binding.meshRenderer) || !lib) return;
+
+          // важно для редактора: использовать материал-инстанс, чтобы не трогать shared material
+          var mr = binding.meshRenderer;
+          // getMaterialInstance создаёт инстанс для пер-объектных правок
+          mr.getMaterialInstance(this.materialIndex);
+          lib.applyRandomSet(mr, this.materialIndex);
+        };
+        _createClass(PieceSpawner, [{
+          key: "SpawnInEditor",
+          get: function get() {
+            return this._spawnNow;
+          },
+          set: function set(v) {
+            if (!v) return;
+            this.clearSpawned();
+            this.spawnObjects();
+            this._spawnNow = false;
+          }
+        }, {
+          key: "ClearSpawned",
+          get: function get() {
+            return this._clearNow;
+          },
+          set: function set(v) {
+            if (!v) return;
+            this.clearSpawned();
+            this._clearNow = false;
+          }
+        }, {
+          key: "RecolorInEditor",
+          get: function get() {
+            return this._recolorNow;
+          },
+          set: function set(v) {
+            if (!v) return;
+            this.applyColorsToChildren();
+            this._recolorNow = false;
+          }
+        }]);
         return PieceSpawner;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "prefab", [_dec2], {
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "prefab", [_dec4], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "totalObjects", [property], {
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "colorLib", [_dec5], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "totalObjects", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 24;
-        }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "maxTotalObjects", [_dec3], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 120;
         }
       }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "objectsPerLevel", [property], {
         configurable: true,
@@ -3234,42 +3035,35 @@ System.register("chunks:///_virtual/PieceSpawner.ts", ['./rollupPluginModLoBabel
         initializer: function initializer() {
           return 0;
         }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "topY", [property], {
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "materialIndex", [_dec6], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0;
         }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "cameraNode", [_dec4], {
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "_spawnNow", [_dec7], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return null;
+          return false;
         }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "recycleMargin", [_dec5], {
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "_clearNow", [_dec8], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 0.0;
+          return false;
         }
-      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "colorUniform", [_dec6], {
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "_recolorNow", [_dec9], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 'albedo';
+          return false;
         }
-      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "materialIndex", [_dec7], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
-        }
-      })), _class2)) || _class));
+      }), _applyDecoratedDescriptor(_class2.prototype, "SpawnInEditor", [_dec10], Object.getOwnPropertyDescriptor(_class2.prototype, "SpawnInEditor"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "ClearSpawned", [_dec11], Object.getOwnPropertyDescriptor(_class2.prototype, "ClearSpawned"), _class2.prototype), _applyDecoratedDescriptor(_class2.prototype, "RecolorInEditor", [_dec12], Object.getOwnPropertyDescriptor(_class2.prototype, "RecolorInEditor"), _class2.prototype)), _class2)) || _class) || _class) || _class));
       cclegacy._RF.pop();
     }
   };
@@ -3285,129 +3079,6 @@ System.register("chunks:///_virtual/PointerIds.ts", ['cc'], function (exports) {
       cclegacy._RF.push({}, "13922PSQAhJcJjhZ5FF88EN", "PointerIds", undefined);
       // PointerIds.ts
       var MOUSE_ID = exports('MOUSE_ID', -1); // ������ �������� ������
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/RandomOpenButton.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './GlobalClickManager.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Node, Component, GlobalClickManager3D;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-      _asyncToGenerator = module.asyncToGenerator;
-      _regeneratorRuntime = module.regeneratorRuntime;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Node = module.Node;
-      Component = module.Component;
-    }, function (module) {
-      GlobalClickManager3D = module.GlobalClickManager3D;
-    }],
-    execute: function () {
-      var _dec, _dec2, _dec3, _class, _class2, _descriptor, _descriptor2;
-      cclegacy._RF.push({}, "6a522r13OFAKqKll7GvHcNg", "RandomOpenButton", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var RandomOpenButton = exports('RandomOpenButton', (_dec = ccclass('RandomOpenButton'), _dec2 = property({
-        type: GlobalClickManager3D,
-        tooltip: '������ �� GlobalClickManager3D �� �����'
-      }), _dec3 = property({
-        type: Node,
-        tooltip: '������, ��� ����� ������������ ������� (parent � PieceSpawner)'
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(RandomOpenButton, _Component);
-        function RandomOpenButton() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "clickManager", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "piecesRoot", _descriptor2, _assertThisInitialized(_this));
-          return _this;
-        }
-        var _proto = RandomOpenButton.prototype;
-        /** ���������� ������ (Button -> Click Events -> this -> onClick) */
-        _proto.onClick = /*#__PURE__*/
-        function () {
-          var _onClick = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-            var ok;
-            return _regeneratorRuntime().wrap(function _callee$(_context) {
-              while (1) switch (_context.prev = _context.next) {
-                case 0:
-                  if (!(!this.clickManager || !this.piecesRoot)) {
-                    _context.next = 3;
-                    break;
-                  }
-                  console.warn('[RandomOpenButton] �� ������ clickManager ��� piecesRoot');
-                  return _context.abrupt("return");
-                case 3:
-                  _context.next = 5;
-                  return this.clickManager.toggleOrOpenRandom(this.piecesRoot);
-                case 5:
-                  ok = _context.sent;
-                  if (!ok) console.log('[RandomOpenButton] �� ������� ������� ��������� �������.');
-                case 7:
-                case "end":
-                  return _context.stop();
-              }
-            }, _callee, this);
-          }));
-          function onClick() {
-            return _onClick.apply(this, arguments);
-          }
-          return onClick;
-        }();
-        _proto.onClickMy = /*#__PURE__*/function () {
-          var _onClickMy = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-            var ok;
-            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-              while (1) switch (_context2.prev = _context2.next) {
-                case 0:
-                  if (!(!this.clickManager || !this.piecesRoot)) {
-                    _context2.next = 3;
-                    break;
-                  }
-                  console.warn('[RandomOpenButton] �� ������ clickManager ��� piecesRoot');
-                  return _context2.abrupt("return");
-                case 3:
-                  _context2.next = 5;
-                  return this.clickManager.toggleOrOpen(this.piecesRoot);
-                case 5:
-                  ok = _context2.sent;
-                  if (!ok) console.log('[RandomOpenButton] �� ������� ������� ��������� �������.');
-                case 7:
-                case "end":
-                  return _context2.stop();
-              }
-            }, _callee2, this);
-          }));
-          function onClickMy() {
-            return _onClickMy.apply(this, arguments);
-          }
-          return onClickMy;
-        }();
-        return RandomOpenButton;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "clickManager", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "piecesRoot", [_dec3], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      })), _class2)) || _class));
       cclegacy._RF.pop();
     }
   };
@@ -3743,311 +3414,6 @@ System.register("chunks:///_virtual/RotateYByKeys.ts", ['./rollupPluginModLoBabe
         writable: true,
         initializer: function initializer() {
           return true;
-        }
-      })), _class2)) || _class));
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/ScaleCameraFOV.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, Camera, view, game, Game, Component, Vec2;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Camera = module.Camera;
-      view = module.view;
-      game = module.game;
-      Game = module.Game;
-      Component = module.Component;
-      Vec2 = module.Vec2;
-    }],
-    execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5;
-      cclegacy._RF.push({}, "8080ccyIBNDNIrJBl23jNo2", "ScaleCameraFOV", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var ScaleCameraKeepWidth = exports('ScaleCameraKeepWidth', (_dec = ccclass('ScaleCameraKeepWidth'), _dec2 = property({
-        type: Camera
-      }), _dec3 = property({
-        tooltip: '����������� ���������� (W,H) � ����� ��������� ������'
-      }), _dec4 = property({
-        tooltip: '������������ FOV �� ��������� (� ��������)'
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(ScaleCameraKeepWidth, _Component);
-        function ScaleCameraKeepWidth() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "camera", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "refResolution", _descriptor2, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "refVertFOV", _descriptor3, _assertThisInitialized(_this));
-          // (�����������) ��������� ���������� ������� FOV
-          _initializerDefineProperty(_this, "minVertFOV", _descriptor4, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "maxVertFOV", _descriptor5, _assertThisInitialized(_this));
-          _this.apply = function () {
-            var _rect$width, _rect$height;
-            if (!_this.camera) return;
-
-            // ������� ������ ������ ���� ��������������, ���� �������� ������
-            var frame = view.getFrameSize();
-            var rect = _this.camera.rect; // normalized [0..1]
-            var curW = Math.max(1, frame.width * ((_rect$width = rect == null ? void 0 : rect.width) != null ? _rect$width : 1));
-            var curH = Math.max(1, frame.height * ((_rect$height = rect == null ? void 0 : rect.height) != null ? _rect$height : 1));
-            var curAspect = curW / curH;
-
-            // ����������� ������ � ����
-            var refAspect = _this.refResolution.x / _this.refResolution.y;
-            var vRef = _this.deg2rad(_this.refVertFOV);
-
-            // hFOV ���������: tan(h/2) = aspect * tan(v/2)
-            var tanHalfHRef = refAspect * Math.tan(vRef / 2);
-
-            // ������ �������������� FOV ����������:
-            // tan(vCur/2) = tan(hRef/2) / curAspect
-            var tanHalfVcur = tanHalfHRef / curAspect;
-            var vCur = 2 * Math.atan(tanHalfVcur);
-            var vDeg = _this.rad2deg(vCur);
-
-            // ������ �� ������ ������
-            vDeg = Math.min(_this.maxVertFOV, Math.max(_this.minVertFOV, vDeg));
-            _this.camera.fov = vDeg;
-            // �� ������ ������ � ������������� �������
-            _this.camera.rect = {
-              x: 0,
-              y: 0,
-              width: 1,
-              height: 1
-            };
-          };
-          return _this;
-        }
-        var _proto = ScaleCameraKeepWidth.prototype;
-        _proto.onEnable = function onEnable() {
-          this.apply();
-          game.on(Game.EVENT_RESIZE, this.apply, this);
-        };
-        _proto.onDisable = function onDisable() {
-          game.off(Game.EVENT_RESIZE, this.apply, this);
-        };
-        _proto.start = function start() {
-          this.apply();
-        };
-        _proto.deg2rad = function deg2rad(d) {
-          return d * Math.PI / 180;
-        };
-        _proto.rad2deg = function rad2deg(r) {
-          return r * 180 / Math.PI;
-        };
-        return ScaleCameraKeepWidth;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "camera", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "refResolution", [_dec3], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return new Vec2(1960, 1200);
-        }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "refVertFOV", [_dec4], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 60;
-        }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "minVertFOV", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 10;
-        }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "maxVertFOV", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 110;
-        }
-      })), _class2)) || _class));
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/ScreenShotExample.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Sprite, log, find, Node, UITransform, Component, SpriteFrame, view, RenderTexture, director, Director, warn, error;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-      _asyncToGenerator = module.asyncToGenerator;
-      _regeneratorRuntime = module.regeneratorRuntime;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Camera = module.Camera;
-      Sprite = module.Sprite;
-      log = module.log;
-      find = module.find;
-      Node = module.Node;
-      UITransform = module.UITransform;
-      Component = module.Component;
-      SpriteFrame = module.SpriteFrame;
-      view = module.view;
-      RenderTexture = module.RenderTexture;
-      director = module.director;
-      Director = module.Director;
-      warn = module.warn;
-      error = module.error;
-    }],
-    execute: function () {
-      var _dec, _dec2, _dec3, _class, _class2, _descriptor, _descriptor2;
-      cclegacy._RF.push({}, "d8c3ay0WUpPfo/zGfPTP0MY", "ScreenShotExample", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var RTDebugger = exports('RTDebugger', (_dec = ccclass('RTDebugger'), _dec2 = property(Camera), _dec3 = property(Sprite), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(RTDebugger, _Component);
-        function RTDebugger() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "camera", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "targetSprite", _descriptor2, _assertThisInitialized(_this));
-          return _this;
-        }
-        var _proto = RTDebugger.prototype;
-        _proto.onLoad = function onLoad() {
-          log('[RTDebugger] onLoad');
-        };
-        _proto.onEnable = function onEnable() {
-          var _this2 = this;
-          log('[RTDebugger] onEnable');
-          // ��������� ����� ������/������ �������������, ���� �� ���������
-          if (!this.camera) {
-            var camNode = find('Main Camera') || find('Camera') || null;
-            if (camNode) this.camera = camNode.getComponent(Camera);
-          }
-          if (!this.targetSprite) {
-            // �������� ������ �� ����� ��� �����������
-            var n = new Node('RT-Preview');
-            n.setParent(this.node.scene);
-            var ui = n.addComponent(UITransform);
-            ui.setAnchorPoint(0.5, 0.5);
-            n.setPosition(0, 0, 0);
-            this.targetSprite = n.addComponent(Sprite);
-            log('[RTDebugger] ������ targetSprite ���� RT-Preview');
-          }
-
-          // ���� ������ ���� �� ������������� � ��������� ������
-          this.scheduleOnce(function () {
-            return _this2.capture();
-          }, 0.1);
-        };
-        _proto.capture = /*#__PURE__*/function () {
-          var _capture = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-            var _view$getCanvasSize, width, height, rt, sf, ui;
-            return _regeneratorRuntime().wrap(function _callee$(_context) {
-              while (1) switch (_context.prev = _context.next) {
-                case 0:
-                  log('[RTDebugger] capture() start');
-                  if (this.camera) {
-                    _context.next = 4;
-                    break;
-                  }
-                  error('[RTDebugger] ������ �� ���������/�� �������');
-                  return _context.abrupt("return");
-                case 4:
-                  if (!this.camera.enabledInHierarchy) {
-                    warn('[RTDebugger] ������ ���������');
-                  }
-                  if (this.targetSprite) {
-                    _context.next = 8;
-                    break;
-                  }
-                  error('[RTDebugger] targetSprite �����������');
-                  return _context.abrupt("return");
-                case 8:
-                  _view$getCanvasSize = view.getCanvasSize(), width = _view$getCanvasSize.width, height = _view$getCanvasSize.height;
-                  log("[RTDebugger] canvas size = " + width + "x" + height);
-                  rt = new RenderTexture();
-                  rt.reset({
-                    width: width,
-                    height: height
-                  });
-                  this.camera.targetTexture = rt;
-                  log('[RTDebugger] targetTexture ��������, ��� ���� �������');
-
-                  // ��� ���������� ��������� �����
-                  _context.next = 16;
-                  return new Promise(function (resolve) {
-                    var once = function once() {
-                      director.off(Director.EVENT_AFTER_DRAW, once);
-                      resolve();
-                    };
-                    director.on(Director.EVENT_AFTER_DRAW, once);
-                  });
-                case 16:
-                  log('[RTDebugger] EVENT_AFTER_DRAW �������');
-                  sf = new SpriteFrame();
-                  sf.texture = rt;
-                  // ���� ����� ����� ������, ��������������:
-                  // (������ API ����������, �������� ���� ��)
-                  // (sf as any).flipUVY = true; // ���� sf.setFlipUVY?.(true);
-
-                  // ����������� ������� ������ �������
-                  ui = this.targetSprite.getComponent(UITransform) || this.targetSprite.addComponent(UITransform);
-                  this.targetSprite.sizeMode = Sprite.SizeMode.RAW;
-                  ui.setContentSize(width, height);
-                  this.targetSprite.spriteFrame = sf;
-                  log('[RTDebugger] spriteFrame ��������');
-
-                  // ���������� ����� ������ �� ����� (�����������)
-                  this.camera.targetTexture = null;
-                  log('[RTDebugger] capture() done');
-                case 26:
-                case "end":
-                  return _context.stop();
-              }
-            }, _callee, this);
-          }));
-          function capture() {
-            return _capture.apply(this, arguments);
-          }
-          return capture;
-        }();
-        return RTDebugger;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "camera", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "targetSprite", [_dec3], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
@@ -4922,7 +4288,7 @@ System.register("chunks:///_virtual/TowerScrollController.ts", ['./rollupPluginM
 });
 
 System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ClickMoveBinding.ts', './ColorLibrary.ts', './TowerScrollController.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _initializerDefineProperty, _inheritsLoose, _assertThisInitialized, _createForOfIteratorHelperLoose, cclegacy, _decorator, Prefab, Label, instantiate, Vec3, Component, ClickMoveBinding, ColorTextureLibrary, TowerScrollController;
+  var _applyDecoratedDescriptor, _initializerDefineProperty, _inheritsLoose, _assertThisInitialized, _createForOfIteratorHelperLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Prefab, Label, instantiate, Vec3, Component, ClickMoveBinding, ColorTextureLibrary, TowerScrollController;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -4930,6 +4296,8 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
       _inheritsLoose = module.inheritsLoose;
       _assertThisInitialized = module.assertThisInitialized;
       _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+      _asyncToGenerator = module.asyncToGenerator;
+      _regeneratorRuntime = module.regeneratorRuntime;
     }, function (module) {
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
@@ -4946,12 +4314,14 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
       TowerScrollController = module.TowerScrollController;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _dec16, _dec17, _dec18, _class4, _class5, _descriptor18, _descriptor19;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _dec23, _dec24, _dec25, _class4, _class5, _descriptor25, _descriptor26;
       cclegacy._RF.push({}, "368ffNUv4lFSZtXbbDm9TB3", "TVS_SpawnLayout", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
 
-      /** Конфиг спавна/раскладки */
+      /** ===== API-модель ===== */
+
+      /** ===== Конфиг спавна/раскладки ===== */
       var TVS_SpawnLayout = exports('TVS_SpawnLayout', (_dec = ccclass('TVS_SpawnLayout'), _dec2 = property({
         type: Prefab
       }), _dec3 = property({
@@ -4981,6 +4351,20 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
       }), _dec15 = property({
         type: Label,
         tooltip: 'Куда выводить глобальный счётчик пройденных кусочков'
+      }), _dec16 = property({
+        tooltip: 'Сколько всего кусочков хотим показать (набираются случайно из API-результатов)'
+      }), _dec17 = property({
+        tooltip: 'Seed для выбора/перемешивания кусков (стабильный рандом)'
+      }), _dec18 = property({
+        tooltip: 'Случайный «набор» (цвета/текстуры) на кусок по gidx через библиотеку'
+      }), _dec19 = property({
+        tooltip: 'Seed для вычисления индекса набора из gidx'
+      }), _dec20 = property({
+        tooltip: 'Доп. уровни прокрутки ПОСЛЕ последнего уровня (пустое пространство внизу)'
+      }), _dec21 = property({
+        tooltip: 'Если true — последний неполный уровень будет прижат к верху окна'
+      }), _dec22 = property({
+        tooltip: 'Делать неполный уровень в НАЧАЛЕ башни (сверху)'
       }), _dec(_class = (_class2 = function TVS_SpawnLayout() {
         _initializerDefineProperty(this, "prefab", _descriptor, this);
         _initializerDefineProperty(this, "objectsPerLevel", _descriptor2, this);
@@ -4999,6 +4383,14 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
         _initializerDefineProperty(this, "materialIndex", _descriptor15, this);
         _initializerDefineProperty(this, "colorSetsFallback", _descriptor16, this);
         _initializerDefineProperty(this, "counterLabel", _descriptor17, this);
+        /** ===== Настройки данных/цветов/прокрутки ===== */
+        _initializerDefineProperty(this, "targetPieces", _descriptor18, this);
+        _initializerDefineProperty(this, "rngSeed", _descriptor19, this);
+        _initializerDefineProperty(this, "randomizeColors", _descriptor20, this);
+        _initializerDefineProperty(this, "rngSeedColors", _descriptor21, this);
+        _initializerDefineProperty(this, "padAfterLevels", _descriptor22, this);
+        _initializerDefineProperty(this, "endPartialAtTop", _descriptor23, this);
+        _initializerDefineProperty(this, "partialAtTop", _descriptor24, this);
       }, (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "prefab", [_dec2], {
         configurable: true,
         enumerable: true,
@@ -5018,7 +4410,7 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 8;
+          return 10;
         }
       }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "angleStep", [property], {
         configurable: true,
@@ -5109,7 +4501,7 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
         enumerable: true,
         writable: true,
         initializer: function initializer() {
-          return 16;
+          return 256;
         }
       }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "counterLabel", [_dec15], {
         configurable: true,
@@ -5118,18 +4510,64 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
         initializer: function initializer() {
           return null;
         }
+      }), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "targetPieces", [_dec16], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 1000;
+        }
+      }), _descriptor19 = _applyDecoratedDescriptor(_class2.prototype, "rngSeed", [_dec17], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 123456789;
+        }
+      }), _descriptor20 = _applyDecoratedDescriptor(_class2.prototype, "randomizeColors", [_dec18], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      }), _descriptor21 = _applyDecoratedDescriptor(_class2.prototype, "rngSeedColors", [_dec19], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 987654321;
+        }
+      }), _descriptor22 = _applyDecoratedDescriptor(_class2.prototype, "padAfterLevels", [_dec20], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 2;
+        }
+      }), _descriptor23 = _applyDecoratedDescriptor(_class2.prototype, "endPartialAtTop", [_dec21], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return false;
+        }
+      }), _descriptor24 = _applyDecoratedDescriptor(_class2.prototype, "partialAtTop", [_dec22], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
       })), _class2)) || _class));
 
-      /**
-       * TowerLayoutController — только спавн/раскладка/цвета/уровни.
-       * Подписывается на TowerScrollController.events('offset-changed').
-       */
-      var TowerLayoutController = exports('TowerLayoutController', (_dec16 = ccclass('TowerLayoutController'), _dec17 = property({
+      /** ===== Контроллер башни + интеграция API ===== */
+      var TowerLayoutController = exports('TowerLayoutController', (_dec23 = ccclass('TowerLayoutController'), _dec24 = property({
         type: TVS_SpawnLayout
-      }), _dec18 = property({
+      }), _dec25 = property({
         type: TowerScrollController,
         tooltip: 'Ссылка на контроллер скролла'
-      }), _dec16(_class4 = (_class5 = /*#__PURE__*/function (_Component) {
+      }), _dec23(_class4 = (_class5 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(TowerLayoutController, _Component);
         function TowerLayoutController() {
           var _this;
@@ -5137,48 +4575,82 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "spawn", _descriptor18, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "scrollCtrl", _descriptor19, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "spawn", _descriptor25, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "scrollCtrl", _descriptor26, _assertThisInitialized(_this));
           // внутреннее
           _this.pool = [];
           _this.lastKeyByNode = new Map();
           _this.nodeLevelInfo = new Map();
           _this.lastTopBase = Number.NaN;
           _this.passedPieces = 0;
+          // данные
+          _this.cakesSource = [];
+          _this.cakesExpanded = [];
           return _this;
         }
         var _proto = TowerLayoutController.prototype;
+        _proto.getLib = function getLib() {
+          // импорт гарантирован, но инстанс может быть не создан
+          var lib = ColorTextureLibrary == null ? void 0 : ColorTextureLibrary.instance;
+          return lib != null ? lib : null;
+        }
+
+        /* ========================== Жизненный цикл ========================== */;
         _proto.onLoad = function onLoad() {
           if (!this.scrollCtrl) console.warn('[TowerLayoutController] scrollCtrl не назначен в инспекторе');
+          if (!this.getLib()) {
+            console.warn('[TowerLayoutController] ColorTextureLibrary.instance не найден. ' + 'Добавь компонент ColorTextureLibrary на любой узел (он сам станет persist).');
+          }
         };
         _proto.onEnable = function onEnable() {
-          var _this$scrollCtrl;
+          var _this2 = this,
+            _this$scrollCtrl;
           this.buildPool();
           var initOff = this.scrollCtrl ? this.scrollCtrl.offset : 0;
           this.layoutByOffset(initOff);
+          this.initApiData().then(function () {
+            _this2.rebuildExpandedCakes();
+            var cur = _this2.scrollCtrl ? _this2.scrollCtrl.offset : 0;
+            var max = _this2.getMaxScrollableOffset();
+            var clamped = Math.min(cur, max);
+            if (_this2.scrollCtrl && cur !== clamped) {
+              _this2.scrollCtrl.scrollToHeight(clamped, {
+                duration: 0
+              });
+            }
+            _this2.layoutByOffset(clamped);
+          });
           (_this$scrollCtrl = this.scrollCtrl) == null || _this$scrollCtrl.events.on('offset-changed', this._onOffsetChanged, this);
         };
         _proto.onDisable = function onDisable() {
           var _this$scrollCtrl2;
           (_this$scrollCtrl2 = this.scrollCtrl) == null || _this$scrollCtrl2.events.off('offset-changed', this._onOffsetChanged, this);
         };
+        _proto.getHeadPad = function getHeadPad(per, total) {
+          if (!this.spawn.partialAtTop) return 0;
+          if (per <= 0 || total <= 0) return 0;
+          var rem = total % per;
+          return rem === 0 ? 0 : per - rem;
+        };
         _proto._onOffsetChanged = function _onOffsetChanged(offset) {
-          this.layoutByOffset(offset);
+          var max = this.getMaxScrollableOffset();
+          var clamped = Math.min(offset, max);
+          if (clamped !== offset && this.scrollCtrl) {
+            this.scrollCtrl.scrollToHeight(clamped, {
+              duration: 0
+            });
+          }
+          this.layoutByOffset(clamped);
         }
 
-        // ======= публичные API =======
-        /** ТЕКУЩИЙ шаг уровня в единицах offset. */;
+        /* ========================== Публичные API ========================== */;
         _proto.getLevelStep = function getLevelStep() {
           return Math.max(1e-6, this.levelStepConst());
-        }
-
-        /** Узнать абсолютный уровень узла из пула. null — если узел сейчас не привязан. */;
+        };
         _proto.getNodeLevel = function getNodeLevel(node) {
           var info = this.nodeLevelInfo.get(node);
           return info ? info.level : null;
-        }
-
-        /** Найти ближайшего предка, который отслеживается в nodeLevelInfo (узел пула). */;
+        };
         _proto.findMappedAncestor = function findMappedAncestor(node) {
           var cur = node;
           while (cur) {
@@ -5186,23 +4658,21 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
             cur = cur.parent;
           }
           return null;
-        }
-
-        /** Получить уровень для ЛЮБОЙ ноды (самой или её предка из пула). */;
+        };
         _proto.getLevelForAny = function getLevelForAny(node) {
           var owner = this.findMappedAncestor(node);
           if (!owner) return null;
           var info = this.nodeLevelInfo.get(owner);
           return info.level;
-        }
-
-        /** Получить слот для ЛЮБОЙ ноды (самой или её предка из пула). */;
+        };
         _proto.getSlotForAny = function getSlotForAny(node) {
           var owner = this.findMappedAncestor(node);
           if (!owner) return null;
           var info = this.nodeLevelInfo.get(owner);
           return info ? info.slot : null;
-        };
+        }
+
+        /** Найти активную ноду по абсолютному уровню и слоту. */;
         _proto.findNodeByLevelSlot = function findNodeByLevelSlot(level, slot) {
           for (var _iterator = _createForOfIteratorHelperLoose(this.nodeLevelInfo), _step; !(_step = _iterator()).done;) {
             var _step$value = _step.value,
@@ -5212,16 +4682,12 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
             if (info.level === level && info.slot === slot) return n;
           }
           return null;
-        }
-
-        /** Прокрутить к уровню L через связанный ScrollController. */;
+        };
         _proto.scrollToLevel = function scrollToLevel(level, opts) {
           var _this$scrollCtrl3;
           var step = this.getLevelStep();
           (_this$scrollCtrl3 = this.scrollCtrl) == null || _this$scrollCtrl3.scrollToHeight(level * step, opts != null ? opts : {});
-        }
-
-        /** Прокрутить к уровню узла. */;
+        };
         _proto.scrollToNodeLevel = function scrollToNodeLevel(node, opts) {
           var L = this.getNodeLevel(node);
           if (L == null) {
@@ -5230,39 +4696,176 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
           }
           this.scrollToLevel(L, opts);
           return true;
-        }
-
-        /** Прокрутить к уровню ЛЮБОЙ ноды (сама или предок из пула). */;
+        };
         _proto.scrollToNodeOrAncestorLevel = function scrollToNodeOrAncestorLevel(node, opts) {
           var owner = this.findMappedAncestor(node);
           if (!owner) return false;
           return this.scrollToNodeLevel(owner, opts);
         }
 
-        // ======= layout =======
-        ;
+        /** Максимальный оффсет скролла, учитывая «воздух» внизу (padAfterLevels) */;
+        _proto.getMaxScrollableOffset = function getMaxScrollableOffset() {
+          var vis = Math.max(1, this.spawn.visibleLevels);
+          var totalLevels = this.getTotalLevels();
+          if (totalLevels === 0) return 0;
+          var pad = Math.max(0, this.spawn.padAfterLevels);
+          var maxTopBase = Math.max(0, totalLevels - vis + pad);
+          return (maxTopBase + 1) * this.getLevelStep();
+        }
 
+        /* ========================== Интеграция API ========================== */;
+        _proto.initApiData = /*#__PURE__*/
+        function () {
+          var _initApiData = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            var _this3 = this;
+            var response, text, raw, rawItems;
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  _context.prev = 0;
+                  _context.next = 3;
+                  return fetch('https://api.demo-stage.ru/cake/list', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({})
+                  });
+                case 3:
+                  response = _context.sent;
+                  if (response.ok) {
+                    _context.next = 11;
+                    break;
+                  }
+                  _context.next = 7;
+                  return this.safeReadText(response);
+                case 7:
+                  text = _context.sent;
+                  console.error('[API] Ошибка запроса:', response.status, text);
+                  this.cakesSource = [];
+                  return _context.abrupt("return");
+                case 11:
+                  _context.next = 13;
+                  return response.json();
+                case 13:
+                  raw = _context.sent;
+                  console.log('[API] Сырой ответ:', raw);
+                  rawItems = Array.isArray(raw == null ? void 0 : raw.cakes) ? raw.cakes : [];
+                  if (!(rawItems.length === 0)) {
+                    _context.next = 20;
+                    break;
+                  }
+                  console.warn('[API] Пустой список cakes. Ключи:', raw && typeof raw === 'object' ? Object.keys(raw) : []);
+                  this.cakesSource = [];
+                  return _context.abrupt("return");
+                case 20:
+                  this.cakesSource = rawItems.map(function (it, idx) {
+                    var _it$hex_color;
+                    var n = _this3.normalizeCakePiece(it);
+                    if (!n.user_id) console.warn("[API item " + idx + "] user_id \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442/\u043D\u0435 UUID. uniq_id=", it == null ? void 0 : it.uniq_id);
+                    if (!n.hex_color) console.warn("[API item " + idx + "] hex_color \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442/\u043D\u0435 HEX. raw=", (_it$hex_color = it == null ? void 0 : it.hex_color) != null ? _it$hex_color : it == null ? void 0 : it.color);
+                    return n;
+                  });
+                  console.log('[API] Нормализовано (источник):', this.cakesSource.length, this.cakesSource);
+                  _context.next = 28;
+                  break;
+                case 24:
+                  _context.prev = 24;
+                  _context.t0 = _context["catch"](0);
+                  console.error('[API] Ошибка соединения:', _context.t0);
+                  this.cakesSource = [];
+                case 28:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, this, [[0, 24]]);
+          }));
+          function initApiData() {
+            return _initApiData.apply(this, arguments);
+          }
+          return initApiData;
+        }() /** Собираем расширенный массив на targetPieces, случайно из источника, но стабильно по seed */;
+        _proto.rebuildExpandedCakes = function rebuildExpandedCakes() {
+          var want = Math.max(0, Math.floor(this.spawn.targetPieces));
+          var src = this.cakesSource.filter(Boolean);
+          if (want === 0 || src.length === 0) {
+            this.cakesExpanded = [];
+            console.warn('[API] Нет данных для расширения: targetPieces=', want, ' src=', src.length);
+            return;
+          }
+          var rng = this.mulberry32(this.spawn.rngSeed >>> 0);
+          var pick = function pick() {
+            return src[Math.floor(rng() * src.length)];
+          };
+          var out = new Array(want);
+          for (var i = 0; i < want; i++) out[i] = pick();
+          this.fisherYatesShuffle(out, rng);
+          this.cakesExpanded = out;
+          console.log('[API] Expanded cakes:', this.cakesExpanded.length);
+        }
+
+        /* ========================== Доступ к данным ========================== */;
+        _proto.getPieceFor = function getPieceFor(level, slot) {
+          if (!this.cakesExpanded || this.cakesExpanded.length === 0) return null;
+          var per = Math.max(1, this.spawn.objectsPerLevel);
+          var total = this.cakesExpanded.length;
+          var headPad = this.getHeadPad(per, total);
+          // смещаем глобальный индекс так, чтобы первый уровень начинался с headPad пустых слотов
+          var dataIndex = level * per + slot - headPad;
+          return dataIndex >= 0 && dataIndex < total ? this.cakesExpanded[dataIndex] : null;
+        };
+        _proto.getTotalPieces = function getTotalPieces() {
+          return Array.isArray(this.cakesExpanded) ? this.cakesExpanded.length : 0;
+        };
+        _proto.getTotalLevels = function getTotalLevels() {
+          var per = Math.max(1, this.spawn.objectsPerLevel);
+          var total = this.getTotalPieces();
+          var headPad = this.getHeadPad(per, total);
+          // считаем уровни по «подпаденному» началу, чтобы первый мог быть неполным
+          return Math.ceil((headPad + total) / per);
+        };
+        _proto.globalIndexOf = function globalIndexOf(level, slot) {
+          var per = Math.max(1, this.spawn.objectsPerLevel);
+          return level * per + slot;
+        }
+
+        /* ========================== Раскладка/отрисовка ========================== */;
         _proto.levelStepConst = function levelStepConst() {
           var basePiece = this.spawn.targetVisualScale / Math.max(1e-6, this.spawn.baseScale);
           var baseVisualHeight = this.spawn.baseHeight * this.spawn.baseScale * basePiece;
           return baseVisualHeight + this.spawn.levelPaddingVisual;
         };
         _proto.layoutByOffset = function layoutByOffset(offset) {
-          var _this2 = this;
+          var _this4 = this;
           var stepConst = Math.max(1e-6, this.levelStepConst());
+          var depthRaw = offset / stepConst;
+          var vis = Math.max(1, this.spawn.visibleLevels);
+          var per = Math.max(1, this.spawn.objectsPerLevel);
+          var totalLevels = this.getTotalLevels();
 
-          // depth = offset / stepConst; при depth = целое, уровень depth оказывается на anchorY
-          var depth = offset / stepConst;
+          // опционально: «неполный конец» наверх окна
+          var depthAdjust = 0;
+          if (this.spawn.endPartialAtTop && totalLevels > 0) {
+            var lastLevelCount = this.getTotalPieces() % per || per;
+            // если есть неполный последний уровень — сдвинем окно так, чтобы он выпадал на верхнюю позицию
+            if (lastLevelCount < per) {
+              // сдвиг в долях уровня: сколько слотов пусто
+              depthAdjust = 0; // визуально мы всё равно выключаем пустые слоты; сдвиг по Y можно донастроить при необходимости
+            }
+          }
+
+          var clampWhenData = totalLevels > 0;
+          var pad = Math.max(0, this.spawn.padAfterLevels);
+          var maxTopBase = Math.max(0, totalLevels - vis + pad);
+          var depth = clampWhenData ? Math.min(depthRaw + depthAdjust, maxTopBase) : depthRaw + depthAdjust;
           var topBase = Math.max(0, Math.floor(depth));
           var frac = depth - topBase;
-          var per = Math.max(1, this.spawn.objectsPerLevel);
           var newPassed = topBase * per;
           if (newPassed !== this.passedPieces) {
             this.passedPieces = newPassed;
             if (this.spawn.counterLabel) this.spawn.counterLabel.string = "" + this.passedPieces;
           }
           this.lastTopBase = topBase;
-          var vis = Math.max(1, this.spawn.visibleLevels);
           var basePiece = this.spawn.targetVisualScale / Math.max(1e-6, this.spawn.baseScale);
           var sGrad = this.spawn.scaleInWindow;
           var rSafe = Math.max(1e-6, this.spawn.r);
@@ -5270,9 +4873,9 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
             return basePiece * Math.pow(rSafe, -rel * sGrad);
           };
           var clampScale = function clampScale(x) {
-            if (!_this2.spawn.enableScaleClamp) return x;
-            var lo = Math.min(_this2.spawn.minScale, _this2.spawn.maxScale);
-            var hi = Math.max(_this2.spawn.minScale, _this2.spawn.maxScale);
+            if (!_this4.spawn.enableScaleClamp) return x;
+            var lo = Math.min(_this4.spawn.minScale, _this4.spawn.maxScale);
+            var hi = Math.max(_this4.spawn.minScale, _this4.spawn.maxScale);
             return Math.min(hi, Math.max(lo, x));
           };
           var relTop = topBase - depth;
@@ -5282,37 +4885,67 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
           var idx = 0;
           for (var L = 0; L < vis; L++) {
             var abs = topBase + L;
+
+            // за пределами данных — гасим оставшиеся уровни
+            if (clampWhenData && abs >= totalLevels) {
+              for (; L < vis; L++) {
+                for (var j = 0; j < per; j++, idx++) {
+                  var n = this.pool[idx];
+                  if (n) {
+                    n.active = false;
+                    this.nodeLevelInfo["delete"](n);
+                  }
+                }
+              }
+              break;
+            }
             var rel = abs - depth;
             var pieceS = clampScale(desiredScaleAtRel(rel));
             var yTop = this.spawn.anchorY - accY;
-            for (var j = 0; j < per; j++) {
-              var n = this.pool[idx];
+            for (var _j = 0; _j < per; _j++) {
+              var _n = this.pool[idx];
               if (!this.spawn.prefab) return;
-              if (!n) {
-                n = instantiate(this.spawn.prefab);
-                n.setParent(this.node);
-                n.active = true;
-                this.pool[idx] = n;
-              } else {
-                n.active = true;
+              if (!_n) {
+                _n = instantiate(this.spawn.prefab);
+                _n.setParent(this.node);
+                _n.active = true;
+                this.pool[idx] = _n;
               }
 
-              // key для цвета
-              var key = abs + ":" + j;
-              if (this.lastKeyByNode.get(n) !== key) {
-                this.colorAllPiecesForKey(n, key);
-                this.lastKeyByNode.set(n, key);
+              // данные для этого слота
+              var gidx = this.globalIndexOf(abs, _j);
+              var piece = this.getPieceFor(abs, _j);
+
+              // нет данных — выключаем
+              if (!piece) {
+                _n.active = false;
+                this.nodeLevelInfo["delete"](_n);
+                _n.__boundIndex = undefined;
+                idx++;
+                continue;
               }
+
+              // поменялся глобальный индекс? → перебиндить контент
+              var prevIdx = _n.__boundIndex;
+              var needRebind = prevIdx !== gidx;
+
+              // === ЦВЕТ/ТЕКСТУРЫ ЧЕРЕЗ БИБЛИОТЕКУ ===
+              this.applyLibrarySetForIndex(_n, gidx, piece);
 
               // позиция/поворот/скейл
-              n.setPosition(new Vec3(0, yTop, 0));
-              n.setRotationFromEuler(new Vec3(0, j * this.spawn.angleStep, 0));
-              n.setScale(pieceS, pieceS, pieceS);
+              _n.active = true;
+              _n.setPosition(new Vec3(0, yTop, 0));
+              _n.setRotationFromEuler(new Vec3(0, _j * this.spawn.angleStep, 0));
+              _n.setScale(pieceS, pieceS, pieceS);
 
-              // трекаем уровень
-              this.nodeLevelInfo.set(n, {
+              // тексты/метаданные — обновляем при смене индекса
+              if (needRebind) {
+                this.applyPieceToNode(_n, piece);
+              }
+              _n.__boundIndex = gidx;
+              this.nodeLevelInfo.set(_n, {
                 level: abs,
-                slot: j
+                slot: _j
               });
               idx++;
             }
@@ -5322,10 +4955,10 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
 
           // выключаем лишние и чистим карту уровней
           for (; idx < this.pool.length; idx++) {
-            var _n = this.pool[idx];
-            if (_n) {
-              _n.active = false;
-              this.nodeLevelInfo["delete"](_n);
+            var _n2 = this.pool[idx];
+            if (_n2) {
+              _n2.active = false;
+              this.nodeLevelInfo["delete"](_n2);
             }
           }
         };
@@ -5345,9 +4978,30 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
           }
         }
 
-        // ===== цвета =====
-        ;
+        /* ========================== Цвета/наборы через библиотеку ========================== */
 
+        /** Применить набор из ColorTextureLibrary, стабильный по gidx (и опционально hex_color) */;
+        _proto.applyLibrarySetForIndex = function applyLibrarySetForIndex(root, gidx, piece) {
+          var _piece$hex_color;
+          var lib = this.getLib();
+          if (!lib) return; // просто выходим, без ошибок
+
+          var count = typeof lib.getSetsCount === 'function' ? lib.getSetsCount() : this.spawn.colorSetsFallback;
+
+          // индекс набора — стабильно по gidx
+          var baseKey = this.spawn.randomizeColors ? (this.spawn.rngSeedColors ^ gidx) >>> 0 : this.hash32str(((_piece$hex_color = piece.hex_color) != null ? _piece$hex_color : 'NOHEX') + '#' + gidx);
+          var setIndex = count <= 0 ? 0 : baseKey % count;
+          var bindings = root.getComponentsInChildren(ClickMoveBinding);
+          var k = 0;
+          for (var _iterator2 = _createForOfIteratorHelperLoose(bindings), _step2; !(_step2 = _iterator2()).done;) {
+            var b = _step2.value;
+            var mr = b == null ? void 0 : b.meshRenderer;
+            if (!mr) continue;
+            var idx = (setIndex + k++) % Math.max(1, count);
+            lib.applySetByIndex(mr, this.spawn.materialIndex, idx);
+          }
+          this.lastKeyByNode.set(root, "SET#" + setIndex);
+        };
         _proto.hash32str = function hash32str(s) {
           var h = 2166136261 >>> 0;
           for (var i = 0; i < s.length; i++) {
@@ -5360,33 +5014,143 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
           var _lib$getSetsCount;
           var lib = ColorTextureLibrary == null ? void 0 : ColorTextureLibrary.instance;
           return (_lib$getSetsCount = lib == null || lib.getSetsCount == null ? void 0 : lib.getSetsCount()) != null ? _lib$getSetsCount : this.spawn.colorSetsFallback;
+        }
+
+        /* ========================== Тексты в префаб ========================== */;
+        _proto.applyPieceToNode = function applyPieceToNode(root, piece) {
+          var _piece$title, _piece$name, _piece$greeting_text;
+          root.__piece = piece != null ? piece : null;
+          if (!piece) return;
+          this.setLabelByChildName(root, 'Title', (_piece$title = piece.title) != null ? _piece$title : '');
+          this.setLabelByChildName(root, 'Name', (_piece$name = piece.name) != null ? _piece$name : '');
+          this.setLabelByChildName(root, 'Greeting', (_piece$greeting_text = piece.greeting_text) != null ? _piece$greeting_text : '');
         };
-        _proto.applySetIndex = function applySetIndex(mr, materialIndex, setIndex) {
-          var lib = ColorTextureLibrary.instance;
-          if (!lib) return;
-          if (typeof lib.applySetByIndex === 'function') lib.applySetByIndex(mr, materialIndex, setIndex);else lib.applyRandomSet(mr, materialIndex);
+        _proto.setLabelByChildName = function setLabelByChildName(root, childName, text) {
+          var found = this.findChildCaseInsensitive(root, childName);
+          if (!found) return;
+          var lbl = found.getComponent(Label);
+          if (lbl) lbl.string = text != null ? text : '';
         };
-        _proto.colorAllPiecesForKey = function colorAllPiecesForKey(root, key) {
-          var bindings = root.getComponentsInChildren(ClickMoveBinding);
-          var count = this.getSetsCount();
-          var k = 0;
-          for (var _iterator2 = _createForOfIteratorHelperLoose(bindings), _step2; !(_step2 = _iterator2()).done;) {
-            var b = _step2.value;
-            var mr = b == null ? void 0 : b.meshRenderer;
-            if (!mr) continue;
-            var idx = count <= 1 ? 0 : this.hash32str(key + "#" + k++) % count;
-            this.applySetIndex(mr, this.spawn.materialIndex, idx);
+        _proto.findChildCaseInsensitive = function findChildCaseInsensitive(root, name) {
+          var target = name.toLowerCase();
+          var stack = [root];
+          while (stack.length) {
+            var n = stack.pop();
+            if (n.name.toLowerCase() === target) return n;
+            stack.push.apply(stack, n.children);
+          }
+          return null;
+        }
+
+        /* ========================== Нормализация / RNG ========================== */;
+        _proto.safeReadText = /*#__PURE__*/
+        function () {
+          var _safeReadText = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(resp) {
+            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+              while (1) switch (_context2.prev = _context2.next) {
+                case 0:
+                  _context2.prev = 0;
+                  _context2.next = 3;
+                  return resp.text();
+                case 3:
+                  return _context2.abrupt("return", _context2.sent);
+                case 6:
+                  _context2.prev = 6;
+                  _context2.t0 = _context2["catch"](0);
+                  return _context2.abrupt("return", '');
+                case 9:
+                case "end":
+                  return _context2.stop();
+              }
+            }, _callee2, null, [[0, 6]]);
+          }));
+          function safeReadText(_x) {
+            return _safeReadText.apply(this, arguments);
+          }
+          return safeReadText;
+        }();
+        _proto.strOrNull = function strOrNull(v) {
+          if (typeof v === 'string') {
+            var s = v.trim();
+            return s.length ? s : null;
+          }
+          return null;
+        };
+        _proto.numOrNull = function numOrNull(v) {
+          if (typeof v === 'number' && Number.isFinite(v)) return v;
+          if (typeof v === 'string') {
+            var s = v.trim();
+            if (s === '') return null;
+            var n = Number(s);
+            return Number.isFinite(n) ? n : null;
+          }
+          return null;
+        };
+        _proto.isUuidLoose = function isUuidLoose(v) {
+          var s = v.trim();
+          return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(s);
+        };
+        _proto.isHexColor = function isHexColor(v) {
+          return /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.test(v.trim());
+        };
+        _proto.normalizeHex = function normalizeHex(v) {
+          var s = (v.startsWith('#') ? v.slice(1) : v).trim().toLowerCase();
+          if (s.length === 3) return '#' + s.split('').map(function (ch) {
+            return ch + ch;
+          }).join('').toUpperCase();
+          if (s.length === 6) return '#' + s.toUpperCase();
+          return s ? '#' + s.slice(0, 6).toUpperCase() : '#000000';
+        };
+        _proto.normalizeCakePiece = function normalizeCakePiece(raw) {
+          var _raw$hex_color, _ref, _raw$greeting_text, _raw$filling_id, _raw$file;
+          var user_id = this.strOrNull(raw == null ? void 0 : raw.uniq_id);
+          if (user_id && !this.isUuidLoose(user_id)) {
+            console.warn('[API] uniq_id не UUID → null:', user_id);
+            user_id = null;
+          }
+          var hex_color = this.strOrNull((_raw$hex_color = raw == null ? void 0 : raw.hex_color) != null ? _raw$hex_color : raw == null ? void 0 : raw.color);
+          if (hex_color && this.isHexColor(hex_color)) {
+            hex_color = this.normalizeHex(hex_color);
+          } else {
+            hex_color = null;
+          }
+          return {
+            user_id: user_id,
+            hex_color: hex_color,
+            name: this.strOrNull(raw == null ? void 0 : raw.name),
+            title: this.strOrNull(raw == null ? void 0 : raw.title),
+            greeting_text: this.strOrNull((_ref = (_raw$greeting_text = raw == null ? void 0 : raw.greeting_text) != null ? _raw$greeting_text : raw == null ? void 0 : raw.greetingText) != null ? _ref : raw == null ? void 0 : raw.greeting),
+            filling_id: this.numOrNull((_raw$filling_id = raw == null ? void 0 : raw.filling_id) != null ? _raw$filling_id : raw == null ? void 0 : raw.fillingId),
+            file: this.strOrNull((_raw$file = raw == null ? void 0 : raw.file) != null ? _raw$file : raw == null ? void 0 : raw.file_base64)
+          };
+        }
+
+        /** PRNG: mulberry32 — быстрый и стабильный от seed */;
+        _proto.mulberry32 = function mulberry32(a) {
+          return function () {
+            var t = a += 0x6D2B79F5;
+            t = Math.imul(t ^ t >>> 15, t | 1);
+            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+          };
+        };
+        _proto.fisherYatesShuffle = function fisherYatesShuffle(arr, rng) {
+          for (var i = arr.length - 1; i > 0; i--) {
+            var j = Math.floor(rng() * (i + 1));
+            var tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
           }
         };
         return TowerLayoutController;
-      }(Component), (_descriptor18 = _applyDecoratedDescriptor(_class5.prototype, "spawn", [_dec17], {
+      }(Component), (_descriptor25 = _applyDecoratedDescriptor(_class5.prototype, "spawn", [_dec24], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return new TVS_SpawnLayout();
         }
-      }), _descriptor19 = _applyDecoratedDescriptor(_class5.prototype, "scrollCtrl", [_dec18], {
+      }), _descriptor26 = _applyDecoratedDescriptor(_class5.prototype, "scrollCtrl", [_dec25], {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -5394,1219 +5158,6 @@ System.register("chunks:///_virtual/TVS_SpawnLayout.ts", ['./rollupPluginModLoBa
           return null;
         }
       })), _class5)) || _class4));
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/UIScaleBounce.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Vec3, tween, Component;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-      _asyncToGenerator = module.asyncToGenerator;
-      _regeneratorRuntime = module.regeneratorRuntime;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Vec3 = module.Vec3;
-      tween = module.tween;
-      Component = module.Component;
-    }],
-    execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11;
-      cclegacy._RF.push({}, "e225dgcyF9JYayYp4NmAGoB", "UIScaleBounce", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-
-      /**
-       * Показ/закрытие UI с баунс-скейлом и «айдлом»:
-       * - playOpen(): 0 → overshoot → undershoot → final, затем бесконечный idle (вверх/вниз + лёгкий дыхающий скейл)
-       * - playClose(): стоп idle, scale → 0, выключение
-       */
-      var UIScaleBounce = exports('UIScaleBounce', (_dec = ccclass('UIScaleBounce'), _dec2 = property({
-        tooltip: 'Если пусто — анимируется этот же узел'
-      }), _dec3 = property({
-        tooltip: 'Итоговый масштаб после показа'
-      }), _dec4 = property({
-        tooltip: 'Оверсхут (выше финального) при показе'
-      }), _dec5 = property({
-        tooltip: 'Лёгкая просадка ниже финального'
-      }), _dec6 = property({
-        tooltip: 'Длительность 0 → оверсхут'
-      }), _dec7 = property({
-        tooltip: 'Длительность оверсхут → просадка'
-      }), _dec8 = property({
-        tooltip: 'Длительность просадка → финал'
-      }), _dec9 = property({
-        tooltip: 'Длительность закрытия (к 0)'
-      }), _dec10 = property({
-        tooltip: 'Амплитуда покачивания по Y (локально), в единицах'
-      }), _dec11 = property({
-        tooltip: 'Амплитуда дыхания скейла (± от finalScale)'
-      }), _dec12 = property({
-        tooltip: 'Полупериод одной фазы (вверх или вниз)'
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(UIScaleBounce, _Component);
-        function UIScaleBounce() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "target", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "finalScale", _descriptor2, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "overshootScale", _descriptor3, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "undershootScale", _descriptor4, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "upDuration", _descriptor5, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "softenDuration", _descriptor6, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "settleDuration", _descriptor7, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "closeDuration", _descriptor8, _assertThisInitialized(_this));
-          // ---------- Параметры «айдла» ----------
-          _initializerDefineProperty(_this, "idleMoveOffsetY", _descriptor9, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "idleScaleDelta", _descriptor10, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "idleHalfDuration", _descriptor11, _assertThisInitialized(_this));
-          _this._busy = false;
-          _this._idleTween = null;
-          _this._basePos = null;
-          return _this;
-        }
-        var _proto = UIScaleBounce.prototype;
-        _proto.onLoad = function onLoad() {
-          if (!this.target) this.target = this.node;
-          this.target.setScale(new Vec3(0, 0, 0));
-        }
-
-        /** Показ с баунсом (0 → overshoot → undershoot → final), затем запуск бесконечного idle. */;
-        _proto.playOpen = /*#__PURE__*/
-        function () {
-          var _playOpen = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-            var _this2 = this;
-            var t;
-            return _regeneratorRuntime().wrap(function _callee$(_context) {
-              while (1) switch (_context.prev = _context.next) {
-                case 0:
-                  if (!(!this.target || this._busy)) {
-                    _context.next = 2;
-                    break;
-                  }
-                  return _context.abrupt("return");
-                case 2:
-                  this._busy = true;
-                  t = this.target; // На всякий случай перед новым показом всё остановим и сбросим
-                  this._stopIdle();
-                  t.active = true;
-                  t.setScale(new Vec3(0, 0, 0));
-                  _context.next = 9;
-                  return new Promise(function (resolve) {
-                    tween(t).to(_this2.upDuration, {
-                      scale: new Vec3(_this2.overshootScale, _this2.overshootScale, _this2.overshootScale)
-                    }, {
-                      easing: 'quadOut'
-                    }).to(_this2.softenDuration, {
-                      scale: new Vec3(_this2.undershootScale, _this2.undershootScale, _this2.undershootScale)
-                    }, {
-                      easing: 'quadInOut'
-                    }).to(_this2.settleDuration, {
-                      scale: new Vec3(_this2.finalScale, _this2.finalScale, _this2.finalScale)
-                    }, {
-                      easing: 'quadOut'
-                    }).call(function () {
-                      return resolve();
-                    }).start();
-                  });
-                case 9:
-                  // Запоминаем базовую позицию для покачивания (локальная позиция на момент стабилизации)
-                  this._basePos = t.getPosition().clone();
-
-                  // Запускаем бесконечный idle
-                  this._startIdle();
-                  this._busy = false;
-                case 12:
-                case "end":
-                  return _context.stop();
-              }
-            }, _callee, this);
-          }));
-          function playOpen() {
-            return _playOpen.apply(this, arguments);
-          }
-          return playOpen;
-        }() /** Закрытие: стоп idle, мягко уводим масштаб к 0, отключаем узел. */;
-        _proto.playClose = /*#__PURE__*/
-        function () {
-          var _playClose = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-            var _this3 = this;
-            var t;
-            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-              while (1) switch (_context2.prev = _context2.next) {
-                case 0:
-                  if (!(!this.target || this._busy)) {
-                    _context2.next = 2;
-                    break;
-                  }
-                  return _context2.abrupt("return");
-                case 2:
-                  this._busy = true;
-                  t = this.target; // Останавливаем покачивание и возвращаем в базу/финальный скейл
-                  this._stopIdle(true);
-                  _context2.next = 7;
-                  return new Promise(function (resolve) {
-                    tween(t).to(_this3.closeDuration, {
-                      scale: new Vec3(0, 0, 0)
-                    }, {
-                      easing: 'quadIn'
-                    }).call(function () {
-                      return resolve();
-                    }).start();
-                  });
-                case 7:
-                  t.active = false;
-                  this._busy = false;
-                case 9:
-                case "end":
-                  return _context2.stop();
-              }
-            }, _callee2, this);
-          }));
-          function playClose() {
-            return _playClose.apply(this, arguments);
-          }
-          return playClose;
-        }() // ---------- Внутренние помогающие ----------
-        /** Старт бесконечного «айдла»: вверх/вниз + дыхание скейла. */;
-
-        _proto._startIdle = function _startIdle() {
-          if (!this.target || !this._basePos) return;
-          var t = this.target;
-          var base = this._basePos;
-
-          // Начальное состояние — точно в базе и с финальным скейлом
-          t.setPosition(base);
-          t.setScale(new Vec3(this.finalScale, this.finalScale, this.finalScale));
-          var upPos = new Vec3(base.x, base.y + this.idleMoveOffsetY, base.z);
-          var downPos = new Vec3(base.x, base.y - this.idleMoveOffsetY, base.z);
-          var scaleUp = this.finalScale + this.idleScaleDelta;
-          var scaleDown = this.finalScale - this.idleScaleDelta;
-
-          // Бесконечный цикл: вверх → вниз → (следующая итерация снова вверх...)
-          this._idleTween = tween(t).repeatForever(tween().to(this.idleHalfDuration, {
-            position: upPos,
-            scale: new Vec3(scaleUp, scaleUp, scaleUp)
-          }, {
-            easing: 'sineInOut'
-          }).to(this.idleHalfDuration, {
-            position: downPos,
-            scale: new Vec3(scaleDown, scaleDown, scaleDown)
-          }, {
-            easing: 'sineInOut'
-          })).start();
-        }
-
-        /**
-         * Остановить айдл. Если reset = true — вернуть узел в базовую позицию и финальный скейл.
-         */;
-        _proto._stopIdle = function _stopIdle(reset) {
-          if (reset === void 0) {
-            reset = false;
-          }
-          if (this._idleTween) {
-            this._idleTween.stop();
-            this._idleTween = null;
-          }
-          if (reset && this.target) {
-            if (this._basePos) this.target.setPosition(this._basePos);
-            this.target.setScale(new Vec3(this.finalScale, this.finalScale, this.finalScale));
-          }
-        };
-        return UIScaleBounce;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "target", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "finalScale", [_dec3], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1.0;
-        }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "overshootScale", [_dec4], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1.08;
-        }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "undershootScale", [_dec5], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.96;
-        }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "upDuration", [_dec6], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.18;
-        }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "softenDuration", [_dec7], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.10;
-        }
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "settleDuration", [_dec8], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.10;
-        }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "closeDuration", [_dec9], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.18;
-        }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "idleMoveOffsetY", [_dec10], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 6;
-        }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "idleScaleDelta", [_dec11], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.03;
-        }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "idleHalfDuration", [_dec12], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.6;
-        }
-      })), _class2)) || _class));
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/VerticalMoveAroundTarget.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './InteractionState.ts', './PointerIds.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createClass, cclegacy, _decorator, Node, clamp, tween, input, Input, KeyCode, Component, InteractionState, MOUSE_ID;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-      _createClass = module.createClass;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      Node = module.Node;
-      clamp = module.clamp;
-      tween = module.tween;
-      input = module.input;
-      Input = module.Input;
-      KeyCode = module.KeyCode;
-      Component = module.Component;
-    }, function (module) {
-      InteractionState = module.InteractionState;
-    }, function (module) {
-      MOUSE_ID = module.MOUSE_ID;
-    }],
-    execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30;
-      cclegacy._RF.push({}, "3885628609LXpglYnTN3MJQ", "VerticalMoveAroundTarget", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var VerticalMoveAroundTarget = exports('VerticalMoveAroundTarget', (_dec = ccclass('VerticalMoveAroundTarget'), _dec2 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        type: Node,
-        tooltip: "Таргет для ориентира по Y (обычно якорь камеры/риг)."
-      }), _dec3 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Стартовая высота камеры относительно target.y."
-      }), _dec4 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Минимальная высота над таргетом (если включён нижний лимит)."
-      }), _dec5 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Максимальная высота над таргетом."
-      }), _dec6 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Отключить нижний лимит. Можно опускаться ниже minHeight; offsetY может стать отрицательным."
-      }), _dec7 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Ширина мягкой зоны у границ (ед.)."
-      }), _dec8 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Отключить мягкую зону у нижней границы (чтобы низ не гасил скорость)."
-      }), _dec9 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Жёсткость возврата за пределы."
-      }), _dec10 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Демпфирование возврата (≈ 2*sqrt(K))."
-      }), _dec11 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Инвертировать вертикальное управление (клавиши и драг)."
-      }), _dec12 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Базовая макс. скорость (ед/с) до масштабирования."
-      }), _dec13 = property({
-        group: {
-          name: "General",
-          id: "general"
-        },
-        tooltip: "Плавность вертикали (сек). Меньше — резче."
-      }), _dec14 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "Включить адаптацию скорости от глубины башни (рекомендуется)."
-      }), _dec15 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "Мировой Y вершины башни (PieceSpawner.topY)."
-      }), _dec16 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "baseScale из спавнера."
-      }), _dec17 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "levelScaleFactor из спавнера (например, 0.9). r = 1/levelScaleFactor."
-      }), _dec18 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "baseHeight из спавнера."
-      }), _dec19 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "levelPadding из спавнера."
-      }), _dec20 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "Степень нелинейности α при нормировке (1 = линейно; >1 — агрессивнее внизу)."
-      }), _dec21 = property({
-        group: {
-          name: "Tower Coupling (optional)",
-          id: "tower"
-        },
-        tooltip: "Нижний пол множителя (чтобы наверху не замирало)."
-      }), _dec22 = property({
-        group: {
-          name: "Fallback pow/exp",
-          id: "fallback"
-        },
-        tooltip: "Реф. высота для pow/exp режима (если useTowerAdaptiveScale = false)."
-      }), _dec23 = property({
-        group: {
-          name: "Fallback pow/exp",
-          id: "fallback"
-        },
-        tooltip: "Степенная часть (больше — быстрее внизу)."
-      }), _dec24 = property({
-        group: {
-          name: "Fallback pow/exp",
-          id: "fallback"
-        },
-        tooltip: "Экспоненциальный буст (0…0.5). 0 — выкл."
-      }), _dec25 = property({
-        group: {
-          name: "Pointer",
-          id: "pointer"
-        },
-        tooltip: "Базовая чувствительность драга: ед/пиксель (до масштабирования)."
-      }), _dec26 = property({
-        group: {
-          name: "Pointer",
-          id: "pointer"
-        },
-        tooltip: "Порог пикселей для начала драга."
-      }), _dec27 = property({
-        group: {
-          name: "Pointer",
-          id: "pointer"
-        },
-        tooltip: "Мёртвая зона старта (ед.)."
-      }), _dec28 = property({
-        group: {
-          name: "Keyboard",
-          id: "keyboard"
-        },
-        tooltip: "Ускорение клавиш (ед/с²)."
-      }), _dec29 = property({
-        group: {
-          name: "Keyboard",
-          id: "keyboard"
-        },
-        tooltip: "Торможение клавиш (ед/с²)."
-      }), _dec30 = property({
-        group: {
-          name: "Debug",
-          id: "debug"
-        },
-        tooltip: "Логи."
-      }), _dec31 = property({
-        group: {
-          name: "Debug",
-          id: "debug"
-        },
-        tooltip: "Тег префикса логов."
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(VerticalMoveAroundTarget, _Component);
-        function VerticalMoveAroundTarget() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          // === General ===
-          _initializerDefineProperty(_this, "target", _descriptor, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "startHeight", _descriptor2, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "minHeight", _descriptor3, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "maxHeight", _descriptor4, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "noMinLimit", _descriptor5, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "softRange", _descriptor6, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "disableSoftAtMin", _descriptor7, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "springK", _descriptor8, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "springDamping", _descriptor9, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "invertVertical", _descriptor10, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "maxSpeed", _descriptor11, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "moveSmoothTime", _descriptor12, _assertThisInitialized(_this));
-          // === Tower Coupling (optional) ===
-          _initializerDefineProperty(_this, "useTowerAdaptiveScale", _descriptor13, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "towerTopY", _descriptor14, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "towerBaseScale", _descriptor15, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "towerLevelScaleFactor", _descriptor16, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "towerBaseHeight", _descriptor17, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "towerLevelPadding", _descriptor18, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "towerAlpha", _descriptor19, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "minScale", _descriptor20, _assertThisInitialized(_this));
-          // === Fallback: pow/exp масштаб (если отключить Tower Coupling) ===
-          _initializerDefineProperty(_this, "refHeight", _descriptor21, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "powExp", _descriptor22, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "expK", _descriptor23, _assertThisInitialized(_this));
-          // === Pointer ===
-          _initializerDefineProperty(_this, "unitsPerPixelY", _descriptor24, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "dragThreshold", _descriptor25, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "startMoveOffsetY", _descriptor26, _assertThisInitialized(_this));
-          // === Keyboard ===
-          _initializerDefineProperty(_this, "keyboardAccel", _descriptor27, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "keyboardDecel", _descriptor28, _assertThisInitialized(_this));
-          // === Debug ===
-          _initializerDefineProperty(_this, "debugLogs", _descriptor29, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "debugTag", _descriptor30, _assertThisInitialized(_this));
-          // === внутреннее состояние ===
-          _this.dirY = 0;
-          _this.kbAccumY = 0;
-          _this.kbActive = false;
-          _this.kbVel = 0;
-          _this.touchActiveId = null;
-          _this.touchStartY = null;
-          _this.touchLastY = null;
-          _this.touchDragging = false;
-          _this.touchAccumUnits = 0;
-          _this.touchActive = false;
-          _this.touchClaimed = false;
-          _this.mouseHeld = false;
-          _this.mouseStartY = null;
-          _this.mouseLastY = null;
-          _this.mouseDragging = false;
-          _this.mouseAccumUnits = 0;
-          _this.mouseActive = false;
-          _this.mouseClaimed = false;
-          _this.velY = 0;
-          // ед/сек
-          _this.baseYOffset = 0;
-          // высота над target.y (может быть <0)
-          _this.pendingUnitsFromPointer = 0;
-          // ΔY от указателей за кадр (ед.)
-          // — предвычисления для Tower —
-          _this.tower_r = 1;
-          _this.tower_h0 = 1;
-          // baseHeight*baseScale
-          _this.tower_pad = 0;
-          _this.tower_k = 0;
-          // r - 1
-          _this.tower_Sref = 1;
-          // глубина на старте
-          _this.tower_Tref = 1;
-          return _this;
-        }
-        var _proto = VerticalMoveAroundTarget.prototype;
-        _proto.dbg = function dbg() {
-          var _console;
-          for (var _len2 = arguments.length, a = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
-            a[_key2] = arguments[_key2];
-          }
-          if (this.debugLogs) (_console = console).log.apply(_console, ["[" + this.debugTag + "]"].concat(a));
-        }
-
-        // ===== API =====
-        ;
-
-        _proto.stopInertia = function stopInertia() {
-          this.velY = 0;
-          this.pendingUnitsFromPointer = 0;
-          this.dirY = 0;
-          this.kbAccumY = 0;
-          this.kbActive = false;
-          this.kbVel = 0;
-          this.mouseHeld = false;
-          this.mouseDragging = false;
-          this.mouseAccumUnits = 0;
-          this.mouseActive = false;
-          this.mouseClaimed = false;
-          this.touchDragging = false;
-          this.touchAccumUnits = 0;
-          this.touchActive = false;
-          this.touchClaimed = false;
-        }
-
-        /** Плавно перейти к мировому Y (с учётом target.y). */;
-        _proto.moveToWorldY = function moveToWorldY(worldY, duration, extraOffset) {
-          var _this2 = this;
-          if (extraOffset === void 0) {
-            extraOffset = 0;
-          }
-          return new Promise(function (resolve) {
-            if (!_this2.target) {
-              resolve();
-              return;
-            }
-            var yLocal = worldY - _this2.target.worldPosition.y + extraOffset;
-            var minEdge = _this2.noMinLimit ? -Infinity : _this2.minHeight;
-            var targetY = clamp(yLocal, minEdge, _this2.maxHeight);
-            if (Math.abs(_this2.baseYOffset - targetY) < 0.01 || duration <= 0) {
-              _this2.baseYOffset = targetY;
-              resolve();
-              return;
-            }
-            _this2.stopInertia();
-            var start = {
-              y: _this2.baseYOffset
-            };
-            tween(start).to(duration, {
-              y: targetY
-            }, {
-              easing: 'quadOut',
-              onUpdate: function onUpdate() {
-                _this2.baseYOffset = start.y;
-              }
-            }).call(function () {
-              return resolve();
-            }).start();
-          });
-        };
-        _proto.moveToNode = function moveToNode(node, duration, extraOffset) {
-          if (extraOffset === void 0) {
-            extraOffset = 0;
-          }
-          return this.moveToWorldY(node.worldPosition.y, duration, extraOffset);
-        };
-        _proto.onEnable = function onEnable() {
-          input.on(Input.EventType.KEY_DOWN, this.onKeyDown, this);
-          input.on(Input.EventType.KEY_UP, this.onKeyUp, this);
-          input.on(Input.EventType.TOUCH_START, this.onTouchStart, this);
-          input.on(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-          input.on(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-          input.on(Input.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-          input.on(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
-          input.on(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
-          input.on(Input.EventType.MOUSE_UP, this.onMouseUp, this);
-        };
-        _proto.onDisable = function onDisable() {
-          input.off(Input.EventType.KEY_DOWN, this.onKeyDown, this);
-          input.off(Input.EventType.KEY_UP, this.onKeyUp, this);
-          input.off(Input.EventType.TOUCH_START, this.onTouchStart, this);
-          input.off(Input.EventType.TOUCH_MOVE, this.onTouchMove, this);
-          input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
-          input.off(Input.EventType.TOUCH_CANCEL, this.onTouchCancel, this);
-          input.off(Input.EventType.MOUSE_DOWN, this.onMouseDown, this);
-          input.off(Input.EventType.MOUSE_MOVE, this.onMouseMove, this);
-          input.off(Input.EventType.MOUSE_UP, this.onMouseUp, this);
-        };
-        _proto.start = function start() {
-          var minEdge = this.noMinLimit ? -Infinity : this.minHeight;
-          this.baseYOffset = clamp(this.startHeight, minEdge, this.maxHeight);
-
-          // предвычисляем константы башни (устойчиво)
-          this.tower_r = this.towerLevelScaleFactor > 0 ? 1 / this.towerLevelScaleFactor : 1;
-          this.tower_h0 = Math.max(1e-9, this.towerBaseHeight * this.towerBaseScale);
-          this.tower_pad = Math.max(0, this.towerLevelPadding);
-          this.tower_k = Math.max(0, this.tower_r - 1);
-
-          // глубина на старте + нормирующая толщина Tref
-          var yWorld = this.currentWorldY();
-          this.tower_Sref = Math.max(0, this.towerTopY - yWorld);
-          this.tower_Tref = Math.max(1e-9, this.tower_h0 + this.tower_k * this.tower_Sref + this.tower_pad);
-          this.dbg('tower init', {
-            r: this.tower_r,
-            h0: this.tower_h0,
-            pad: this.tower_pad,
-            k: this.tower_k,
-            Sref: this.tower_Sref,
-            Tref: this.tower_Tref
-          });
-        }
-
-        // === ВСПОМОГАТЕЛЬНЫЕ ===
-        /** Текущий мировой Y камеры по target и offset. */;
-        _proto.currentWorldY = function currentWorldY() {
-          if (this.target) return this.target.worldPosition.y + this.baseYOffset;
-          return this.baseYOffset; // fallback, если target не задан
-        }
-
-        /** Адаптивный масштаб от глубины башни (устойчивый на больших числах). */;
-        _proto.getSpeedScaleTower = function getSpeedScaleTower() {
-          // глубина от вершины в мировых единицах
-          var S = Math.max(0, this.towerTopY - this.currentWorldY());
-
-          // линейная аппроксимация толщины уровня: T(S) ≈ h0 + (r-1)*S + pad
-          var T = this.tower_h0 + this.tower_k * S + this.tower_pad;
-
-          // нормировка относительно старта + нелинейность α
-          var scale = T / this.tower_Tref;
-          if (this.towerAlpha !== 1) {
-            // возводим в степень, аккуратно
-            scale = Math.pow(Math.max(1e-9, scale), this.towerAlpha);
-          }
-
-          // пол снизу, потолка нет
-          scale = Math.max(this.minScale, scale);
-
-          // страховки от численных артефактов
-          if (!Number.isFinite(scale) || scale <= 0) scale = this.minScale;
-
-          // лог (при желании)
-          // this.dbg('scale tower', { S: Math.round(S), T: T.toFixed(3), scale: scale.toFixed(3) });
-
-          return scale;
-        }
-
-        /** Fallback: pow/exp от |offset| (если отключили Tower-режим). */;
-        _proto.getSpeedScaleFallback = function getSpeedScaleFallback() {
-          var ref = Number.isFinite(this.refHeight) && this.refHeight > 0 ? this.refHeight : 500;
-          var hAbs = Math.max(1e-6, Math.abs(this.baseYOffset));
-          var r = hAbs / ref;
-          var sPow = Math.pow(r, Math.max(0, this.powExp));
-          var sExp = this.expK !== 0 ? Math.exp(this.expK * (r - 1)) : 1;
-          var scale = sPow * sExp;
-          if (!Number.isFinite(scale) || scale <= 0) scale = 1;
-          return Math.max(this.minScale, scale);
-        };
-        _proto.getSpeedScale = function getSpeedScale() {
-          return this.useTowerAdaptiveScale ? this.getSpeedScaleTower() : this.getSpeedScaleFallback();
-        }
-
-        // === клавиатура ===
-        ;
-
-        _proto.onKeyDown = function onKeyDown(e) {
-          if (e.keyCode === KeyCode.KEY_S) this.dirY = 1;else if (e.keyCode === KeyCode.KEY_W) this.dirY = -1;
-        };
-        _proto.onKeyUp = function onKeyUp(e) {
-          if (e.keyCode === KeyCode.KEY_S && this.dirY === 1) this.dirY = 0;
-          if (e.keyCode === KeyCode.KEY_W && this.dirY === -1) this.dirY = 0;
-          if (this.dirY === 0) {
-            this.kbAccumY = 0;
-            this.kbActive = false;
-          }
-        }
-
-        // === тач ===
-        ;
-
-        _proto.onTouchStart = function onTouchStart(e) {
-          if (InteractionState.inGesture && InteractionState.source === 'touch') return;
-          if (this.touchActiveId !== null) return;
-          this.touchActiveId = e.getID();
-          var y = e.getLocationY();
-          this.touchStartY = y;
-          this.touchLastY = y;
-          this.touchDragging = false;
-          this.touchAccumUnits = 0;
-          this.touchActive = false;
-          this.touchClaimed = false;
-        };
-        _proto.onTouchMove = function onTouchMove(e) {
-          var id = e.getID();
-          if (this.touchActiveId !== id || this.touchLastY === null || this.touchStartY === null) return;
-          if (InteractionState.inGesture && InteractionState.source === 'touch' && !this.touchClaimed) return;
-          var y = e.getLocationY();
-          var dyIncPx = y - this.touchLastY;
-          var totalPx = y - this.touchStartY;
-          this.touchLastY = y;
-          if (!this.touchDragging && Math.abs(totalPx) >= this.dragThreshold) this.touchDragging = true;
-          if (dyIncPx === 0) return;
-          var sign = this.invertVertical ? -1 : 1;
-          var dyIncUnits = dyIncPx * this.unitsPerPixelY * this.getSpeedScale() * sign;
-          if (!this.touchActive) {
-            this.touchAccumUnits += dyIncUnits;
-            if (this.touchDragging && Math.abs(this.touchAccumUnits) >= this.startMoveOffsetY) {
-              if (!InteractionState.inGesture) {
-                this.touchActive = true;
-                InteractionState.beginGesture(id, 'touch');
-                this.touchClaimed = true;
-                InteractionState.markDrag(id);
-              } else return;
-            } else return;
-          }
-          if (this.touchClaimed) this.pendingUnitsFromPointer += dyIncUnits;
-        };
-        _proto.onTouchEnd = function onTouchEnd(e) {
-          if (this.touchActiveId !== e.getID()) return;
-          if (this.touchClaimed) InteractionState.tryEndGesture(e.getID(), 'touch');
-          this.touchActiveId = null;
-          this.touchStartY = this.touchLastY = null;
-          this.touchDragging = false;
-          this.touchAccumUnits = 0;
-          this.touchActive = false;
-          this.touchClaimed = false;
-        };
-        _proto.onTouchCancel = function onTouchCancel(e) {
-          if (this.touchActiveId !== e.getID()) return;
-          if (this.touchClaimed) InteractionState.tryEndGesture(e.getID(), 'touch');
-          this.touchActiveId = null;
-          this.touchStartY = this.touchLastY = null;
-          this.touchDragging = false;
-          this.touchAccumUnits = 0;
-          this.touchActive = false;
-          this.touchClaimed = false;
-        }
-
-        // === мышь ===
-        ;
-
-        _proto.onMouseDown = function onMouseDown(e) {
-          if (e.getButton() !== 0) return;
-          this.mouseHeld = true;
-          var y = e.getLocationY();
-          this.mouseStartY = y;
-          this.mouseLastY = y;
-          this.mouseDragging = false;
-          this.mouseAccumUnits = 0;
-          this.mouseActive = false;
-          this.mouseClaimed = false;
-        };
-        _proto.onMouseMove = function onMouseMove(e) {
-          if (!this.mouseHeld || this.mouseLastY === null || this.mouseStartY === null) return;
-          var y = e.getLocationY();
-          var dyIncPx = y - this.mouseLastY;
-          var totalPx = y - this.mouseStartY;
-          this.mouseLastY = y;
-          if (!this.mouseDragging && Math.abs(totalPx) >= this.dragThreshold) this.mouseDragging = true;
-          if (dyIncPx === 0) return;
-          var sign = this.invertVertical ? -1 : 1;
-          var dyIncUnits = dyIncPx * this.unitsPerPixelY * this.getSpeedScale() * sign;
-          if (!this.mouseActive) {
-            this.mouseAccumUnits += dyIncUnits;
-            if (this.mouseDragging && Math.abs(this.mouseAccumUnits) >= this.startMoveOffsetY) {
-              this.mouseActive = true;
-              if (!InteractionState.inGesture) {
-                InteractionState.beginGesture(MOUSE_ID, 'mouse');
-                this.mouseClaimed = true;
-              }
-              InteractionState.markDrag(MOUSE_ID);
-            } else return;
-          }
-          this.pendingUnitsFromPointer += dyIncUnits;
-        };
-        _proto.onMouseUp = function onMouseUp(e) {
-          if (e.getButton() !== 0) return;
-          if (this.mouseClaimed) InteractionState.tryEndGesture(MOUSE_ID, 'mouse');
-          this.mouseHeld = false;
-          this.mouseStartY = this.mouseLastY = null;
-          this.mouseDragging = false;
-          this.mouseAccumUnits = 0;
-          this.mouseActive = false;
-          this.mouseClaimed = false;
-        }
-
-        // === апдейт (инерция + мягкие границы) ===
-        ;
-
-        _proto.update = function update(dt) {
-          var sign = this.invertVertical ? -1 : 1;
-
-          // Порог «старта» для клавиш — учитываем текущий scale
-          if (this.dirY !== 0) {
-            if (!this.kbActive) {
-              this.kbAccumY += Math.abs(this.maxSpeed * this.getSpeedScale() * dt);
-              if (this.kbAccumY >= this.startMoveOffsetY) this.kbActive = true;
-            }
-          } else {
-            this.kbAccumY = 0;
-            this.kbActive = false;
-          }
-          var speedScale = this.getSpeedScale();
-
-          // Целевая скорость от клавиш
-          var desiredKbVel = this.dirY !== 0 && this.kbActive ? this.dirY * this.maxSpeed * speedScale * sign : 0;
-
-          // Плавный разгон/торможение W/S
-          var need = desiredKbVel - this.kbVel;
-          var accel = Math.sign(need) === Math.sign(desiredKbVel) ? this.keyboardAccel : this.keyboardDecel;
-          var maxStep = accel * dt;
-          if (need > maxStep) this.kbVel += maxStep;else if (need < -maxStep) this.kbVel -= maxStep;else this.kbVel = desiredKbVel;
-          var keyboardTargetVel = this.kbVel;
-
-          // Скорость от указателей — уже масштабирована в on*Move()
-          var pointerTargetVel = this.pendingUnitsFromPointer / Math.max(dt, 1e-5);
-          this.pendingUnitsFromPointer = 0;
-
-          // Мягкие края (нижний можно отключить)
-          if (this.softRange > 0) {
-            var dToMin = this.baseYOffset - this.minHeight;
-            var dToMax = this.maxHeight - this.baseYOffset;
-            var softFactor = function softFactor(d, edge) {
-              if (edge <= 0) return 1;
-              if (d >= edge) return 1;
-              var t = clamp(d / edge, 0, 1);
-              return t * t * (3 - 2 * t);
-            };
-            var softMin = this.noMinLimit || this.disableSoftAtMin ? 0 : this.softRange;
-            var softMax = this.softRange;
-            if (keyboardTargetVel < 0) keyboardTargetVel *= softFactor(dToMin, softMin);
-            if (pointerTargetVel < 0) pointerTargetVel *= softFactor(dToMin, softMin);
-            if (keyboardTargetVel > 0) keyboardTargetVel *= softFactor(dToMax, softMax);
-            if (pointerTargetVel > 0) pointerTargetVel *= softFactor(dToMax, softMax);
-          }
-          var targetVel = keyboardTargetVel + pointerTargetVel;
-
-          // Сглаживание к целевой скорости
-          var k = this.moveSmoothTime > 0 ? 1 - Math.exp(-dt / this.moveSmoothTime) : 1;
-          this.velY += (targetVel - this.velY) * k;
-          this.baseYOffset += this.velY * dt;
-
-          // Границы
-          if (!this.noMinLimit) {
-            if (this.baseYOffset < this.minHeight) {
-              var error = this.minHeight - this.baseYOffset;
-              this.velY += (this.springK * error - this.springDamping * this.velY) * dt;
-              this.baseYOffset += this.velY * dt;
-              if (this.baseYOffset < this.minHeight) this.baseYOffset = this.minHeight;
-            }
-          }
-          if (this.baseYOffset > this.maxHeight) {
-            var _error = this.maxHeight - this.baseYOffset;
-            this.velY += (this.springK * _error - this.springDamping * this.velY) * dt;
-            this.baseYOffset += this.velY * dt;
-            if (this.baseYOffset > this.maxHeight) this.baseYOffset = this.maxHeight;
-          }
-
-          // Чистка численных артефактов
-          if (!Number.isFinite(this.velY)) this.velY = 0;
-          if (!Number.isFinite(this.baseYOffset)) this.baseYOffset = 0;
-
-          // Сброс флага вращения
-          var localActive = this.mouseActive || this.touchActive || this.dirY !== 0 && this.kbActive;
-          if (!InteractionState.inGesture && !localActive && InteractionState.isRotating) {
-            InteractionState.isRotating = false;
-          }
-          if (!localActive && Math.abs(this.velY) < 0.02) this.velY = 0;
-
-          // debug
-          if (this.debugLogs && Math.random() < 0.1) {
-            var yW = this.currentWorldY();
-            var S = Math.max(0, this.towerTopY - yW);
-            var T = this.tower_h0 + this.tower_k * S + this.tower_pad;
-            this.dbg('upd', {
-              worldY: yW.toFixed(2),
-              S: Math.round(S),
-              scale: speedScale.toFixed(3),
-              T: T.toFixed(3),
-              Tref: this.tower_Tref.toFixed(3),
-              kbVel: this.kbVel.toFixed(3),
-              velY: this.velY.toFixed(3)
-            });
-          }
-        };
-        _createClass(VerticalMoveAroundTarget, [{
-          key: "offsetY",
-          get:
-          // T(Sref) = h0 + k*Sref + pad  (нормирующая толщина)
-
-          function get() {
-            return this.baseYOffset;
-          }
-        }]);
-        return VerticalMoveAroundTarget;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "target", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "startHeight", [_dec3], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 2;
-        }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "minHeight", [_dec4], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.5;
-        }
-      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "maxHeight", [_dec5], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 30;
-        }
-      }), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "noMinLimit", [_dec6], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return true;
-        }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "softRange", [_dec7], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.8;
-        }
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "disableSoftAtMin", [_dec8], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return true;
-        }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "springK", [_dec9], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 40;
-        }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "springDamping", [_dec10], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 12;
-        }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "invertVertical", [_dec11], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return false;
-        }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "maxSpeed", [_dec12], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 8;
-        }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "moveSmoothTime", [_dec13], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.12;
-        }
-      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "useTowerAdaptiveScale", [_dec14], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return true;
-        }
-      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "towerTopY", [_dec15], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
-        }
-      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "towerBaseScale", [_dec16], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1;
-        }
-      }), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "towerLevelScaleFactor", [_dec17], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.9;
-        }
-      }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "towerBaseHeight", [_dec18], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 2;
-        }
-      }), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "towerLevelPadding", [_dec19], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
-        }
-      }), _descriptor19 = _applyDecoratedDescriptor(_class2.prototype, "towerAlpha", [_dec20], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1.0;
-        }
-      }), _descriptor20 = _applyDecoratedDescriptor(_class2.prototype, "minScale", [_dec21], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1.0;
-        }
-      }), _descriptor21 = _applyDecoratedDescriptor(_class2.prototype, "refHeight", [_dec22], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 500;
-        }
-      }), _descriptor22 = _applyDecoratedDescriptor(_class2.prototype, "powExp", [_dec23], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 1.6;
-        }
-      }), _descriptor23 = _applyDecoratedDescriptor(_class2.prototype, "expK", [_dec24], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.25;
-        }
-      }), _descriptor24 = _applyDecoratedDescriptor(_class2.prototype, "unitsPerPixelY", [_dec25], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.02;
-        }
-      }), _descriptor25 = _applyDecoratedDescriptor(_class2.prototype, "dragThreshold", [_dec26], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 10;
-        }
-      }), _descriptor26 = _applyDecoratedDescriptor(_class2.prototype, "startMoveOffsetY", [_dec27], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0.2;
-        }
-      }), _descriptor27 = _applyDecoratedDescriptor(_class2.prototype, "keyboardAccel", [_dec28], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 40;
-        }
-      }), _descriptor28 = _applyDecoratedDescriptor(_class2.prototype, "keyboardDecel", [_dec29], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 55;
-        }
-      }), _descriptor29 = _applyDecoratedDescriptor(_class2.prototype, "debugLogs", [_dec30], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return false;
-        }
-      }), _descriptor30 = _applyDecoratedDescriptor(_class2.prototype, "debugTag", [_dec31], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return "VMove";
-        }
-      })), _class2)) || _class));
       cclegacy._RF.pop();
     }
   };
