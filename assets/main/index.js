@@ -1625,9 +1625,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
         };
 
         _proto.updateFromApi = function updateFromApi(apiData) {
-          if (this.arcText) {
-            this.arcText.applyApiData(apiData);
-          }
+          if (this.arcText) ;
         }
 
         /** ���� ������� ��������� � ����� (��� �������) */;
