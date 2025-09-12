@@ -1762,7 +1762,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
       ArcTextMSDFTwoLinesSubmesh = module.ArcTextMSDFTwoLinesSubmesh;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13;
       cclegacy._RF.push({}, "a3b9f30vchC9aP2MSuw/5Bg", "ClickMoveBinding", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
@@ -1810,10 +1810,11 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           _initializerDefineProperty(_this, "berries", _descriptor8, _assertThisInitialized(_this));
           /** ��������/��������� �������� */
           _initializerDefineProperty(_this, "mainDuration", _descriptor9, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "candleDuration", _descriptor10, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "candleDelayBetween", _descriptor11, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "mainDurationHide", _descriptor10, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "candleDuration", _descriptor11, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "candleDelayBetween", _descriptor12, _assertThisInitialized(_this));
           // ����� ����� �������
-          _initializerDefineProperty(_this, "berriesDuration", _descriptor12, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "berriesDuration", _descriptor13, _assertThisInitialized(_this));
           /** ���� �����, ����� ����� ���� ������� ��� ��������� ������� */
           _this._runningTweens = [];
           return _this;
@@ -1915,84 +1916,38 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             return _playSequence.apply(this, arguments);
           }
           return playSequence;
-        }() /** �������� �������� (��������) + ������ reset */;
+        }()
+        /** �������� �������� (��������) + ������ reset */
+        /** �������� �������� (��������) + ������ reset */
+        /** �������� �������� (��������) ������ main + ������ reset */;
+
         _proto.playSequenceCloseAndReset = /*#__PURE__*/
         function () {
           var _playSequenceCloseAndReset = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-            var _this$main$active,
-              _this$main,
-              _this2 = this;
-            var anyActive, berriesTasks, i, c;
             return _regeneratorRuntime().wrap(function _callee2$(_context2) {
               while (1) switch (_context2.prev = _context2.next) {
                 case 0:
-                  // ������������� ����� ��������, ���� ��� ���
                   this.stopSequence();
 
-                  // ���� ������ �� ������� � ������ �������� � reset
-                  anyActive = ((_this$main$active = (_this$main = this.main) == null ? void 0 : _this$main.active) != null ? _this$main$active : false) || this.candles.some(function (c) {
-                    return c == null ? void 0 : c.active;
-                  }) || this.berries.some(function (b) {
-                    return b == null ? void 0 : b.active;
-                  });
-                  if (anyActive) {
-                    _context2.next = 5;
+                  // ���� main ��� �������� � ������ reset
+                  if (!(!this.main || !this.main.active)) {
+                    _context2.next = 4;
                     break;
                   }
                   this.resetVisuals();
                   return _context2.abrupt("return");
-                case 5:
-                  // 1) ����� ������������: 1 -> 0
-                  berriesTasks = this.berries.map(function (b) {
-                    if (!b) return Promise.resolve();
-                    b.active = true;
-                    return _this2._scaleTo(b, 0, _this2.berriesDuration, 'backIn');
-                  });
-                  _context2.next = 8;
-                  return Promise.all(berriesTasks);
-                case 8:
-                  i = this.candles.length - 1;
-                case 9:
-                  if (!(i >= 0)) {
-                    _context2.next = 23;
-                    break;
-                  }
-                  c = this.candles[i];
-                  if (c) {
-                    _context2.next = 13;
-                    break;
-                  }
-                  return _context2.abrupt("continue", 20);
-                case 13:
-                  c.active = true;
-                  _context2.next = 16;
-                  return this._scaleTo(c, 0, this.candleDuration, 'bounceIn');
-                case 16:
-                  c.active = false;
-                  if (!(this.candleDelayBetween > 0 && i > 0)) {
-                    _context2.next = 20;
-                    break;
-                  }
-                  _context2.next = 20;
-                  return this._delay(this.candleDelayBetween);
-                case 20:
-                  i--;
-                  _context2.next = 9;
-                  break;
-                case 23:
-                  if (!this.main) {
-                    _context2.next = 28;
-                    break;
-                  }
+                case 4:
+                  // main ����� 1 -> 0
                   this.main.active = true;
-                  _context2.next = 27;
-                  return this._scaleTo(this.main, 0, this.mainDuration, 'backIn');
-                case 27:
+                  _context2.next = 7;
+                  return this._scaleTo(this.main, 0, this.mainDurationHide, 'backIn');
+                case 7:
+                  // ������ ����������
                   this.main.active = false;
-                case 28:
-                  // ��������� reset, ����� ��������� ������ ��� �� ������� �����
+
+                  // ���������� �� � ��������� ���������
                   this.resetVisuals();
-                case 29:
+                case 9:
                 case "end":
                   return _context2.stop();
               }
@@ -2057,52 +2012,52 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           }
         };
         _proto._appearMain = function _appearMain() {
-          var _this3 = this;
+          var _this2 = this;
           return new Promise(function (resolve) {
-            if (!_this3.main) return resolve();
-            var node = _this3.main;
+            if (!_this2.main) return resolve();
+            var node = _this2.main;
             node.active = true;
             node.setScale(0, 0, 0);
-            var tw = tween(node).to(_this3.mainDuration, {
+            var tw = tween(node).to(_this2.mainDuration, {
               scale: new Vec3(1, 1, 1)
             }, {
               easing: 'backOut'
             }).call(function () {
               return resolve();
             }).start();
-            _this3._runningTweens.push(tw);
+            _this2._runningTweens.push(tw);
           });
         };
         _proto._appearCandle = function _appearCandle(candle) {
-          var _this4 = this;
+          var _this3 = this;
           return new Promise(function (resolve) {
             candle.active = true;
             candle.setScale(0, 0, 0);
-            var tw = tween(candle).to(_this4.candleDuration, {
+            var tw = tween(candle).to(_this3.candleDuration, {
               scale: new Vec3(1, 1, 1)
             }, {
               easing: 'bounceOut'
             }).call(function () {
               return resolve();
             }).start();
-            _this4._runningTweens.push(tw);
+            _this3._runningTweens.push(tw);
           });
         };
         _proto._appearBerriesParallel = function _appearBerriesParallel() {
-          var _this5 = this;
+          var _this4 = this;
           var tasks = this.berries.map(function (b) {
             if (!b) return Promise.resolve();
             return new Promise(function (resolve) {
               b.active = true;
               b.setScale(0, 0, 0);
-              var tw = tween(b).to(_this5.berriesDuration, {
+              var tw = tween(b).to(_this4.berriesDuration, {
                 scale: new Vec3(1, 1, 1)
               }, {
                 easing: 'backOut'
               }).call(function () {
                 return resolve();
               }).start();
-              _this5._runningTweens.push(tw);
+              _this4._runningTweens.push(tw);
             });
           });
           return Promise.all(tasks).then(function () {
@@ -2110,7 +2065,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           });
         };
         _proto._scaleTo = function _scaleTo(node, to, duration, easing) {
-          var _this6 = this;
+          var _this5 = this;
           return new Promise(function (resolve) {
             var tw = tween(node).to(duration, {
               scale: new Vec3(to, to, to)
@@ -2119,7 +2074,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             }).call(function () {
               return resolve();
             }).start();
-            _this6._runningTweens.push(tw);
+            _this5._runningTweens.push(tw);
           });
         };
         _proto._delay = function _delay(sec) {
@@ -2191,21 +2146,28 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
         initializer: function initializer() {
           return 0.45;
         }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "candleDuration", [property], {
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "mainDurationHide", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.45;
+        }
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "candleDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.35;
         }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "candleDelayBetween", [property], {
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "candleDelayBetween", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.05;
         }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "berriesDuration", [property], {
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "berriesDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -3205,16 +3167,17 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   this.fsm = State.SlideIn;
                   if (this.bloor) this.bloor.active = false;
                   L = this.clickedLevel;
-                  S = this.clickedSlot;
+                  S = this.clickedSlot; // 1) СНАЧАЛА схлопываем main (scale -> 0) через ClickMoveBinding
                   _context3.next = 9;
-                  return this.rotateModelClose();
+                  return (_this$currentBinding3 = this.currentBinding) == null || _this$currentBinding3.playSequenceCloseAndReset == null ? void 0 : _this$currentBinding3.playSequenceCloseAndReset();
                 case 9:
+                  _context3.next = 11;
+                  return this.rotateModelClose();
+                case 11:
+                  // 3) Выключаем бортик
                   this.setRimActive(false);
 
-                  // ===== ADDED: обратная анимация у ClickMoveBinding + полный reset по завершению
-                  _context3.next = 12;
-                  return (_this$currentBinding3 = this.currentBinding) == null || _this$currentBinding3.playSequenceCloseAndReset == null ? void 0 : _this$currentBinding3.playSequenceCloseAndReset();
-                case 12:
+                  // 4) Задвигаем деталь назад по X
                   if (!(this.currentPiece && this.currentBinding)) {
                     _context3.next = 17;
                     break;
@@ -3224,6 +3187,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   _context3.next = 17;
                   return this.tweenLocalX(target, baseX, this.slideDuration, this.slideEasing);
                 case 17:
+                  // 5) Разлочиваем управление и сбрасываем ссылки
                   this.unlockControls();
                   this.currentPiece = null;
                   this.currentBinding = null;
