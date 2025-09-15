@@ -3075,7 +3075,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
       ColorTextureLibrary = module.ColorTextureLibrary;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34, _descriptor35, _descriptor36, _descriptor37, _descriptor38, _descriptor39, _descriptor40, _descriptor41, _descriptor42;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34, _descriptor35, _descriptor36, _descriptor37, _descriptor38, _descriptor39, _descriptor40, _descriptor41, _descriptor42, _descriptor43, _descriptor44, _descriptor45, _descriptor46, _descriptor47, _descriptor48;
       cclegacy._RF.push({}, "4bd86blOoRLpq75wEwnh3v5", "GlobalClickManager", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
@@ -3161,6 +3161,18 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         tooltip: 'Амплитуда idle по Z (градусы)'
       }), _dec33 = property({
         tooltip: 'Длительность одного полного idle-цикла (сек)'
+      }), _dec34 = property({
+        tooltip: 'Включить доп.пинг-понг по Y (поверх синуса)'
+      }), _dec35 = property({
+        tooltip: 'Минимальный относительный угол по Y (deg) для пинг-понга'
+      }), _dec36 = property({
+        tooltip: 'Максимальный относительный угол по Y (deg) для пинг-понга'
+      }), _dec37 = property({
+        tooltip: 'Фазовый сдвиг синуса по Y (рад)'
+      }), _dec38 = property({
+        tooltip: 'Длительность плавного входа в idle (сек)'
+      }), _dec39 = property({
+        tooltip: 'Коэффициент кривизны easing при входе (0..1, больше — резче к концу)'
       }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(GlobalClickManager3D, _Component);
         function GlobalClickManager3D() {
@@ -3225,6 +3237,16 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           _initializerDefineProperty(_this, "idleAmpY", _descriptor40, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "idleAmpZ", _descriptor41, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "idleCycleSeconds", _descriptor42, _assertThisInitialized(_this));
+          // Доп. пинг-понг по Y (добавляется к существующему синусу idleAmpY)
+          _initializerDefineProperty(_this, "idleYRangeEnabled", _descriptor43, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "idleYRangeMinDeg", _descriptor44, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "idleYRangeMaxDeg", _descriptor45, _assertThisInitialized(_this));
+          // (опционально) фаза для синуса по Y, чтобы не совпадала с X/Z
+          _initializerDefineProperty(_this, "idlePhaseY", _descriptor46, _assertThisInitialized(_this));
+          // Плавный вход в idle
+          _initializerDefineProperty(_this, "idleBlendInSeconds", _descriptor47, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "idleBlendCurve", _descriptor48, _assertThisInitialized(_this));
+          // 0 — quadOut по умолчанию
           // state
           _this.fsm = State.Idle;
           _this.clickedLevel = 0;
@@ -3899,35 +3921,128 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           });
         }
 
-        // ===== Idle анимация (зацикленные покачивания по всем осям) =====
+        // ===== Idle анимация (плавные покачивания + мягкий пинг-понг по Y) =====
+        // ===== Idle анимация (плавные покачивания + мягкий пинг-понг по Y + плавный вход) =====
+        // ===== Idle анимация (мягкий вход, косинусный пинг-понг по Y, выбор ближайшей фазы) =====
         ;
 
         _proto.startIdleAnimation = function startIdleAnimation(model) {
-          var _this7 = this;
+          var _idlePhaseY,
+            _this7 = this;
           if (!this.enableIdleAnimation) return;
           if (this.idleTween) {
             this.idleTween.stop();
             this.idleTween = null;
           }
-
-          // БЫЛО: const base = (this.modelBaseEuler.get(model) ?? model.eulerAngles).clone();
-          // СТАЛО: берем именно текущие эйлеры после 360°+extra — без возврата к базе
           var base = model.eulerAngles.clone();
-          var drv = {
-            phase: 0
+          var TAU = Math.PI * 2;
+          var phaseY = (_idlePhaseY = this.idlePhaseY) != null ? _idlePhaseY : Math.PI / 3;
+
+          // БЕЗОПАСНЫЙ wrap к ближайшему эквиваленту
+          var nearestAngleDeg = function nearestAngleDeg(prev, cand) {
+            var c = cand;
+            var d0 = c - prev,
+              d1 = c + 360 - prev,
+              d2 = c - 360 - prev;
+            var ad0 = Math.abs(d0),
+              ad1 = Math.abs(d1),
+              ad2 = Math.abs(d2);
+            if (ad1 < ad0 && ad1 <= ad2) c += 360;else if (ad2 < ad0 && ad2 < ad1) c -= 360;
+            return c;
           };
 
-          // На всякий случай выставим текущий угол перед циклом (исключает «первый тик» со сдвигом)
-          model.setRotationFromEuler(base.x, base.y, base.z);
+          // Косинусный пинг-понг t(phi) ∈ [0..1..0] за 2π
+          var ping01 = function ping01(phi) {
+            return (1 - Math.cos(phi)) * 0.5;
+          };
+
+          // --- 1) Подготовим Y-диапазон, сдвинув его ближе к текущему Y ---
+          var curr = model.eulerAngles.clone();
+          var yMin0 = Math.min(this.idleYRangeMinDeg, this.idleYRangeMaxDeg);
+          var yMax0 = Math.max(this.idleYRangeMinDeg, this.idleYRangeMaxDeg);
+          var span = yMax0 - yMin0;
+
+          // абсолютные границы вокруг базы
+          var yMinAbs = base.y + yMin0;
+          var yMaxAbs = base.y + yMax0;
+          var mid = (yMinAbs + yMaxAbs) * 0.5;
+
+          // сдвигаем диапазон на кратное 360 так, чтобы его середина была ближе к текущему углу
+          var nShift = Math.round((curr.y - mid) / 360);
+          yMinAbs += 360 * nShift;
+          yMaxAbs += 360 * nShift;
+
+          // --- 2) Выберем стартовую фазу, чтобы стартовая цель была ближе к текущему ---
+          // сначала подгоняем сам пинг-понг к ближайшей точке диапазона
+          var y0Clamped = Math.min(Math.max(curr.y, yMinAbs), yMaxAbs);
+          var t0 = span > 1e-6 ? (y0Clamped - yMinAbs) / span : 0.0; // 0..1
+          var phiA = Math.acos(Math.max(-1, Math.min(1, 1 - 2 * t0))); // [0..π]
+          var phiB = TAU - phiA; // альтернативная ветка
+
+          // учитываем синус по Y и выбираем фазу, где итоговая цель ближе к текущему
+          var yTargetAt = function yTargetAt(phi) {
+            return yMinAbs + span * ping01(phi) + _this7.idleAmpY * Math.sin(phi + phaseY);
+          };
+          var candA = yTargetAt(phiA);
+          var candB = yTargetAt(phiB);
+          var startPhase = Math.abs(candA - curr.y) <= Math.abs(candB - curr.y) ? phiA : phiB;
+
+          // --- 3) Запускаем драйвер c подобранной фазой и мягким blend-in ---
+          var drv = {
+            phase: startPhase,
+            t: 0
+          };
+
+          // параметры плавного входа
+          var easeInBlend = function easeInBlend(x) {
+            var y = 1 - (1 - x) * (1 - x); // quadOut
+            if (_this7.idleBlendCurve > 0) {
+              var k = _this7.idleBlendCurve;
+              y = (1 - k) * y + k * Math.pow(y, 1.5);
+            }
+            return y;
+          };
+
+          // стартуем из фактического текущего положения — это и будет «prev*»
+          var prevX = curr.x,
+            prevY = curr.y,
+            prevZ = curr.z;
           this.idleTween = tween(drv).repeatForever(tween().by(this.idleCycleSeconds, {
-            phase: Math.PI * 2
+            phase: TAU,
+            t: this.idleCycleSeconds
           }, {
             easing: 'linear',
             onUpdate: function onUpdate() {
-              var x = base.x + _this7.idleAmpX * Math.sin(drv.phase);
-              var y = base.y + _this7.idleAmpY * Math.sin(drv.phase + Math.PI / 3);
-              var z = base.z + _this7.idleAmpZ * Math.sin(drv.phase + Math.PI / 5);
-              model.setRotationFromEuler(x, y, z);
+              // целевые синусы
+              var xSin = _this7.idleAmpX * Math.sin(drv.phase);
+              var ySin = _this7.idleAmpY * Math.sin(drv.phase + phaseY);
+              var zSin = _this7.idleAmpZ * Math.sin(drv.phase + Math.PI / 5);
+
+              // пинг-понг по Y в сдвинутом (ближайшем) диапазоне
+              var yPing = yMinAbs + span * ping01(drv.phase);
+
+              // абсолютные цели
+              var tx = base.x + xSin;
+              var ty = yPing + ySin;
+              var tz = base.z + zSin;
+
+              // анти-wrap к предыдущим значениям
+              tx = nearestAngleDeg(prevX, tx);
+              ty = nearestAngleDeg(prevY, ty);
+              tz = nearestAngleDeg(prevZ, tz);
+
+              // плавный вход к ближайшей цели
+              var blendRaw = _this7.idleBlendInSeconds > 0 ? Math.min(1, drv.t / _this7.idleBlendInSeconds) : 1;
+              var blend = easeInBlend(blendRaw);
+              var ox = prevX + (tx - prevX) * blend;
+              var oy = prevY + (ty - prevY) * blend;
+              var oz = prevZ + (tz - prevZ) * blend;
+              model.setRotationFromEuler(ox, oy, oz);
+
+              // переносим prev* — обеспечиваем непрерывность
+              prevX = ox;
+              prevY = oy;
+              prevZ = oz;
             }
           })).start();
         };
@@ -4333,6 +4448,48 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         writable: true,
         initializer: function initializer() {
           return 3.0;
+        }
+      }), _descriptor43 = _applyDecoratedDescriptor(_class2.prototype, "idleYRangeEnabled", [_dec34], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      }), _descriptor44 = _applyDecoratedDescriptor(_class2.prototype, "idleYRangeMinDeg", [_dec35], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return -10;
+        }
+      }), _descriptor45 = _applyDecoratedDescriptor(_class2.prototype, "idleYRangeMaxDeg", [_dec36], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 10;
+        }
+      }), _descriptor46 = _applyDecoratedDescriptor(_class2.prototype, "idlePhaseY", [_dec37], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return Math.PI / 3;
+        }
+      }), _descriptor47 = _applyDecoratedDescriptor(_class2.prototype, "idleBlendInSeconds", [_dec38], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.4;
+        }
+      }), _descriptor48 = _applyDecoratedDescriptor(_class2.prototype, "idleBlendCurve", [_dec39], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.0;
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
