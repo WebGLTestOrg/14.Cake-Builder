@@ -3035,7 +3035,7 @@ System.register("chunks:///_virtual/DebugPanelToggle.ts", ['./rollupPluginModLoB
 });
 
 System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ClickMoveBinding.ts', './InteractionState.ts', './PointerIds.ts', './RotateYByKeys.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './ColorLibrary.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Node, input, Input, Vec3, geometry, PhysicsSystem, tween, MeshRenderer, Component, sys, ClickMoveBinding, InteractionState, MOUSE_ID, RotateYByKeys, TowerLayoutController, TowerScrollController, ColorTextureLibrary;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Node, Vec3, input, Input, geometry, PhysicsSystem, tween, MeshRenderer, Component, sys, ClickMoveBinding, InteractionState, MOUSE_ID, RotateYByKeys, TowerLayoutController, TowerScrollController, ColorTextureLibrary;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -3050,9 +3050,9 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
       _decorator = module._decorator;
       Camera = module.Camera;
       Node = module.Node;
+      Vec3 = module.Vec3;
       input = module.input;
       Input = module.Input;
-      Vec3 = module.Vec3;
       geometry = module.geometry;
       PhysicsSystem = module.PhysicsSystem;
       tween = module.tween;
@@ -3075,7 +3075,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
       ColorTextureLibrary = module.ColorTextureLibrary;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34, _descriptor35, _descriptor36, _descriptor37, _descriptor38, _descriptor39, _descriptor40, _descriptor41, _descriptor42;
       cclegacy._RF.push({}, "4bd86blOoRLpq75wEwnh3v5", "GlobalClickManager", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
@@ -3140,9 +3140,27 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
       }), _dec22 = property({
         tooltip: 'Имя юниформа текстуры в шейдере'
       }), _dec23 = property({
-        tooltip: 'Подсказка расширения, если URL без него (picsum и т.п.)'
+        tooltip: 'Подсказка расширения, если URL без него'
       }), _dec24 = property({
         tooltip: 'Очищать MainTexture при закрытии'
+      }), _dec25 = property({
+        tooltip: 'Длительность полного оборота (360°)'
+      }), _dec26 = property({
+        tooltip: 'Дополнительный доворот после 360° (в градусах, можно отриц.)'
+      }), _dec27 = property({
+        tooltip: 'Длительность дополнительного доворота'
+      }), _dec28 = property({
+        tooltip: 'Easing для единой анимации 360°+extra'
+      }), _dec29 = property({
+        tooltip: 'Включать idle-анимацию после открытия'
+      }), _dec30 = property({
+        tooltip: 'Амплитуда idle по X (градусы)'
+      }), _dec31 = property({
+        tooltip: 'Амплитуда idle по Y (градусы)'
+      }), _dec32 = property({
+        tooltip: 'Амплитуда idle по Z (градусы)'
+      }), _dec33 = property({
+        tooltip: 'Длительность одного полного idle-цикла (сек)'
       }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(GlobalClickManager3D, _Component);
         function GlobalClickManager3D() {
@@ -3185,20 +3203,28 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           _initializerDefineProperty(_this, "invertPieceAxis", _descriptor24, _assertThisInitialized(_this));
           // +180°
           _initializerDefineProperty(_this, "slotPhaseShift", _descriptor25, _assertThisInitialized(_this));
-          // поворот МОДЕЛИ при открытии/закрытии
-          _initializerDefineProperty(_this, "modelRotateDeg", _descriptor26, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "modelRotateDuration", _descriptor27, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "modelRotateEasing", _descriptor28, _assertThisInitialized(_this));
+          // поворот МОДЕЛИ при закрытии (возврат к базе)
+          _initializerDefineProperty(_this, "modelRotateDuration", _descriptor26, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "modelRotateEasing", _descriptor27, _assertThisInitialized(_this));
           // куда постить события
-          _initializerDefineProperty(_this, "parentOrigin", _descriptor29, _assertThisInitialized(_this));
-          // === настройки загрузки текстур по клику ===
-          _initializerDefineProperty(_this, "loadImageOnClick", _descriptor30, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "imageMatIndex", _descriptor31, _assertThisInitialized(_this));
-          // см. автокоррекцию в applyImageToCurrentPiece
-          _initializerDefineProperty(_this, "imageUniform", _descriptor32, _assertThisInitialized(_this));
-          // проверь имя свойства в твоём материале
-          _initializerDefineProperty(_this, "imageFallbackExt", _descriptor33, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "clearImageOnClose", _descriptor34, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "parentOrigin", _descriptor28, _assertThisInitialized(_this));
+          // === загрузка текстуры по клику ===
+          _initializerDefineProperty(_this, "loadImageOnClick", _descriptor29, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "imageMatIndex", _descriptor30, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "imageUniform", _descriptor31, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "imageFallbackExt", _descriptor32, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "clearImageOnClose", _descriptor33, _assertThisInitialized(_this));
+          // ======== 360° + доворот ========
+          _initializerDefineProperty(_this, "modelSpin360Duration", _descriptor34, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "modelExtraYawDeg", _descriptor35, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "modelExtraYawDuration", _descriptor36, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "modelSpinEasing", _descriptor37, _assertThisInitialized(_this));
+          // ======== Idle-покачивания (бесконечный цикл) ========
+          _initializerDefineProperty(_this, "enableIdleAnimation", _descriptor38, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "idleAmpX", _descriptor39, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "idleAmpY", _descriptor40, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "idleAmpZ", _descriptor41, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "idleCycleSeconds", _descriptor42, _assertThisInitialized(_this));
           // state
           _this.fsm = State.Idle;
           _this.clickedLevel = 0;
@@ -3206,9 +3232,11 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           _this.currentPiece = null;
           _this.currentBinding = null;
           _this.baseLocalX = new Map();
-          _this.modelBaseYaw = new Map();
+          _this.modelBaseEuler = new Map();
+          // <=== ЗАПОМИНАЕМ БАЗОВЫЕ X/Y/Z
           _this.rotateTween = null;
           _this.modelTween = null;
+          _this.idleTween = null;
           _this._emitOnThisAction = false;
           // ======== активная камера ========
           _this._activeCamera = null;
@@ -3222,6 +3250,12 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           this._activeCamera = next != null ? next : null;
           if ((_this$sceneCamera2 = this.sceneCamera) != null && _this$sceneCamera2.node) this.sceneCamera.node.active = this._activeCamera === this.sceneCamera;
           if ((_this$sceneCameraMobi2 = this.sceneCameraMobile) != null && _this$sceneCameraMobi2.node) this.sceneCameraMobile.node.active = this._activeCamera === this.sceneCameraMobile;
+
+          // стартовое состояние блюра
+          if (this.bloor) {
+            this.bloor.active = false;
+            this.bloor.setScale(new Vec3(0, 0, 0));
+          }
         }
 
         // input
@@ -3235,12 +3269,6 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           try {
             window.addEventListener == null || window.addEventListener('resize', this.updateActiveCamera.bind(this));
           } catch (_unused) {}
-
-          // стартовое состояние блюра: скрыт и со скейлом 0
-          if (this.bloor) {
-            this.bloor.active = false;
-            this.bloor.setScale(new Vec3(0, 0, 0));
-          }
         };
         _proto.onDisable = function onDisable() {
           input.off(Input.EventType.TOUCH_END, this.onTouchEnd, this);
@@ -3343,14 +3371,14 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   _context.next = 27;
                   return this.rotateRootToBringSlotToCamera(this.clickedSlot);
                 case 27:
-                  // 3) актуальный видимый (на случай рециклинга)
+                  // 3) актуальный видимый
                   resolved = this.layoutCtrl.findNodeByLevelSlot(this.clickedLevel, this.clickedSlot);
                   owner = resolved != null ? resolved : picked.n;
                   b = owner.getComponent(ClickMoveBinding) || owner.getComponentInChildren(ClickMoveBinding) || picked.binding;
                   this.currentPiece = owner;
                   this.currentBinding = b;
 
-                  // 3.5) грузим картинку
+                  // 3.5) загрузка картинки
                   this.applyImageToCurrentPiece(this.clickedLevel, this.clickedSlot);
 
                   // 4) выезд + бортик + поворот модели
@@ -3358,6 +3386,8 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   return this.slideOutWithScaleComp();
                 case 35:
                   this.setRimActive(true);
+
+                  // плавный 360° + доворот одной анимацией
                   _context.next = 38;
                   return this.rotateModelOpen();
                 case 38:
@@ -3396,12 +3426,11 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   }
                   return _context2.abrupt("return");
                 case 3:
-                  // стоп предыдущий твин
                   if (this.bloorTween) {
                     this.bloorTween.stop();
                     this.bloorTween = null;
                   }
-                  target = this.getBloorTargetScale(); // активируем и ставим 0, если вдруг не ноль
+                  target = this.getBloorTargetScale();
                   n.active = true;
                   n.setScale(new Vec3(0, 0, 0));
                   drv = {
@@ -3451,12 +3480,10 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                     this.bloorTween.stop();
                     this.bloorTween = null;
                   }
-
-                  // читаем текущий скейл как старт — может быть в середине анимации
-                  start = n.worldScale.x; // предполагаем одинаковый по осям
+                  start = n.worldScale.x;
                   drv = {
                     t: 1
-                  }; // 1 -> 0
+                  };
                   _context3.next = 8;
                   return new Promise(function (resolve) {
                     _this3.bloorTween = tween(drv).to(_this3.bloorScaleDuration, {
@@ -3625,23 +3652,26 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   this.fsm = State.SlideIn;
                   void this.hideBloor();
                   L = this.clickedLevel;
-                  S = this.clickedSlot;
-                  _context5.next = 9;
+                  S = this.clickedSlot; // Остановить бесконечный idle
+                  this.stopIdleAnimation();
+                  _context5.next = 10;
                   return (_this$currentBinding3 = this.currentBinding) == null || _this$currentBinding3.playSequenceCloseAndReset == null ? void 0 : _this$currentBinding3.playSequenceCloseAndReset();
-                case 9:
-                  _context5.next = 11;
-                  return this.rotateModelClose();
-                case 11:
+                case 10:
+                  _context5.next = 12;
+                  return this.rotateModelCloseToBaseEuler();
+                case 12:
                   this.setRimActive(false);
+
+                  // вернуть позицию выезда
                   if (!(this.currentPiece && this.currentBinding)) {
-                    _context5.next = 17;
+                    _context5.next = 18;
                     break;
                   }
                   target = (_this$currentBinding$2 = this.currentBinding.target) != null ? _this$currentBinding$2 : this.currentPiece;
                   baseX = (_this$baseLocalX$get = this.baseLocalX.get(target)) != null ? _this$baseLocalX$get : target.position.x;
-                  _context5.next = 17;
+                  _context5.next = 18;
                   return this.tweenLocalX(target, baseX, this.slideDuration, this.slideEasing);
-                case 17:
+                case 18:
                   if (this.clearImageOnClose) {
                     ctl = ColorTextureLibrary.instance;
                     if (ctl && this.currentPiece && this.currentBinding) {
@@ -3655,7 +3685,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   this.fsm = State.Idle;
                   if (emitToParent) this.postPieceEvent('CLOSED', L, S);
                   this._emitOnThisAction = false;
-                case 24:
+                case 25:
                 case "end":
                   return _context5.stop();
               }
@@ -3709,13 +3739,13 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           });
         }
 
-        // ==== поворот модели ====
+        // ==== поворот модели (плавный 360° + доворот, затем бесконечный idle) ====
         ;
 
         _proto.rotateModelOpen = /*#__PURE__*/
         function () {
           var _rotateModelOpen = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
-            var model, base;
+            var model, deltaYaw, totalDur;
             return _regeneratorRuntime().wrap(function _callee6$(_context6) {
               while (1) switch (_context6.prev = _context6.next) {
                 case 0:
@@ -3732,11 +3762,18 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   }
                   return _context6.abrupt("return");
                 case 5:
-                  if (!this.modelBaseYaw.has(model)) this.modelBaseYaw.set(model, model.eulerAngles.y);
-                  base = this.modelBaseYaw.get(model);
-                  _context6.next = 9;
-                  return this.rotateModelTo(model, base + this.modelRotateDeg, this.modelRotateDuration, this.modelRotateEasing);
-                case 9:
+                  // запоминаем БАЗОВЫЕ эйлеры x/y/z — чтобы потом вернуть всё как было
+                  if (!this.modelBaseEuler.has(model)) this.modelBaseEuler.set(model, model.eulerAngles.clone());
+
+                  // единая кривая: 360° + extra без рывка (по оси Y)
+                  deltaYaw = 360 + this.modelExtraYawDeg;
+                  totalDur = this.modelSpin360Duration + this.modelExtraYawDuration;
+                  _context6.next = 10;
+                  return this.rotateModelYawByUnwrapped(model, deltaYaw, totalDur, this.modelSpinEasing);
+                case 10:
+                  // бесконечный idle
+                  this.startIdleAnimation(model);
+                case 11:
                 case "end":
                   return _context6.stop();
               }
@@ -3746,11 +3783,14 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
             return _rotateModelOpen.apply(this, arguments);
           }
           return rotateModelOpen;
-        }();
-        _proto.rotateModelClose = /*#__PURE__*/function () {
-          var _rotateModelClose = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
-            var _this$modelBaseYaw$ge;
-            var model, base;
+        }() // Плавный возврат к исходным X/Y/Z
+        ;
+
+        _proto.rotateModelCloseToBaseEuler = /*#__PURE__*/
+        function () {
+          var _rotateModelCloseToBaseEuler = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee7() {
+            var _this$modelBaseEuler$;
+            var model, target;
             return _regeneratorRuntime().wrap(function _callee7$(_context7) {
               while (1) switch (_context7.prev = _context7.next) {
                 case 0:
@@ -3767,28 +3807,32 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   }
                   return _context7.abrupt("return");
                 case 5:
-                  base = (_this$modelBaseYaw$ge = this.modelBaseYaw.get(model)) != null ? _this$modelBaseYaw$ge : model.eulerAngles.y;
+                  target = (_this$modelBaseEuler$ = this.modelBaseEuler.get(model)) != null ? _this$modelBaseEuler$ : model.eulerAngles.clone();
                   _context7.next = 8;
-                  return this.rotateModelTo(model, base, this.modelRotateDuration, this.modelRotateEasing);
+                  return this.rotateModelToEuler(model, target, this.modelRotateDuration, this.modelRotateEasing);
                 case 8:
                 case "end":
                   return _context7.stop();
               }
             }, _callee7, this);
           }));
-          function rotateModelClose() {
-            return _rotateModelClose.apply(this, arguments);
+          function rotateModelCloseToBaseEuler() {
+            return _rotateModelCloseToBaseEuler.apply(this, arguments);
           }
-          return rotateModelClose;
-        }();
-        _proto.rotateModelTo = function rotateModelTo(model, targetYaw, duration, easing) {
+          return rotateModelCloseToBaseEuler;
+        }()
+        /**
+         * Повернуть ТОЛЬКО yaw на заданный угол (без wrap к ±180), реальный прокрут.
+         */;
+
+        _proto.rotateModelYawByUnwrapped = function rotateModelYawByUnwrapped(model, deltaYaw, duration, easing) {
           var _this5 = this;
           return new Promise(function (resolve) {
             var e0 = model.eulerAngles;
-            var startYaw = (e0.y % 360 + 360) % 360;
-            var delta = wrapDeg(targetYaw - startYaw);
-            if (Math.abs(delta) < 0.05 || duration <= 0) {
-              model.setRotationFromEuler(e0.x, startYaw + delta, e0.z);
+            var startYaw = e0.y;
+            var endYaw = startYaw + deltaYaw;
+            if (Math.abs(deltaYaw) < 0.05 || duration <= 0) {
+              model.setRotationFromEuler(e0.x, endYaw, e0.z);
               resolve();
               return;
             }
@@ -3804,7 +3848,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
             }, {
               easing: easing,
               onUpdate: function onUpdate() {
-                var y = startYaw + delta * drv.t;
+                var y = startYaw + deltaYaw * drv.t;
                 model.setRotationFromEuler(e0.x, y, e0.z);
               }
             }).call(function () {
@@ -3812,6 +3856,87 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
               resolve();
             }).start();
           });
+        }
+
+        /**
+         * Интерполяция всех осей к целевым эйлерам с коротким путём (wrap для каждой оси).
+         */;
+        _proto.rotateModelToEuler = function rotateModelToEuler(model, targetEuler, duration, easing) {
+          var _this6 = this;
+          return new Promise(function (resolve) {
+            var e0 = model.eulerAngles;
+            var sx = (e0.x % 360 + 360) % 360;
+            var sy = (e0.y % 360 + 360) % 360;
+            var sz = (e0.z % 360 + 360) % 360;
+            var tx = (targetEuler.x % 360 + 360) % 360;
+            var ty = (targetEuler.y % 360 + 360) % 360;
+            var tz = (targetEuler.z % 360 + 360) % 360;
+            var dx = wrapDeg(tx - sx);
+            var dy = wrapDeg(ty - sy);
+            var dz = wrapDeg(tz - sz);
+            if (Math.abs(dx) + Math.abs(dy) + Math.abs(dz) < 0.05 || duration <= 0) {
+              model.setRotationFromEuler(sx + dx, sy + dy, sz + dz);
+              resolve();
+              return;
+            }
+            if (_this6.modelTween) {
+              _this6.modelTween.stop();
+              _this6.modelTween = null;
+            }
+            var drv = {
+              t: 0
+            };
+            _this6.modelTween = tween(drv).to(duration, {
+              t: 1
+            }, {
+              easing: easing,
+              onUpdate: function onUpdate() {
+                model.setRotationFromEuler(sx + dx * drv.t, sy + dy * drv.t, sz + dz * drv.t);
+              }
+            }).call(function () {
+              _this6.modelTween = null;
+              resolve();
+            }).start();
+          });
+        }
+
+        // ===== Idle анимация (зацикленные покачивания по всем осям) =====
+        ;
+
+        _proto.startIdleAnimation = function startIdleAnimation(model) {
+          var _this7 = this;
+          if (!this.enableIdleAnimation) return;
+          if (this.idleTween) {
+            this.idleTween.stop();
+            this.idleTween = null;
+          }
+
+          // БЫЛО: const base = (this.modelBaseEuler.get(model) ?? model.eulerAngles).clone();
+          // СТАЛО: берем именно текущие эйлеры после 360°+extra — без возврата к базе
+          var base = model.eulerAngles.clone();
+          var drv = {
+            phase: 0
+          };
+
+          // На всякий случай выставим текущий угол перед циклом (исключает «первый тик» со сдвигом)
+          model.setRotationFromEuler(base.x, base.y, base.z);
+          this.idleTween = tween(drv).repeatForever(tween().by(this.idleCycleSeconds, {
+            phase: Math.PI * 2
+          }, {
+            easing: 'linear',
+            onUpdate: function onUpdate() {
+              var x = base.x + _this7.idleAmpX * Math.sin(drv.phase);
+              var y = base.y + _this7.idleAmpY * Math.sin(drv.phase + Math.PI / 3);
+              var z = base.z + _this7.idleAmpZ * Math.sin(drv.phase + Math.PI / 5);
+              model.setRotationFromEuler(x, y, z);
+            }
+          })).start();
+        };
+        _proto.stopIdleAnimation = function stopIdleAnimation() {
+          if (this.idleTween) {
+            this.idleTween.stop();
+            this.idleTween = null;
+          }
         }
 
         // utils
@@ -3872,13 +3997,9 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         }
 
         // ===================== загрузка картинок по клику =====================
-
-        // В GlobalClickManager3D
-        // GlobalClickManager3D
         ;
 
         _proto.applyImageToCurrentPiece = function applyImageToCurrentPiece(level, slot) {
-          var _binding$model;
           if (!this.loadImageOnClick) return;
           var ctl = ColorTextureLibrary.instance;
           if (!ctl) {
@@ -3886,28 +4007,27 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
             return;
           }
           var owner = this.currentPiece;
-          var binding = this.currentBinding;
-          if (!owner || !binding) return;
-          var targetNode = (_binding$model = binding.model) != null ? _binding$model : owner;
-          var url = this.getUrlForPiece(level, slot);
-          console.log("[GCM3D] url resolved for L=" + level + " S=" + slot + ":", url);
-
-          // если API дал null — ничего не грузим
-          if (url == null) return;
-          var mr = targetNode.getComponent(MeshRenderer) || targetNode.getComponentInChildren(MeshRenderer);
-          if (!mr) {
-            console.warn('[GCM3D] MeshRenderer not found');
-            return;
+          theBinding: {
+            var _binding$model;
+            var binding = this.currentBinding;
+            if (!owner || !binding) break theBinding;
+            var targetNode = (_binding$model = binding.model) != null ? _binding$model : owner;
+            var url = this.getUrlForPiece(level, slot);
+            console.log("[GCM3D] url resolved for L=" + level + " S=" + slot + ":", url);
+            if (url == null) break theBinding;
+            var mr = targetNode.getComponent(MeshRenderer) || targetNode.getComponentInChildren(MeshRenderer);
+            if (!mr) {
+              console.warn('[GCM3D] MeshRenderer not found');
+              break theBinding;
+            }
+            if (this.imageMatIndex < 0 || this.imageMatIndex >= mr.materials.length) {
+              console.warn('[GCM3D] imageMatIndex out of range, forcing 0');
+              this.imageMatIndex = 0;
+            }
+            void ctl.applyMainTextureFromUrlOrRandom(mr, url, this.imageMatIndex, this.imageUniform, this.imageFallbackExt).then(function (status) {
+              console.log('[GCM3D] texture apply status:', status);
+            });
           }
-          if (this.imageMatIndex < 0 || this.imageMatIndex >= mr.materials.length) {
-            console.warn('[GCM3D] imageMatIndex out of range, forcing 0');
-            this.imageMatIndex = 0;
-          }
-
-          // вызываем без await — загрузка идёт асинхронно
-          void ctl.applyMainTextureFromUrlOrRandom(mr, url, this.imageMatIndex, this.imageUniform, this.imageFallbackExt).then(function (status) {
-            console.log('[GCM3D] texture apply status:', status);
-          });
         };
         _createClass(GlobalClickManager3D, [{
           key: "isMobile",
@@ -4096,68 +4216,124 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         initializer: function initializer() {
           return 0;
         }
-      }), _descriptor26 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateDeg", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 90;
-        }
-      }), _descriptor27 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateDuration", [property], {
+      }), _descriptor26 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.25;
         }
-      }), _descriptor28 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateEasing", [property], {
+      }), _descriptor27 = _applyDecoratedDescriptor(_class2.prototype, "modelRotateEasing", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 'quadOut';
         }
-      }), _descriptor29 = _applyDecoratedDescriptor(_class2.prototype, "parentOrigin", [_dec19], {
+      }), _descriptor28 = _applyDecoratedDescriptor(_class2.prototype, "parentOrigin", [_dec19], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return '';
         }
-      }), _descriptor30 = _applyDecoratedDescriptor(_class2.prototype, "loadImageOnClick", [_dec20], {
+      }), _descriptor29 = _applyDecoratedDescriptor(_class2.prototype, "loadImageOnClick", [_dec20], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return true;
         }
-      }), _descriptor31 = _applyDecoratedDescriptor(_class2.prototype, "imageMatIndex", [_dec21], {
+      }), _descriptor30 = _applyDecoratedDescriptor(_class2.prototype, "imageMatIndex", [_dec21], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 1;
         }
-      }), _descriptor32 = _applyDecoratedDescriptor(_class2.prototype, "imageUniform", [_dec22], {
+      }), _descriptor31 = _applyDecoratedDescriptor(_class2.prototype, "imageUniform", [_dec22], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 'MainTexture';
         }
-      }), _descriptor33 = _applyDecoratedDescriptor(_class2.prototype, "imageFallbackExt", [_dec23], {
+      }), _descriptor32 = _applyDecoratedDescriptor(_class2.prototype, "imageFallbackExt", [_dec23], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return '.jpg';
         }
-      }), _descriptor34 = _applyDecoratedDescriptor(_class2.prototype, "clearImageOnClose", [_dec24], {
+      }), _descriptor33 = _applyDecoratedDescriptor(_class2.prototype, "clearImageOnClose", [_dec24], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return false;
+        }
+      }), _descriptor34 = _applyDecoratedDescriptor(_class2.prototype, "modelSpin360Duration", [_dec25], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.6;
+        }
+      }), _descriptor35 = _applyDecoratedDescriptor(_class2.prototype, "modelExtraYawDeg", [_dec26], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 30;
+        }
+      }), _descriptor36 = _applyDecoratedDescriptor(_class2.prototype, "modelExtraYawDuration", [_dec27], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0.25;
+        }
+      }), _descriptor37 = _applyDecoratedDescriptor(_class2.prototype, "modelSpinEasing", [_dec28], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 'quadOut';
+        }
+      }), _descriptor38 = _applyDecoratedDescriptor(_class2.prototype, "enableIdleAnimation", [_dec29], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      }), _descriptor39 = _applyDecoratedDescriptor(_class2.prototype, "idleAmpX", [_dec30], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 5;
+        }
+      }), _descriptor40 = _applyDecoratedDescriptor(_class2.prototype, "idleAmpY", [_dec31], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 10;
+        }
+      }), _descriptor41 = _applyDecoratedDescriptor(_class2.prototype, "idleAmpZ", [_dec32], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 5;
+        }
+      }), _descriptor42 = _applyDecoratedDescriptor(_class2.prototype, "idleCycleSeconds", [_dec33], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 3.0;
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
@@ -4299,123 +4475,10 @@ System.register("chunks:///_virtual/InteractionState.ts", ['cc'], function (expo
   };
 });
 
-System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './AddCake.ts', './AutoScaleCameraPosition.ts', './CakeApiExample.ts', './CameraTuner.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './GlobalClickManager.ts', './InteractionState.ts', './MorphLooper.ts', './PlatformCameraSwitcher.ts', './PointerIds.ts', './RotateYByKeys.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './DebugPanelToggle.ts', './PieceSpawner.ts', './TowerQueriesTester.ts', './cake.types.ts'], function () {
+System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './AddCake.ts', './AutoScaleCameraPosition.ts', './CakeApiExample.ts', './CameraTuner.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './GlobalClickManager.ts', './InteractionState.ts', './PlatformCameraSwitcher.ts', './PointerIds.ts', './RotateYByKeys.ts', './ShapeKeyController.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './DebugPanelToggle.ts', './PieceSpawner.ts', './TowerQueriesTester.ts', './cake.types.ts'], function () {
   return {
     setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
-  };
-});
-
-System.register("chunks:///_virtual/MorphLooper.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _inheritsLoose, _createForOfIteratorHelperLoose, cclegacy, _decorator, SkinnedMeshRenderer, MeshRenderer, Component;
-  return {
-    setters: [function (module) {
-      _inheritsLoose = module.inheritsLoose;
-      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      SkinnedMeshRenderer = module.SkinnedMeshRenderer;
-      MeshRenderer = module.MeshRenderer;
-      Component = module.Component;
-    }],
-    execute: function () {
-      var _dec, _class;
-      cclegacy._RF.push({}, "e306bEYm1pMbYCnUT2ifTcu", "MorphLooper", undefined);
-      var ccclass = _decorator.ccclass;
-      var ShapeKeyLister = exports('ShapeKeyLister', (_dec = ccclass('ShapeKeyLister'), _dec(_class = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(ShapeKeyLister, _Component);
-        function ShapeKeyLister() {
-          return _Component.apply(this, arguments) || this;
-        }
-        var _proto = ShapeKeyLister.prototype;
-        _proto.onEnable = function onEnable() {
-          this.listAllShapeKeys();
-        }
-
-        /** Пройти по узлу и всем дочерним, вывести все shape keys */;
-        _proto.listAllShapeKeys = function listAllShapeKeys() {
-          var skinned = this.node.getComponentsInChildren(SkinnedMeshRenderer);
-          var staticR = this.node.getComponentsInChildren(MeshRenderer);
-          var renderers = [].concat(skinned, staticR);
-          if (renderers.length === 0) {
-            console.warn('[ShapeKeyLister] Рендереры не найдены на этом узле и его потомках.');
-            return;
-          }
-          console.log("%c[ShapeKeyLister] \u0412\u0441\u0435\u0433\u043E \u0440\u0435\u043D\u0434\u0435\u0440\u0435\u0440\u043E\u0432: " + renderers.length, 'color:#4caf50');
-          var totalKeys = 0;
-          for (var _iterator = _createForOfIteratorHelperLoose(renderers), _step; !(_step = _iterator()).done;) {
-            var _struct;
-            var r = _step.value;
-            var mesh = r.mesh;
-            var nodePath = this._getNodePath(r.node);
-            if (!mesh) {
-              console.warn("[ShapeKeyLister] " + nodePath + ": mesh \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u0435\u0442");
-              continue;
-            }
-            var morph = (_struct = mesh.struct) == null ? void 0 : _struct.morph;
-            if (!morph) {
-              console.log("[ShapeKeyLister] " + nodePath + ": morph targets \u043E\u0442\u0441\u0443\u0442\u0441\u0442\u0432\u0443\u044E\u0442");
-              continue;
-            }
-            console.log("%c[ShapeKeyLister] \u0423\u0437\u0435\u043B: " + nodePath, 'color:#03a9f4');
-            var subMeshes = morph.subMeshMorphs;
-            if (!subMeshes || subMeshes.length === 0) {
-              console.log("  (\u043D\u0435\u0442 subMeshMorphs)");
-              continue;
-            }
-            subMeshes.forEach(function (sub, si) {
-              var names = sub.targets.map(function (t) {
-                return t.name;
-              });
-              totalKeys += names.length;
-              console.log("  SubMesh " + si + ":", names.length ? names : '(пусто)');
-              if (names.length) {
-                names.forEach(function (n, idx) {
-                  return console.log("    [" + idx + "] " + n);
-                });
-              }
-            });
-          }
-          console.log("%c[ShapeKeyLister] \u0418\u0442\u043E\u0433\u043E \u043A\u043B\u044E\u0447\u0435\u0439: " + totalKeys, 'color:#8bc34a');
-        }
-
-        /** Полезно: получить плоский список всех имён по всей модели */;
-        _proto.getAllKeyNamesUnique = function getAllKeyNamesUnique() {
-          var names = new Set();
-          var skinned = this.node.getComponentsInChildren(SkinnedMeshRenderer);
-          var staticR = this.node.getComponentsInChildren(MeshRenderer);
-          var renderers = [].concat(skinned, staticR);
-          for (var _iterator2 = _createForOfIteratorHelperLoose(renderers), _step2; !(_step2 = _iterator2()).done;) {
-            var _struct2;
-            var r = _step2.value;
-            var mesh = r.mesh;
-            var morph = mesh == null || (_struct2 = mesh.struct) == null ? void 0 : _struct2.morph;
-            if (!mesh || !morph) continue;
-            var subMeshes = morph.subMeshMorphs;
-            for (var _iterator3 = _createForOfIteratorHelperLoose(subMeshes), _step3; !(_step3 = _iterator3()).done;) {
-              var sub = _step3.value;
-              for (var _iterator4 = _createForOfIteratorHelperLoose(sub.targets), _step4; !(_step4 = _iterator4()).done;) {
-                var t = _step4.value;
-                names.add(t.name);
-              }
-            }
-          }
-          return Array.from(names);
-        };
-        _proto._getNodePath = function _getNodePath(node) {
-          var parts = [];
-          var n = node;
-          while (n) {
-            parts.push(n.name);
-            n = n.parent;
-          }
-          return parts.reverse().join('/');
-        };
-        return ShapeKeyLister;
-      }(Component)) || _class));
-      cclegacy._RF.pop();
-    }
   };
 });
 
@@ -5102,6 +5165,97 @@ System.register("chunks:///_virtual/RotateYByKeys.ts", ['./rollupPluginModLoBabe
           return true;
         }
       })), _class2)) || _class));
+      cclegacy._RF.pop();
+    }
+  };
+});
+
+System.register("chunks:///_virtual/ShapeKeyController.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, cclegacy, _decorator, MeshRenderer, Component;
+  return {
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _inheritsLoose = module.inheritsLoose;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _assertThisInitialized = module.assertThisInitialized;
+      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      MeshRenderer = module.MeshRenderer;
+      Component = module.Component;
+    }],
+    execute: function () {
+      var _dec, _dec2, _class, _class2, _descriptor;
+      cclegacy._RF.push({}, "70388oygPBE7pnf/tCtMYXJ", "ShapeKeyController", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+      var ShapeKeyController = exports('ShapeKeyController', (_dec = ccclass('ShapeKeyController'), _dec2 = property(MeshRenderer), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(ShapeKeyController, _Component);
+        function ShapeKeyController() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "meshRenderer", _descriptor, _assertThisInitialized(_this));
+          return _this;
+        }
+        var _proto = ShapeKeyController.prototype;
+        _proto.start = function start() {
+          if (!this.meshRenderer) {
+            console.warn("MeshRenderer �� ��������");
+            return;
+          }
+
+          // ���������, ����� morph targets ����
+          var mesh = this.meshRenderer.mesh;
+          var morph = mesh.struct.morph;
+          if (morph) {
+            console.log("Shape keys:", morph.subMeshMorphs.map(function (m, i) {
+              return {
+                index: i,
+                names: m == null ? void 0 : m.targets.map(function (t) {
+                  return t.name;
+                })
+              };
+            }));
+          }
+        };
+        _proto.update = function update(dt) {
+          if (!this.meshRenderer) return;
+          var mesh = this.meshRenderer.mesh;
+          var model = this.meshRenderer.model;
+          if (!mesh || !model) return;
+
+          // ������ morph target, � �������� name == "key1"
+          var morph = mesh.struct.morph;
+          if (!morph) return;
+          var targetIndex = -1;
+          for (var _iterator = _createForOfIteratorHelperLoose(morph.subMeshMorphs), _step; !(_step = _iterator()).done;) {
+            var sm = _step.value;
+            for (var _iterator2 = _createForOfIteratorHelperLoose(sm.targets), _step2; !(_step2 = _iterator2()).done;) {
+              var t = _step2.value;
+              if (t.name === "key1") {
+                targetIndex = t.morphTargetIndex;
+              }
+            }
+          }
+          if (targetIndex >= 0) {
+            // ��������� ����-���� ��� �� 0 �� 1
+            var weight = Math.sin(Date.now() * 0.002) * 0.5 + 0.5;
+            model.setMorphWeight(0, targetIndex, weight);
+          }
+        };
+        return ShapeKeyController;
+      }(Component), _descriptor = _applyDecoratedDescriptor(_class2.prototype, "meshRenderer", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _class2)) || _class));
       cclegacy._RF.pop();
     }
   };
