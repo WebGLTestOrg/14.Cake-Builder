@@ -3386,12 +3386,11 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   return this.slideOutWithScaleComp();
                 case 35:
                   this.setRimActive(true);
-
-                  // плавный 360° + доворот одной анимацией
-                  _context.next = 38;
-                  return this.rotateModelOpen();
-                case 38:
                   void this.showBloor();
+                  // плавный 360° + доворот одной анимацией
+                  _context.next = 39;
+                  return this.rotateModelOpen();
+                case 39:
                   (_this$currentBinding = this.currentBinding) == null || _this$currentBinding.playSequence == null || _this$currentBinding.playSequence();
 
                   // пользовательский «OPENED»
@@ -5171,91 +5170,95 @@ System.register("chunks:///_virtual/RotateYByKeys.ts", ['./rollupPluginModLoBabe
 });
 
 System.register("chunks:///_virtual/ShapeKeyController.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, cclegacy, _decorator, MeshRenderer, Component;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, MeshRenderer, SkinnedMeshRenderer, Component;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
       _inheritsLoose = module.inheritsLoose;
       _initializerDefineProperty = module.initializerDefineProperty;
       _assertThisInitialized = module.assertThisInitialized;
-      _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
     }, function (module) {
       cclegacy = module.cclegacy;
       _decorator = module._decorator;
       MeshRenderer = module.MeshRenderer;
+      SkinnedMeshRenderer = module.SkinnedMeshRenderer;
       Component = module.Component;
     }],
     execute: function () {
-      var _dec, _dec2, _class, _class2, _descriptor;
+      var _dec, _dec2, _class, _class2, _descriptor, _descriptor2, _descriptor3;
       cclegacy._RF.push({}, "70388oygPBE7pnf/tCtMYXJ", "ShapeKeyController", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
-      var ShapeKeyController = exports('ShapeKeyController', (_dec = ccclass('ShapeKeyController'), _dec2 = property(MeshRenderer), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(ShapeKeyController, _Component);
-        function ShapeKeyController() {
+      var MorphKeyDriver = exports('MorphKeyDriver', (_dec = ccclass('MorphKeyDriver'), _dec2 = property({
+        type: MeshRenderer
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(MorphKeyDriver, _Component);
+        function MorphKeyDriver() {
           var _this;
           for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
           _initializerDefineProperty(_this, "meshRenderer", _descriptor, _assertThisInitialized(_this));
+          // ����� � SkinnedMeshRenderer
+          _initializerDefineProperty(_this, "subMeshIndex", _descriptor2, _assertThisInitialized(_this));
+          // ����� ������
+          _initializerDefineProperty(_this, "shapeIndex", _descriptor3, _assertThisInitialized(_this));
           return _this;
         }
-        var _proto = ShapeKeyController.prototype;
+        var _proto = MorphKeyDriver.prototype;
+        // ������ ����� � �������
         _proto.start = function start() {
-          if (!this.meshRenderer) {
-            console.warn("MeshRenderer �� ��������");
+          var _ref, _ref2, _mr$mesh;
+          // ���� �� ���������� � ��������� ����� �������������
+          this.meshRenderer = (_ref = (_ref2 = this.meshRenderer) != null ? _ref2 : this.getComponent(SkinnedMeshRenderer)) != null ? _ref : this.getComponent(MeshRenderer);
+          var mr = this.meshRenderer;
+          var morph = mr == null || (_mr$mesh = mr.mesh) == null || (_mr$mesh = _mr$mesh.struct) == null ? void 0 : _mr$mesh.morph;
+          if (!mr || !morph) {
+            console.warn('�� ���� ��� ������ morph (shape keys �� ���������������?)');
             return;
           }
 
-          // ���������, ����� morph targets ����
-          var mesh = this.meshRenderer.mesh;
-          var morph = mesh.struct.morph;
-          if (morph) {
-            console.log("Shape keys:", morph.subMeshMorphs.map(function (m, i) {
-              return {
-                index: i,
-                names: m == null ? void 0 : m.targets.map(function (t) {
-                  return t.name;
-                })
-              };
-            }));
-          }
+          // ���������, ������� ������ � ������� �������
+          morph.subMeshMorphs.forEach(function (sm, i) {
+            var _sm$weights$length, _sm$weights;
+            var count = (_sm$weights$length = sm == null || (_sm$weights = sm.weights) == null ? void 0 : _sm$weights.length) != null ? _sm$weights$length : 0;
+            console.log("subMesh " + i + ": morph targets = " + count);
+          });
         };
-        _proto.update = function update(dt) {
-          if (!this.meshRenderer) return;
-          var mesh = this.meshRenderer.mesh;
-          var model = this.meshRenderer.model;
-          if (!mesh || !model) return;
+        _proto.update = function update() {
+          var mr = this.meshRenderer;
+          if (!mr) return;
 
-          // ������ morph target, � �������� name == "key1"
-          var morph = mesh.struct.morph;
-          if (!morph) return;
-          var targetIndex = -1;
-          for (var _iterator = _createForOfIteratorHelperLoose(morph.subMeshMorphs), _step; !(_step = _iterator()).done;) {
-            var sm = _step.value;
-            for (var _iterator2 = _createForOfIteratorHelperLoose(sm.targets), _step2; !(_step2 = _iterator2()).done;) {
-              var t = _step2.value;
-              if (t.name === "key1") {
-                targetIndex = t.morphTargetIndex;
-              }
-            }
-          }
-          if (targetIndex >= 0) {
-            // ��������� ����-���� ��� �� 0 �� 1
-            var weight = Math.sin(Date.now() * 0.002) * 0.5 + 0.5;
-            model.setMorphWeight(0, targetIndex, weight);
-          }
+          // ������: ������ ������ ��� 0..1..0 �� ��������� �����
+          var t = performance.now() * 0.002;
+          var w = 0.5 + 0.5 * Math.sin(t);
+          mr.setWeight(w, this.subMeshIndex, this.shapeIndex); // <-- ���������� �����
         };
-        return ShapeKeyController;
-      }(Component), _descriptor = _applyDecoratedDescriptor(_class2.prototype, "meshRenderer", [_dec2], {
+
+        return MorphKeyDriver;
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "meshRenderer", [_dec2], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _class2)) || _class));
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "subMeshIndex", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0;
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "shapeIndex", [property], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0;
+        }
+      })), _class2)) || _class));
       cclegacy._RF.pop();
     }
   };
