@@ -1740,7 +1740,7 @@ System.register("chunks:///_virtual/CameraTuner.ts", ['./rollupPluginModLoBabelH
 });
 
 System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ArcTextMesh.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Node, MeshRenderer, Animation, tween, Vec3, Component, ArcTextMSDFTwoLinesSubmesh;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Node, MeshRenderer, Animation, tween, Vec3, Component, ParticleSystem, ArcTextMSDFTwoLinesSubmesh;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -1760,6 +1760,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
       tween = module.tween;
       Vec3 = module.Vec3;
       Component = module.Component;
+      ParticleSystem = module.ParticleSystem;
     }, function (module) {
       ArcTextMSDFTwoLinesSubmesh = module.ArcTextMSDFTwoLinesSubmesh;
     }],
@@ -1872,49 +1873,43 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
         _proto.playSequence = /*#__PURE__*/
         function () {
           var _playSequence = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-            var i, c;
+            var i;
             return _regeneratorRuntime().wrap(function _callee$(_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
                   this.stopSequence();
                   this._prepareAnimationState();
+
+                  // 1) main
                   _context.next = 4;
                   return this._appearMain();
                 case 4:
                   i = 0;
                 case 5:
                   if (!(i < this.candles.length)) {
-                    _context.next = 18;
+                    _context.next = 14;
                     break;
                   }
-                  c = this.candles[i];
-                  if (c) {
-                    _context.next = 9;
-                    break;
-                  }
-                  return _context.abrupt("continue", 15);
-                case 9:
-                  _context.next = 11;
+                  _context.next = 8;
                   return this._appearCandle(i);
-                case 11:
-                  // 2) ����� ������ � �������� ��������������� Animation c ����
-                  this._enableAndPlayHubAnim(i);
-
-                  // 3) ����� ������� � ����� (����� ���������)
+                case 8:
                   if (!(this.candleDelayBetween > 0 && i < this.candles.length - 1)) {
-                    _context.next = 15;
+                    _context.next = 11;
                     break;
                   }
-                  _context.next = 15;
+                  _context.next = 11;
                   return this._delay(this.candleDelayBetween);
-                case 15:
+                case 11:
                   i++;
                   _context.next = 5;
                   break;
-                case 18:
-                  _context.next = 20;
+                case 14:
+                  _context.next = 16;
                   return this._appearBerriesParallel();
-                case 20:
+                case 16:
+                  // 4) ������ � ������������ ��������� ��� �������� � ����
+                  this._enableAndPlayAllHubAnims();
+                case 17:
                 case "end":
                   return _context.stop();
               }
@@ -1924,7 +1919,20 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             return _playSequence.apply(this, arguments);
           }
           return playSequence;
-        }() /** �������� �������� (������ main 1->0) + ������ reset */;
+        }() /** ������������� ������ ���� ����������, ������� �� candleAnimatorHubNode */;
+        _proto._enableAndPlayAllHubAnims = function _enableAndPlayAllHubAnims() {
+          for (var _iterator = _createForOfIteratorHelperLoose(this._hubAnims), _step; !(_step = _iterator()).done;) {
+            var anim = _step.value;
+            if (!anim) continue;
+            anim.enabled = true;
+            try {
+              anim.stop();
+              anim.play(); // � ������� ���������� � ��� ��������� ����
+            } catch (_unused) {/* noop */}
+          }
+        }
+
+        /** �������� �������� (������ main 1->0) + ������ reset */;
         _proto.playSequenceCloseAndReset = /*#__PURE__*/
         function () {
           var _playSequenceCloseAndReset = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -1963,15 +1971,15 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             this.main.setScale(0, 0, 0);
           }
           // �����
-          for (var _iterator = _createForOfIteratorHelperLoose(this.candles), _step; !(_step = _iterator()).done;) {
-            var c = _step.value;
+          for (var _iterator2 = _createForOfIteratorHelperLoose(this.candles), _step2; !(_step2 = _iterator2()).done;) {
+            var c = _step2.value;
             if (!c) continue;
             c.active = false;
             c.setScale(0, 0, 0);
           }
           // �����
-          for (var _iterator2 = _createForOfIteratorHelperLoose(this.berries), _step2; !(_step2 = _iterator2()).done;) {
-            var b = _step2.value;
+          for (var _iterator3 = _createForOfIteratorHelperLoose(this.berries), _step3; !(_step3 = _iterator3()).done;) {
+            var b = _step3.value;
             if (!b) continue;
             b.active = false;
             b.setScale(0, 0, 0);
@@ -1983,11 +1991,11 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
 
         /** ��������� ���� ������� ������ + ���� ���������� ���� */;
         _proto.stopSequence = function stopSequence() {
-          for (var _iterator3 = _createForOfIteratorHelperLoose(this._runningTweens), _step3; !(_step3 = _iterator3()).done;) {
-            var t = _step3.value;
+          for (var _iterator4 = _createForOfIteratorHelperLoose(this._runningTweens), _step4; !(_step4 = _iterator4()).done;) {
+            var t = _step4.value;
             try {
               t.stop();
-            } catch (_unused) {/* noop */}
+            } catch (_unused2) {/* noop */}
           }
           this._runningTweens.length = 0;
 
@@ -2003,14 +2011,14 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             this.main.active = false;
             this.main.setScale(0, 0, 0);
           }
-          for (var _iterator4 = _createForOfIteratorHelperLoose(this.candles), _step4; !(_step4 = _iterator4()).done;) {
-            var c = _step4.value;
+          for (var _iterator5 = _createForOfIteratorHelperLoose(this.candles), _step5; !(_step5 = _iterator5()).done;) {
+            var c = _step5.value;
             if (!c) continue;
             c.active = false;
             c.setScale(0, 0, 0);
           }
-          for (var _iterator5 = _createForOfIteratorHelperLoose(this.berries), _step5; !(_step5 = _iterator5()).done;) {
-            var b = _step5.value;
+          for (var _iterator6 = _createForOfIteratorHelperLoose(this.berries), _step6; !(_step6 = _iterator6()).done;) {
+            var b = _step6.value;
             if (!b) continue;
             b.active = false;
             b.setScale(0, 0, 0);
@@ -2024,11 +2032,11 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           if (!this.candleAnimatorHubNode) return;
           this._hubAnims = this.candleAnimatorHubNode.getComponents(Animation) || [];
           // ���������� ��������� �� ������
-          for (var _iterator6 = _createForOfIteratorHelperLoose(this._hubAnims), _step6; !(_step6 = _iterator6()).done;) {
-            var a = _step6.value;
+          for (var _iterator7 = _createForOfIteratorHelperLoose(this._hubAnims), _step7; !(_step7 = _iterator7()).done;) {
+            var a = _step7.value;
             try {
               a.stop();
-            } catch (_unused2) {/* noop */}
+            } catch (_unused3) {/* noop */}
             a.enabled = false;
           }
         }
@@ -2105,28 +2113,28 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           try {
             anim.stop(); // ����� � ����
             anim.play(); // ��������� ���� ����� ����������
-          } catch (_unused3) {/* noop */}
+          } catch (_unused4) {/* noop */}
         }
 
         /** ������� ��� (��� ����������) � ������������ ��� stopSequence() */;
         _proto._stopAllHubAnims = function _stopAllHubAnims() {
-          for (var _iterator7 = _createForOfIteratorHelperLoose(this._hubAnims), _step7; !(_step7 = _iterator7()).done;) {
-            var a = _step7.value;
-            if (!a) continue;
-            try {
-              a.stop();
-            } catch (_unused4) {/* noop */}
-          }
-        }
-
-        /** ������� � ��������� � ������������ ��� reset/prepare */;
-        _proto._stopAndDisableAllHubAnims = function _stopAndDisableAllHubAnims() {
           for (var _iterator8 = _createForOfIteratorHelperLoose(this._hubAnims), _step8; !(_step8 = _iterator8()).done;) {
             var a = _step8.value;
             if (!a) continue;
             try {
               a.stop();
             } catch (_unused5) {/* noop */}
+          }
+        }
+
+        /** ������� � ��������� � ������������ ��� reset/prepare */;
+        _proto._stopAndDisableAllHubAnims = function _stopAndDisableAllHubAnims() {
+          for (var _iterator9 = _createForOfIteratorHelperLoose(this._hubAnims), _step9; !(_step9 = _iterator9()).done;) {
+            var a = _step9.value;
+            if (!a) continue;
+            try {
+              a.stop();
+            } catch (_unused6) {/* noop */}
             a.enabled = false;
           }
         }
