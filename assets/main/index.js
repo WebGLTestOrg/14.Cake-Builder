@@ -1740,7 +1740,7 @@ System.register("chunks:///_virtual/CameraTuner.ts", ['./rollupPluginModLoBabelH
 });
 
 System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ArcTextMesh.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Node, MeshRenderer, tween, Vec3, Component, ArcTextMSDFTwoLinesSubmesh;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createForOfIteratorHelperLoose, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Node, MeshRenderer, Animation, tween, Vec3, Component, ArcTextMSDFTwoLinesSubmesh;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -1748,6 +1748,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
       _initializerDefineProperty = module.initializerDefineProperty;
       _assertThisInitialized = module.assertThisInitialized;
       _createForOfIteratorHelperLoose = module.createForOfIteratorHelperLoose;
+      _createClass = module.createClass;
       _asyncToGenerator = module.asyncToGenerator;
       _regeneratorRuntime = module.regeneratorRuntime;
     }, function (module) {
@@ -1755,6 +1756,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
       _decorator = module._decorator;
       Node = module.Node;
       MeshRenderer = module.MeshRenderer;
+      Animation = module.Animation;
       tween = module.tween;
       Vec3 = module.Vec3;
       Component = module.Component;
@@ -1762,7 +1764,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
       ArcTextMSDFTwoLinesSubmesh = module.ArcTextMSDFTwoLinesSubmesh;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15;
       cclegacy._RF.push({}, "a3b9f30vchC9aP2MSuw/5Bg", "ClickMoveBinding", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
@@ -1777,10 +1779,15 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
       }), _dec6 = property({
         type: ArcTextMSDFTwoLinesSubmesh
       }), _dec7 = property({
-        type: Node
+        type: Node,
+        tooltip: '������ c ��������� ��� ������ �������'
       }), _dec8 = property({
-        type: [Node]
+        type: Node
       }), _dec9 = property({
+        type: [Node]
+      }), _dec10 = property({
+        type: Node
+      }), _dec11 = property({
         type: [Node]
       }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(ClickMoveBinding, _Component);
@@ -1790,33 +1797,38 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          // ====== ���� ���� (�� ������) ======
+          // ====== ���� ���� (�������) ======
           _initializerDefineProperty(_this, "target", _descriptor, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "meshRenderer", _descriptor2, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "model", _descriptor3, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "rim", _descriptor4, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "arcText", _descriptor5, _assertThisInitialized(_this));
+          // +++ �����: ��������� �� GlobalClickManager3D
+          _initializerDefineProperty(_this, "pullParticleObject", _descriptor6, _assertThisInitialized(_this));
           _this._startTargetPos = null;
           _this._startModelEuler = null;
           _this._captured = false;
           // =========================
-          // ====== ��������� ========
+          // ====== �������� UI ======
           // =========================
-          /** ������� ������ (��������� �� target), ������� ���������� ������ (scale 0 -> 1) */
-          _initializerDefineProperty(_this, "main", _descriptor6, _assertThisInitialized(_this));
-          /** 3 ������, ���������� ��������������� � ������ bounce (scale 0 -> 1) */
-          _initializerDefineProperty(_this, "candles", _descriptor7, _assertThisInitialized(_this));
+          /** ������� ������ (��������� �� target), ���������� ������ (scale 0 -> 1) */
+          _initializerDefineProperty(_this, "main", _descriptor7, _assertThisInitialized(_this));
+          /** ������, ���������� ��������������� (scale 0 -> 1) */
+          _initializerDefineProperty(_this, "candles", _descriptor8, _assertThisInitialized(_this));
+          /** ����-���: �� ��� ����� ��������� ����������� Animation (�� ������ ��� ������ �����) */
+          _initializerDefineProperty(_this, "candleAnimatorHubNode", _descriptor9, _assertThisInitialized(_this));
           /** 2 �����, ���������� ������������ (scale 0 -> 1) */
-          _initializerDefineProperty(_this, "berries", _descriptor8, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "berries", _descriptor10, _assertThisInitialized(_this));
           /** ��������/��������� �������� */
-          _initializerDefineProperty(_this, "mainDuration", _descriptor9, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "mainDurationHide", _descriptor10, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "candleDuration", _descriptor11, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "candleDelayBetween", _descriptor12, _assertThisInitialized(_this));
-          // ����� ����� �������
-          _initializerDefineProperty(_this, "berriesDuration", _descriptor13, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "mainDuration", _descriptor11, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "mainDurationHide", _descriptor12, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "candleDuration", _descriptor13, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "candleDelayBetween", _descriptor14, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "berriesDuration", _descriptor15, _assertThisInitialized(_this));
           /** ���� �����, ����� ����� ���� ������� ��� ��������� ������� */
           _this._runningTweens = [];
+          /** ��� ���� Animation � ����-���� (������ ������������� ������� �����) */
+          _this._hubAnims = [];
           return _this;
         }
         var _proto = ClickMoveBinding.prototype;
@@ -1835,18 +1847,11 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           var t = this.arcText;
           if (!t) return;
           var wasEnabled = t.enabled;
-          // �������� �������� ���������, ����� ��������� rebuild/geometry
           if (!wasEnabled) t.enabled = true;
-
-          // ��������� ������ (������ setText* ����������� instant-������ ��� �������)
           t.applyApiData(apiData);
-
-          // �������������� ������ ����� ������ (��� �������� � schedule)
           if (typeof t.rebuildNow === 'function') {
             t.rebuildNow();
           }
-
-          // ���������� �������� ���������: ���� ����� ����� ������� ��� ����������� � ��������
           if (!wasEnabled && t.freezeAfterBuild) {
             t.enabled = false;
           }
@@ -1855,12 +1860,15 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           if (this.target) console.log("[" + label + "] target world pos=", this.target.worldPosition.clone());
           if (this.model) console.log("[" + label + "] model  world pos=", this.model.worldPosition.clone(), 'euler=', this.model.eulerAngles.clone());
         };
-        /** ����������� ��������� ��������� ����� ��� �������� ����� */
+        // ====== lifecycle ======
         _proto.start = function start() {
           this._prepareAnimationState();
+          this._collectHubAnims();
         }
 
-        /** ������� ����� ����� � ��������� ��� ������������������ �������� */;
+        // ====== ��������� �������� ======
+
+        /** ������ ������ ������������������ �������� */;
         _proto.playSequence = /*#__PURE__*/
         function () {
           var _playSequence = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
@@ -1868,19 +1876,15 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             return _regeneratorRuntime().wrap(function _callee$(_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
-                  // �� ������ ������ ��������� ������
                   this.stopSequence();
-                  // �������� �� � ������ (active=false, scale=0)
                   this._prepareAnimationState();
-
-                  // 1) ������� ������: ���������� � ������� 0 -> 1
                   _context.next = 4;
                   return this._appearMain();
                 case 4:
                   i = 0;
                 case 5:
                   if (!(i < this.candles.length)) {
-                    _context.next = 17;
+                    _context.next = 18;
                     break;
                   }
                   c = this.candles[i];
@@ -1888,25 +1892,29 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
                     _context.next = 9;
                     break;
                   }
-                  return _context.abrupt("continue", 14);
+                  return _context.abrupt("continue", 15);
                 case 9:
                   _context.next = 11;
-                  return this._appearCandle(c);
+                  return this._appearCandle(i);
                 case 11:
+                  // 2) ����� ������ � �������� ��������������� Animation c ����
+                  this._enableAndPlayHubAnim(i);
+
+                  // 3) ����� ������� � ����� (����� ���������)
                   if (!(this.candleDelayBetween > 0 && i < this.candles.length - 1)) {
-                    _context.next = 14;
+                    _context.next = 15;
                     break;
                   }
-                  _context.next = 14;
+                  _context.next = 15;
                   return this._delay(this.candleDelayBetween);
-                case 14:
+                case 15:
                   i++;
                   _context.next = 5;
                   break;
-                case 17:
-                  _context.next = 19;
+                case 18:
+                  _context.next = 20;
                   return this._appearBerriesParallel();
-                case 19:
+                case 20:
                 case "end":
                   return _context.stop();
               }
@@ -1916,11 +1924,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             return _playSequence.apply(this, arguments);
           }
           return playSequence;
-        }()
-        /** �������� �������� (��������) + ������ reset */
-        /** �������� �������� (��������) + ������ reset */
-        /** �������� �������� (��������) ������ main + ������ reset */;
-
+        }() /** �������� �������� (������ main 1->0) + ������ reset */;
         _proto.playSequenceCloseAndReset = /*#__PURE__*/
         function () {
           var _playSequenceCloseAndReset = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
@@ -1928,8 +1932,6 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
               while (1) switch (_context2.prev = _context2.next) {
                 case 0:
                   this.stopSequence();
-
-                  // ���� main ��� �������� � ������ reset
                   if (!(!this.main || !this.main.active)) {
                     _context2.next = 4;
                     break;
@@ -1937,15 +1939,11 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
                   this.resetVisuals();
                   return _context2.abrupt("return");
                 case 4:
-                  // main ����� 1 -> 0
                   this.main.active = true;
                   _context2.next = 7;
                   return this._scaleTo(this.main, 0, this.mainDurationHide, 'backIn');
                 case 7:
-                  // ������ ����������
                   this.main.active = false;
-
-                  // ���������� �� � ��������� ���������
                   this.resetVisuals();
                 case 9:
                 case "end":
@@ -1957,7 +1955,7 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             return _playSequenceCloseAndReset.apply(this, arguments);
           }
           return playSequenceCloseAndReset;
-        }() /** ������ �����: �� ��������� � scale=0 */;
+        }() /** ������ �����: �� ��������� � scale=0, ��������� ����������� � ��������� */;
         _proto.resetVisuals = function resetVisuals() {
           // �������
           if (this.main) {
@@ -1978,9 +1976,12 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             b.active = false;
             b.setScale(0, 0, 0);
           }
+
+          // ���������� � ��������� ��� Animation � ����
+          this._stopAndDisableAllHubAnims();
         }
 
-        /** ��������� ���� ������� ������ (��������/��������) */;
+        /** ��������� ���� ������� ������ + ���� ���������� ���� */;
         _proto.stopSequence = function stopSequence() {
           for (var _iterator3 = _createForOfIteratorHelperLoose(this._runningTweens), _step3; !(_step3 = _iterator3()).done;) {
             var t = _step3.value;
@@ -1989,10 +1990,14 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             } catch (_unused) {/* noop */}
           }
           this._runningTweens.length = 0;
+
+          // ������ ������� ��������� (��������� ���������/���������� �� prepare/reset)
+          this._stopAllHubAnims();
         }
 
-        // ---------- helpers ----------
-        /** ��������� ���������: ��������� � scale=0 */;
+        // ====== helpers: ���������� ======
+
+        /** ��������� ���������: �� ��������� � scale=0; ��������� � ����������� � ��������� */;
         _proto._prepareAnimationState = function _prepareAnimationState() {
           if (this.main) {
             this.main.active = false;
@@ -2010,7 +2015,27 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             b.active = false;
             b.setScale(0, 0, 0);
           }
-        };
+          if (this._hubAnims.length === 0) this._collectHubAnims();else this._stopAndDisableAllHubAnims();
+        }
+
+        /** ������� ��� Animation � ����-���� */;
+        _proto._collectHubAnims = function _collectHubAnims() {
+          this._hubAnims = [];
+          if (!this.candleAnimatorHubNode) return;
+          this._hubAnims = this.candleAnimatorHubNode.getComponents(Animation) || [];
+          // ���������� ��������� �� ������
+          for (var _iterator6 = _createForOfIteratorHelperLoose(this._hubAnims), _step6; !(_step6 = _iterator6()).done;) {
+            var a = _step6.value;
+            try {
+              a.stop();
+            } catch (_unused2) {/* noop */}
+            a.enabled = false;
+          }
+        }
+
+        // ====== helpers: ��������� ======
+        ;
+
         _proto._appearMain = function _appearMain() {
           var _this2 = this;
           return new Promise(function (resolve) {
@@ -2027,9 +2052,13 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             }).start();
             _this2._runningTweens.push(tw);
           });
-        };
-        _proto._appearCandle = function _appearCandle(candle) {
+        }
+
+        /** ����� ����� � �������; ��� �������� ���������� �������� ����� ����� ������ */;
+        _proto._appearCandle = function _appearCandle(index) {
           var _this3 = this;
+          var candle = this.candles[index];
+          if (!candle) return Promise.resolve();
           return new Promise(function (resolve) {
             candle.active = true;
             candle.setScale(0, 0, 0);
@@ -2063,7 +2092,48 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
           return Promise.all(tasks).then(function () {
             return undefined;
           });
-        };
+        }
+
+        // ====== helpers: ��������� ���� ======
+
+        /** �������� � ��������� ������ Animation �� ������� ����� */;
+        _proto._enableAndPlayHubAnim = function _enableAndPlayHubAnim(index) {
+          var anim = this._hubAnims[index];
+          if (!anim) return; // ���� ����������� ������, ������ ����������
+
+          anim.enabled = true;
+          try {
+            anim.stop(); // ����� � ����
+            anim.play(); // ��������� ���� ����� ����������
+          } catch (_unused3) {/* noop */}
+        }
+
+        /** ������� ��� (��� ����������) � ������������ ��� stopSequence() */;
+        _proto._stopAllHubAnims = function _stopAllHubAnims() {
+          for (var _iterator7 = _createForOfIteratorHelperLoose(this._hubAnims), _step7; !(_step7 = _iterator7()).done;) {
+            var a = _step7.value;
+            if (!a) continue;
+            try {
+              a.stop();
+            } catch (_unused4) {/* noop */}
+          }
+        }
+
+        /** ������� � ��������� � ������������ ��� reset/prepare */;
+        _proto._stopAndDisableAllHubAnims = function _stopAndDisableAllHubAnims() {
+          for (var _iterator8 = _createForOfIteratorHelperLoose(this._hubAnims), _step8; !(_step8 = _iterator8()).done;) {
+            var a = _step8.value;
+            if (!a) continue;
+            try {
+              a.stop();
+            } catch (_unused5) {/* noop */}
+            a.enabled = false;
+          }
+        }
+
+        // ====== ����� ������� ======
+        ;
+
         _proto._scaleTo = function _scaleTo(node, to, duration, easing) {
           var _this5 = this;
           return new Promise(function (resolve) {
@@ -2082,6 +2152,13 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
             return setTimeout(r, Math.max(0, sec * 1000));
           });
         };
+        _createClass(ClickMoveBinding, [{
+          key: "pullParticle",
+          get: function get() {
+            var _this$pullParticleObj, _this$pullParticleObj2;
+            return (_this$pullParticleObj = (_this$pullParticleObj2 = this.pullParticleObject) == null ? void 0 : _this$pullParticleObj2.getComponent(ParticleSystem)) != null ? _this$pullParticleObj : null;
+          }
+        }]);
         return ClickMoveBinding;
       }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "target", [_dec2], {
         configurable: true,
@@ -2118,56 +2195,70 @@ System.register("chunks:///_virtual/ClickMoveBinding.ts", ['./rollupPluginModLoB
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "main", [_dec7], {
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "pullParticleObject", [_dec7], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "candles", [_dec8], {
+      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "main", [_dec8], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "candles", [_dec9], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return [];
         }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "berries", [_dec9], {
+      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "candleAnimatorHubNode", [_dec10], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "berries", [_dec11], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return [];
         }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "mainDuration", [property], {
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "mainDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.45;
         }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "mainDurationHide", [property], {
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "mainDurationHide", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.45;
         }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "candleDuration", [property], {
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "candleDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.35;
         }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "candleDelayBetween", [property], {
+      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "candleDelayBetween", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 0.05;
         }
-      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "berriesDuration", [property], {
+      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "berriesDuration", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -3035,7 +3126,7 @@ System.register("chunks:///_virtual/DebugPanelToggle.ts", ['./rollupPluginModLoB
 });
 
 System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc', './ClickMoveBinding.ts', './InteractionState.ts', './PointerIds.ts', './RotateYByKeys.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './ColorLibrary.ts'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Node, Vec3, input, Input, geometry, PhysicsSystem, tween, MeshRenderer, Component, sys, ClickMoveBinding, InteractionState, MOUSE_ID, RotateYByKeys, TowerLayoutController, TowerScrollController, ColorTextureLibrary;
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _createClass, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, Camera, Node, Vec3, input, Input, geometry, PhysicsSystem, tween, MeshRenderer, Component, sys, ParticleSystem, ClickMoveBinding, InteractionState, MOUSE_ID, RotateYByKeys, TowerLayoutController, TowerScrollController, ColorTextureLibrary;
   return {
     setters: [function (module) {
       _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
@@ -3059,6 +3150,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
       MeshRenderer = module.MeshRenderer;
       Component = module.Component;
       sys = module.sys;
+      ParticleSystem = module.ParticleSystem;
     }, function (module) {
       ClickMoveBinding = module.ClickMoveBinding;
     }, function (module) {
@@ -3075,7 +3167,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
       ColorTextureLibrary = module.ColorTextureLibrary;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34, _descriptor35, _descriptor36, _descriptor37, _descriptor38, _descriptor39, _descriptor40, _descriptor41, _descriptor42, _descriptor43, _descriptor44, _descriptor45, _descriptor46, _descriptor47, _descriptor48;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _dec31, _dec32, _dec33, _dec34, _dec35, _dec36, _dec37, _dec38, _dec39, _dec40, _dec41, _dec42, _dec43, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34, _descriptor35, _descriptor36, _descriptor37, _descriptor38, _descriptor39, _descriptor40, _descriptor41, _descriptor42, _descriptor43, _descriptor44, _descriptor45, _descriptor46, _descriptor47, _descriptor48, _descriptor49, _descriptor50, _descriptor51, _descriptor52;
       cclegacy._RF.push({}, "4bd86blOoRLpq75wEwnh3v5", "GlobalClickManager", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property;
@@ -3173,6 +3265,16 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         tooltip: 'Длительность плавного входа в idle (сек)'
       }), _dec39 = property({
         tooltip: 'Коэффициент кривизны easing при входе (0..1, больше — резче к концу)'
+      }), _dec40 = property({
+        type: Node,
+        tooltip: 'Объект c партиклом для выезда кусочка'
+      }), _dec41 = property({
+        type: Node,
+        tooltip: 'Объект, который включаем после скейла bloor'
+      }), _dec42 = property({
+        tooltip: 'Очищать/выключать pull-партикл после завершения выезда'
+      }), _dec43 = property({
+        tooltip: 'Скорость именно пинг-понга по Y (множитель)'
       }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(GlobalClickManager3D, _Component);
         function GlobalClickManager3D() {
@@ -3247,6 +3349,10 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           _initializerDefineProperty(_this, "idleBlendInSeconds", _descriptor47, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "idleBlendCurve", _descriptor48, _assertThisInitialized(_this));
           // 0 — quadOut по умолчанию
+          _initializerDefineProperty(_this, "pullParticleObject", _descriptor49, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "afterBloorObject", _descriptor50, _assertThisInitialized(_this));
+          // (необязательные настройки)
+          _initializerDefineProperty(_this, "stopPullParticleOnFinish", _descriptor51, _assertThisInitialized(_this));
           // state
           _this.fsm = State.Idle;
           _this.clickedLevel = 0;
@@ -3263,6 +3369,8 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           // ======== активная камера ========
           _this._activeCamera = null;
           _this.bloorTween = null;
+          // Скорость пинг-понга по Y относительно базовой фазы idle (1 = как было; 0.5 — в 2 раза медленнее)
+          _initializerDefineProperty(_this, "idleYRangeSpeed", _descriptor52, _assertThisInitialized(_this));
           return _this;
         }
         var _proto = GlobalClickManager3D.prototype;
@@ -3469,6 +3577,11 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                       }
                     }).call(function () {
                       _this2.bloorTween = null;
+
+                      // +++ ПОСЛЕ скейла блюра включаем второй объект
+                      if (_this2.afterBloorObject) {
+                        _this2.afterBloorObject.active = true;
+                      }
                       resolve();
                     }).start();
                   });
@@ -3614,7 +3727,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         function () {
           var _slideOutWithScaleComp = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
             var _this$currentBinding$, _parent$worldScale$x;
-            var target, parent, sx, worldDx, localDx, baseX, toX;
+            var target, parent, sx, worldDx, localDx, baseX, toX, pullPs, pullObj, _pullPs, _pullPs2, _pullPs3;
             return _regeneratorRuntime().wrap(function _callee4$(_context4) {
               while (1) switch (_context4.prev = _context4.next) {
                 case 0:
@@ -3635,6 +3748,21 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   _context4.next = 12;
                   return this.tweenLocalX(target, toX, this.slideDuration, this.slideEasing);
                 case 12:
+                  // --- раньше читали из this.pullParticleObject, теперь из биндинга:
+                  pullPs = null;
+                  pullObj = this.currentBinding.pullParticleObject;
+                  if (pullObj) {
+                    pullObj.active = true; // включаем объект
+                    pullPs = pullObj.getComponent(ParticleSystem);
+                    try {
+                      (_pullPs = pullPs) == null || _pullPs.stop();
+                      (_pullPs2 = pullPs) == null || _pullPs2.clear();
+                    } catch (_unused3) {}
+                    try {
+                      (_pullPs3 = pullPs) == null || _pullPs3.play();
+                    } catch (_unused4) {}
+                  }
+                case 15:
                 case "end":
                   return _context4.stop();
               }
@@ -3656,8 +3784,8 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         };
         _proto.closeAndInsert = /*#__PURE__*/function () {
           var _closeAndInsert = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(emitToParent) {
-            var _this$currentBinding3;
-            var L, S, _this$currentBinding$2, _this$baseLocalX$get, target, baseX, ctl, _this$currentBinding$3, targetNode;
+            var _this$currentBinding$2, _this$currentBinding3, _this$currentBinding4;
+            var pullObj, ps, L, S, _this$currentBinding$3, _this$baseLocalX$get, target, baseX, ctl, _this$currentBinding$4, targetNode;
             return _regeneratorRuntime().wrap(function _callee5$(_context5) {
               while (1) switch (_context5.prev = _context5.next) {
                 case 0:
@@ -3672,31 +3800,42 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                 case 3:
                   this.fsm = State.SlideIn;
                   void this.hideBloor();
-                  L = this.clickedLevel;
-                  S = this.clickedSlot; // Остановить бесконечный idle
-                  this.stopIdleAnimation();
-                  _context5.next = 10;
-                  return (_this$currentBinding3 = this.currentBinding) == null || _this$currentBinding3.playSequenceCloseAndReset == null ? void 0 : _this$currentBinding3.playSequenceCloseAndReset();
-                case 10:
-                  _context5.next = 12;
-                  return this.rotateModelCloseToBaseEuler();
-                case 12:
-                  this.setRimActive(false);
 
-                  // вернуть позицию выезда
+                  // выключим вспомогательные объекты
+                  if (this.afterBloorObject) this.afterBloorObject.active = false;
+
+                  // --- раньше: this.pullParticleObject -> теперь берём из currentBinding
+                  pullObj = (_this$currentBinding$2 = (_this$currentBinding3 = this.currentBinding) == null ? void 0 : _this$currentBinding3.pullParticleObject) != null ? _this$currentBinding$2 : null;
+                  if (pullObj) {
+                    ps = pullObj.getComponent(ParticleSystem);
+                    try {
+                      ps == null || ps.stop();
+                    } catch (_unused5) {}
+                    pullObj.active = false;
+                  }
+                  L = this.clickedLevel;
+                  S = this.clickedSlot;
+                  this.stopIdleAnimation();
+                  _context5.next = 13;
+                  return (_this$currentBinding4 = this.currentBinding) == null || _this$currentBinding4.playSequenceCloseAndReset == null ? void 0 : _this$currentBinding4.playSequenceCloseAndReset();
+                case 13:
+                  _context5.next = 15;
+                  return this.rotateModelCloseToBaseEuler();
+                case 15:
+                  this.setRimActive(false);
                   if (!(this.currentPiece && this.currentBinding)) {
-                    _context5.next = 18;
+                    _context5.next = 21;
                     break;
                   }
-                  target = (_this$currentBinding$2 = this.currentBinding.target) != null ? _this$currentBinding$2 : this.currentPiece;
+                  target = (_this$currentBinding$3 = this.currentBinding.target) != null ? _this$currentBinding$3 : this.currentPiece;
                   baseX = (_this$baseLocalX$get = this.baseLocalX.get(target)) != null ? _this$baseLocalX$get : target.position.x;
-                  _context5.next = 18;
+                  _context5.next = 21;
                   return this.tweenLocalX(target, baseX, this.slideDuration, this.slideEasing);
-                case 18:
+                case 21:
                   if (this.clearImageOnClose) {
                     ctl = ColorTextureLibrary.instance;
                     if (ctl && this.currentPiece && this.currentBinding) {
-                      targetNode = (_this$currentBinding$3 = this.currentBinding.model) != null ? _this$currentBinding$3 : this.currentPiece;
+                      targetNode = (_this$currentBinding$4 = this.currentBinding.model) != null ? _this$currentBinding$4 : this.currentPiece;
                       ctl.clearAppliedTexture(targetNode, this.imageMatIndex, this.imageUniform);
                     }
                   }
@@ -3706,7 +3845,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
                   this.fsm = State.Idle;
                   if (emitToParent) this.postPieceEvent('CLOSED', L, S);
                   this._emitOnThisAction = false;
-                case 25:
+                case 28:
                 case "end":
                   return _context5.stop();
               }
@@ -3727,7 +3866,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
             var piece = lc.getPieceByDataIndex(di);
             var url = (_file = piece == null ? void 0 : piece.file) != null ? _file : null;
             return url;
-          } catch (_unused3) {
+          } catch (_unused6) {
             return null;
           }
         };
@@ -3919,15 +4058,10 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
               resolve();
             }).start();
           });
-        }
-
-        // ===== Idle анимация (плавные покачивания + мягкий пинг-понг по Y) =====
-        // ===== Idle анимация (плавные покачивания + мягкий пинг-понг по Y + плавный вход) =====
-        // ===== Idle анимация (мягкий вход, косинусный пинг-понг по Y, выбор ближайшей фазы) =====
-        ;
-
+        };
+        // ===== Idle анимация (мягкий вход, анти-wrap, выбор ближайшей фазы; одна цель tween) =====
         _proto.startIdleAnimation = function startIdleAnimation(model) {
-          var _idlePhaseY,
+          var _this$idlePhaseY,
             _this7 = this;
           if (!this.enableIdleAnimation) return;
           if (this.idleTween) {
@@ -3936,9 +4070,9 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           }
           var base = model.eulerAngles.clone();
           var TAU = Math.PI * 2;
-          var phaseY = (_idlePhaseY = this.idlePhaseY) != null ? _idlePhaseY : Math.PI / 3;
+          var phaseYShift = (_this$idlePhaseY = this.idlePhaseY) != null ? _this$idlePhaseY : Math.PI / 3;
 
-          // БЕЗОПАСНЫЙ wrap к ближайшему эквиваленту
+          // анти-wrap: тянем новый угол к предыдущему
           var nearestAngleDeg = function nearestAngleDeg(prev, cand) {
             var c = cand;
             var d0 = c - prev,
@@ -3950,50 +4084,42 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
             if (ad1 < ad0 && ad1 <= ad2) c += 360;else if (ad2 < ad0 && ad2 < ad1) c -= 360;
             return c;
           };
-
-          // Косинусный пинг-понг t(phi) ∈ [0..1..0] за 2π
           var ping01 = function ping01(phi) {
             return (1 - Math.cos(phi)) * 0.5;
-          };
+          }; // 0..1..0
 
-          // --- 1) Подготовим Y-диапазон, сдвинув его ближе к текущему Y ---
+          // сдвигаем диапазон [yMin..yMax] ближе к текущему углу
           var curr = model.eulerAngles.clone();
           var yMin0 = Math.min(this.idleYRangeMinDeg, this.idleYRangeMaxDeg);
           var yMax0 = Math.max(this.idleYRangeMinDeg, this.idleYRangeMaxDeg);
           var span = yMax0 - yMin0;
-
-          // абсолютные границы вокруг базы
           var yMinAbs = base.y + yMin0;
           var yMaxAbs = base.y + yMax0;
           var mid = (yMinAbs + yMaxAbs) * 0.5;
-
-          // сдвигаем диапазон на кратное 360 так, чтобы его середина была ближе к текущему углу
           var nShift = Math.round((curr.y - mid) / 360);
           yMinAbs += 360 * nShift;
           yMaxAbs += 360 * nShift;
 
-          // --- 2) Выберем стартовую фазу, чтобы стартовая цель была ближе к текущему ---
-          // сначала подгоняем сам пинг-понг к ближайшей точке диапазона
-          var y0Clamped = Math.min(Math.max(curr.y, yMinAbs), yMaxAbs);
-          var t0 = span > 1e-6 ? (y0Clamped - yMinAbs) / span : 0.0; // 0..1
-          var phiA = Math.acos(Math.max(-1, Math.min(1, 1 - 2 * t0))); // [0..π]
-          var phiB = TAU - phiA; // альтернативная ветка
-
-          // учитываем синус по Y и выбираем фазу, где итоговая цель ближе к текущему
-          var yTargetAt = function yTargetAt(phi) {
-            return yMinAbs + span * ping01(phi) + _this7.idleAmpY * Math.sin(phi + phaseY);
+          // подобрать стартовую фазу ближе к текущему Y (с учётом синуса)
+          var clamp = function clamp(v, a, b) {
+            return Math.min(Math.max(v, a), b);
           };
-          var candA = yTargetAt(phiA);
-          var candB = yTargetAt(phiB);
-          var startPhase = Math.abs(candA - curr.y) <= Math.abs(candB - curr.y) ? phiA : phiB;
+          var y0Clamped = clamp(curr.y, yMinAbs, yMaxAbs);
+          var t0 = span > 1e-6 ? (y0Clamped - yMinAbs) / span : 0.0;
+          var phiA = Math.acos(Math.max(-1, Math.min(1, 1 - 2 * t0))); // [0..π]
+          var phiB = TAU - phiA;
+          var yTargetAt = function yTargetAt(phi) {
+            return yMinAbs + span * ping01(phi * _this7.idleYRangeSpeed) + _this7.idleAmpY * Math.sin(phi + phaseYShift);
+          };
+          var startPhase = Math.abs(yTargetAt(phiA) - curr.y) <= Math.abs(yTargetAt(phiB) - curr.y) ? phiA : phiB;
 
-          // --- 3) Запускаем драйвер c подобранной фазой и мягким blend-in ---
+          // драйвер — один объект
           var drv = {
             phase: startPhase,
             t: 0
           };
 
-          // параметры плавного входа
+          // плавный вход
           var easeInBlend = function easeInBlend(x) {
             var y = 1 - (1 - x) * (1 - x); // quadOut
             if (_this7.idleBlendCurve > 0) {
@@ -4002,44 +4128,46 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
             }
             return y;
           };
-
-          // стартуем из фактического текущего положения — это и будет «prev*»
           var prevX = curr.x,
             prevY = curr.y,
             prevZ = curr.z;
-          this.idleTween = tween(drv).repeatForever(tween().by(this.idleCycleSeconds, {
+          model.setRotationFromEuler(prevX, prevY, prevZ);
+
+          // важное изменение: внутри repeatForever используем tween(drv), а не tween()
+          this.idleTween = tween(drv).repeatForever(tween(drv).by(this.idleCycleSeconds, {
             phase: TAU,
             t: this.idleCycleSeconds
           }, {
             easing: 'linear',
             onUpdate: function onUpdate() {
-              // целевые синусы
-              var xSin = _this7.idleAmpX * Math.sin(drv.phase);
-              var ySin = _this7.idleAmpY * Math.sin(drv.phase + phaseY);
-              var zSin = _this7.idleAmpZ * Math.sin(drv.phase + Math.PI / 5);
+              var p = drv.phase;
+              var py = p * _this7.idleYRangeSpeed; // отдельная скорость пинг-понга
 
-              // пинг-понг по Y в сдвинутом (ближайшем) диапазоне
-              var yPing = yMinAbs + span * ping01(drv.phase);
+              // синусы (базовая скорость)
+              var xSin = _this7.idleAmpX * Math.sin(p);
+              var ySin = _this7.idleAmpY * Math.sin(p + phaseYShift);
+              var zSin = _this7.idleAmpZ * Math.sin(p + Math.PI / 5);
 
-              // абсолютные цели
+              // пинг-понг со своей скоростью
+              var yPing = yMinAbs + span * ping01(py);
+
+              // цели
               var tx = base.x + xSin;
-              var ty = yPing + ySin;
+              var ty = yPing + ySin; // yPing уже вокруг base.y
               var tz = base.z + zSin;
 
-              // анти-wrap к предыдущим значениям
+              // непрерывность
               tx = nearestAngleDeg(prevX, tx);
               ty = nearestAngleDeg(prevY, ty);
               tz = nearestAngleDeg(prevZ, tz);
 
-              // плавный вход к ближайшей цели
+              // blend-in к целям
               var blendRaw = _this7.idleBlendInSeconds > 0 ? Math.min(1, drv.t / _this7.idleBlendInSeconds) : 1;
               var blend = easeInBlend(blendRaw);
               var ox = prevX + (tx - prevX) * blend;
               var oy = prevY + (ty - prevY) * blend;
               var oz = prevZ + (tz - prevZ) * blend;
               model.setRotationFromEuler(ox, oy, oz);
-
-              // переносим prev* — обеспечиваем непрерывность
               prevX = ox;
               prevY = oy;
               prevZ = oz;
@@ -4080,7 +4208,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
           try {
             var _parent;
             (_parent = window.parent) == null || _parent.postMessage(msg, origin);
-          } catch (_unused4) {}
+          } catch (_unused7) {}
         };
         _proto.buildPiecePayload = function buildPiecePayload(level, slot) {
           var lc = this.layoutCtrl;
@@ -4093,7 +4221,7 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
               dataIndex: di,
               piece: piece
             };
-          } catch (_unused5) {
+          } catch (_unused8) {
             return {
               level: level,
               slot: slot
@@ -4491,6 +4619,34 @@ System.register("chunks:///_virtual/GlobalClickManager.ts", ['./rollupPluginModL
         initializer: function initializer() {
           return 0.0;
         }
+      }), _descriptor49 = _applyDecoratedDescriptor(_class2.prototype, "pullParticleObject", [_dec40], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor50 = _applyDecoratedDescriptor(_class2.prototype, "afterBloorObject", [_dec41], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return null;
+        }
+      }), _descriptor51 = _applyDecoratedDescriptor(_class2.prototype, "stopPullParticleOnFinish", [_dec42], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return true;
+        }
+      }), _descriptor52 = _applyDecoratedDescriptor(_class2.prototype, "idleYRangeSpeed", [_dec43], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 1.0;
+        }
       })), _class2)) || _class));
       cclegacy._RF.pop();
     }
@@ -4631,9 +4787,9 @@ System.register("chunks:///_virtual/InteractionState.ts", ['cc'], function (expo
   };
 });
 
-System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './AddCake.ts', './AutoScaleCameraPosition.ts', './CakeApiExample.ts', './CameraTuner.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './GlobalClickManager.ts', './InteractionState.ts', './PlatformCameraSwitcher.ts', './PointerIds.ts', './RotateYByKeys.ts', './ShapeKeyController.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './DebugPanelToggle.ts', './PieceSpawner.ts', './TowerQueriesTester.ts', './cake.types.ts'], function () {
+System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './AddCake.ts', './AutoScaleCameraPosition.ts', './CakeApiExample.ts', './CameraTuner.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './GlobalClickManager.ts', './InteractionState.ts', './PlatformCameraSwitcher.ts', './PointerIds.ts', './RotateYByKeys.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './DebugPanelToggle.ts', './PieceSpawner.ts', './TowerQueriesTester.ts', './cake.types.ts'], function () {
   return {
-    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
   };
 });
@@ -5319,101 +5475,6 @@ System.register("chunks:///_virtual/RotateYByKeys.ts", ['./rollupPluginModLoBabe
         writable: true,
         initializer: function initializer() {
           return true;
-        }
-      })), _class2)) || _class));
-      cclegacy._RF.pop();
-    }
-  };
-});
-
-System.register("chunks:///_virtual/ShapeKeyController.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
-  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, cclegacy, _decorator, MeshRenderer, SkinnedMeshRenderer, Component;
-  return {
-    setters: [function (module) {
-      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
-      _inheritsLoose = module.inheritsLoose;
-      _initializerDefineProperty = module.initializerDefineProperty;
-      _assertThisInitialized = module.assertThisInitialized;
-    }, function (module) {
-      cclegacy = module.cclegacy;
-      _decorator = module._decorator;
-      MeshRenderer = module.MeshRenderer;
-      SkinnedMeshRenderer = module.SkinnedMeshRenderer;
-      Component = module.Component;
-    }],
-    execute: function () {
-      var _dec, _dec2, _class, _class2, _descriptor, _descriptor2, _descriptor3;
-      cclegacy._RF.push({}, "70388oygPBE7pnf/tCtMYXJ", "ShapeKeyController", undefined);
-      var ccclass = _decorator.ccclass,
-        property = _decorator.property;
-      var MorphKeyDriver = exports('MorphKeyDriver', (_dec = ccclass('MorphKeyDriver'), _dec2 = property({
-        type: MeshRenderer
-      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
-        _inheritsLoose(MorphKeyDriver, _Component);
-        function MorphKeyDriver() {
-          var _this;
-          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
-            args[_key] = arguments[_key];
-          }
-          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          _initializerDefineProperty(_this, "meshRenderer", _descriptor, _assertThisInitialized(_this));
-          // ����� � SkinnedMeshRenderer
-          _initializerDefineProperty(_this, "subMeshIndex", _descriptor2, _assertThisInitialized(_this));
-          // ����� ������
-          _initializerDefineProperty(_this, "shapeIndex", _descriptor3, _assertThisInitialized(_this));
-          return _this;
-        }
-        var _proto = MorphKeyDriver.prototype;
-        // ������ ����� � �������
-        _proto.start = function start() {
-          var _ref, _ref2, _mr$mesh;
-          // ���� �� ���������� � ��������� ����� �������������
-          this.meshRenderer = (_ref = (_ref2 = this.meshRenderer) != null ? _ref2 : this.getComponent(SkinnedMeshRenderer)) != null ? _ref : this.getComponent(MeshRenderer);
-          var mr = this.meshRenderer;
-          var morph = mr == null || (_mr$mesh = mr.mesh) == null || (_mr$mesh = _mr$mesh.struct) == null ? void 0 : _mr$mesh.morph;
-          if (!mr || !morph) {
-            console.warn('�� ���� ��� ������ morph (shape keys �� ���������������?)');
-            return;
-          }
-
-          // ���������, ������� ������ � ������� �������
-          morph.subMeshMorphs.forEach(function (sm, i) {
-            var _sm$weights$length, _sm$weights;
-            var count = (_sm$weights$length = sm == null || (_sm$weights = sm.weights) == null ? void 0 : _sm$weights.length) != null ? _sm$weights$length : 0;
-            console.log("subMesh " + i + ": morph targets = " + count);
-          });
-        };
-        _proto.update = function update() {
-          var mr = this.meshRenderer;
-          if (!mr) return;
-
-          // ������: ������ ������ ��� 0..1..0 �� ��������� �����
-          var t = performance.now() * 0.002;
-          var w = 0.5 + 0.5 * Math.sin(t);
-          mr.setWeight(w, this.subMeshIndex, this.shapeIndex); // <-- ���������� �����
-        };
-
-        return MorphKeyDriver;
-      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "meshRenderer", [_dec2], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return null;
-        }
-      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "subMeshIndex", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
-        }
-      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "shapeIndex", [property], {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        initializer: function initializer() {
-          return 0;
         }
       })), _class2)) || _class));
       cclegacy._RF.pop();
