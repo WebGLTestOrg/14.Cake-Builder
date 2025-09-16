@@ -192,7 +192,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
       Component = module.Component;
     }],
     execute: function () {
-      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _dec28, _dec29, _dec30, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34, _descriptor35, _descriptor36;
+      var _dec, _dec2, _dec3, _dec4, _dec5, _dec6, _dec7, _dec8, _dec9, _dec10, _dec11, _dec12, _dec13, _dec14, _dec15, _dec16, _dec17, _dec18, _dec19, _dec20, _dec21, _dec22, _dec23, _dec24, _dec25, _dec26, _dec27, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4, _descriptor5, _descriptor6, _descriptor7, _descriptor8, _descriptor9, _descriptor10, _descriptor11, _descriptor12, _descriptor13, _descriptor14, _descriptor15, _descriptor16, _descriptor17, _descriptor18, _descriptor19, _descriptor20, _descriptor21, _descriptor22, _descriptor23, _descriptor24, _descriptor25, _descriptor26, _descriptor27, _descriptor28, _descriptor29, _descriptor30, _descriptor31, _descriptor32, _descriptor33, _descriptor34, _descriptor35, _descriptor36, _descriptor37, _descriptor38, _descriptor39;
       cclegacy._RF.push({}, "28184xX3rNPcJTTJ6RRKcou", "ArcTextMesh", undefined);
       var ccclass = _decorator.ccclass,
         property = _decorator.property,
@@ -237,54 +237,48 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
       }), _dec8 = property({
         tooltip: 'Поставь true -> пересборка прямо сейчас'
       }), _dec9 = property({
-        tooltip: 'Текст 1-й строки'
+        type: JsonAsset
       }), _dec10 = property({
-        type: JsonAsset
+        type: Texture2D
       }), _dec11 = property({
-        type: Texture2D
+        type: Material
       }), _dec12 = property({
-        type: Material
+        type: Color
       }), _dec13 = property({
-        tooltip: 'Размер шрифта 1 (px→мир)'
-      }), _dec14 = property({
-        tooltip: 'Шаг 1 (xadvance множитель)'
-      }), _dec15 = property({
-        type: Color
-      }), _dec16 = property({
-        tooltip: 'Текст 2-й строки'
-      }), _dec17 = property({
         type: JsonAsset
-      }), _dec18 = property({
+      }), _dec14 = property({
         type: Texture2D
-      }), _dec19 = property({
+      }), _dec15 = property({
         type: Material
-      }), _dec20 = property({
-        tooltip: 'Размер шрифта 2 (px→мир)'
-      }), _dec21 = property({
-        tooltip: 'Шаг 2 (xadvance множитель)'
-      }), _dec22 = property({
+      }), _dec16 = property({
         type: Color
-      }), _dec23 = property({
+      }), _dec17 = property({
         type: BendMode
-      }), _dec24 = property({
+      }), _dec18 = property({
         type: ArcPlane
-      }), _dec25 = property({
+      }), _dec19 = property({
         type: ArcAlign
-      }), _dec26 = property({
+      }), _dec20 = property({
         type: ArcBend
-      }), _dec27 = property({
+      }), _dec21 = property({
+        tooltip: 'Держать постоянный радиус (работает и при ArcAngle)'
+      }), _dec22 = property({
+        tooltip: 'Радиус цилиндра/торта (мировые ед.)'
+      }), _dec23 = property({
+        tooltip: 'Смещение вершин вдоль нормали (+ наружу, − внутрь)'
+      }), _dec24 = property({
         slide: true,
         range: [2, 64],
         step: 1
-      }), _dec28 = property({
+      }), _dec25 = property({
         slide: true,
         range: [1, 32],
         step: 1
-      }), _dec29 = property({
+      }), _dec26 = property({
         slide: true,
         range: [1, 128],
         step: 1
-      }), _dec30 = property({
+      }), _dec27 = property({
         tooltip: 'Центрировать только когда активны обе строки'
       }), _dec(_class = _dec2(_class = _dec3(_class = (_class2 = /*#__PURE__*/function (_Component) {
         _inheritsLoose(ArcTextMSDFTwoLinesSubmesh, _Component);
@@ -294,15 +288,12 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             args[_key] = arguments[_key];
           }
           _this = _Component.call.apply(_Component, [this].concat(args)) || this;
-          // -------- редактор/рантайм поведение
           _initializerDefineProperty(_this, "editorLiveUpdate", _descriptor, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "buildOnStart", _descriptor2, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "freezeAfterBuild", _descriptor3, _assertThisInitialized(_this));
-          /** Максимальная частота ребилда (Hz). 0 = не ограничивать, 60 = раз в кадр */
           _initializerDefineProperty(_this, "maxRebuildRate", _descriptor4, _assertThisInitialized(_this));
-          // Кнопка-переключатель в инспекторе
           _this._forceRebuild = false;
-          // -------- строка 1 (верхняя)
+          // Строка 1
           _initializerDefineProperty(_this, "text1", _descriptor5, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "fontJson1", _descriptor6, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "atlas1", _descriptor7, _assertThisInitialized(_this));
@@ -310,7 +301,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           _initializerDefineProperty(_this, "pixelScale1", _descriptor9, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "spacingScale1", _descriptor10, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "color1", _descriptor11, _assertThisInitialized(_this));
-          // -------- строка 2 (нижняя)
+          // Строка 2
           _initializerDefineProperty(_this, "text2", _descriptor12, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "fontJson2", _descriptor13, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "atlas2", _descriptor14, _assertThisInitialized(_this));
@@ -318,7 +309,6 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           _initializerDefineProperty(_this, "pixelScale2", _descriptor16, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "spacingScale2", _descriptor17, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "color2", _descriptor18, _assertThisInitialized(_this));
-          // Вертикальная дистанция между строками (мировые ед.): text1 ↑ d/2, text2 ↓ d/2
           _initializerDefineProperty(_this, "lineSpacing", _descriptor19, _assertThisInitialized(_this));
           // MSDF/UV
           _initializerDefineProperty(_this, "invertV", _descriptor20, _assertThisInitialized(_this));
@@ -330,26 +320,26 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           // Кривизна/раскладка
           _initializerDefineProperty(_this, "bendMode", _descriptor26, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "radius", _descriptor27, _assertThisInitialized(_this));
-          // при ArcAngle может быть 0
           _initializerDefineProperty(_this, "arcAngleDeg", _descriptor28, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "plane", _descriptor29, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "align", _descriptor30, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "bend", _descriptor31, _assertThisInitialized(_this));
           _initializerDefineProperty(_this, "faceOutward", _descriptor32, _assertThisInitialized(_this));
-          // Сегментация (колонки)
-          _initializerDefineProperty(_this, "segmentWidthPx", _descriptor33, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "minSegmentsPerGlyph", _descriptor34, _assertThisInitialized(_this));
-          _initializerDefineProperty(_this, "maxSegmentsPerGlyph", _descriptor35, _assertThisInitialized(_this));
-          // Центрирование по видимой высоте (Y для XY/XZ, Z для YZ)
-          _initializerDefineProperty(_this, "centerVertByBounds", _descriptor36, _assertThisInitialized(_this));
-          // ---------- perf: очередь/сигнатура ----------
+          // Новый блок: фиксированный радиус и отступ
+          _initializerDefineProperty(_this, "lockRadius", _descriptor33, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "fixedRadius", _descriptor34, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "pushAlongNormal", _descriptor35, _assertThisInitialized(_this));
+          // Сегментация
+          _initializerDefineProperty(_this, "segmentWidthPx", _descriptor36, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "minSegmentsPerGlyph", _descriptor37, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "maxSegmentsPerGlyph", _descriptor38, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "centerVertByBounds", _descriptor39, _assertThisInitialized(_this));
+          // perf helpers
           _this._rebuildQueued = false;
           _this._lastRebuildAt = 0;
           _this._lastSignature = '';
-          // чтобы понять «пусто/непусто» и дергать instant rebuild
           _this._line1Has = false;
           _this._line2Has = false;
-          // ---------- cache: метрики шрифта ----------
           _this._fontCache = new Map();
           _this._doQueuedRebuild = function () {
             _this._rebuildQueued = false;
@@ -358,7 +348,6 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           return _this;
         }
         var _proto = ArcTextMSDFTwoLinesSubmesh.prototype;
-        // ---------- lifecycle ----------
         _proto.onLoad = function onLoad() {
           this.node.layer = 1 << Layers.Enum.DEFAULT;
           if (!this.node.getComponent(MeshRenderer)) this.node.addComponent(MeshRenderer);
@@ -369,11 +358,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             if (this.freezeAfterBuild) this.enabled = false;
           }
         };
-        _proto.onValidate = function onValidate() {}
-
-        // ---------- API: безопасный запрос пересборки ----------
-        ;
-
+        _proto.onValidate = function onValidate() {};
         _proto.requestRebuild = function requestRebuild() {
           var _globalThis$performan,
             _globalThis$performan2,
@@ -403,11 +388,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           var a2 = this._texSig(this.atlas2);
           var m1 = (_uuid3 = (_this$material = this.material1) == null ? void 0 : _this$material.uuid) != null ? _uuid3 : '0';
           var m2 = (_uuid4 = (_this$material2 = this.material2) == null ? void 0 : _this$material2.uuid) != null ? _uuid4 : '0';
-          return [this.text1, this.text2, j1, j2, a1, a2, m1, m2, this.pixelScale1, this.pixelScale2, this.spacingScale1, this.spacingScale2, this.lineSpacing, this.invertV, this.mirrorX, this.mirrorY, this.autoPxRange, this.msdfSoftness, this.alphaClip, this.bendMode, this.radius, this.arcAngleDeg, this.plane, this.align, this.bend, this.faceOutward, this.segmentWidthPx, this.minSegmentsPerGlyph, this.maxSegmentsPerGlyph,
-          // важно: наличие строк — часть сигнатуры
-          this._line1Has ? 1 : 0, this._line2Has ? 1 : 0,
-          // центрирование включено?
-          this.centerVertByBounds ? 1 : 0].join('|');
+          return [this.text1, this.text2, j1, j2, a1, a2, m1, m2, this.pixelScale1, this.pixelScale2, this.spacingScale1, this.spacingScale2, this.lineSpacing, this.invertV, this.mirrorX, this.mirrorY, this.autoPxRange, this.msdfSoftness, this.alphaClip, this.bendMode, this.radius, this.arcAngleDeg, this.plane, this.align, this.bend, this.faceOutward, this.segmentWidthPx, this.minSegmentsPerGlyph, this.maxSegmentsPerGlyph, this._line1Has ? 1 : 0, this._line2Has ? 1 : 0, this.centerVertByBounds ? 1 : 0, this.lockRadius ? 1 : 0, this.fixedRadius, this.pushAlongNormal].join('|');
         };
         _proto._texSig = function _texSig(t) {
           var _ref, _format;
@@ -416,7 +397,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           return t.width + "x" + t.height + ":" + fmt;
         }
 
-        // ---------- сборка: 1 меш, 1–2 сабмеша ----------
+        // ---------- сборка ----------
         ;
 
         _proto._rebuild = function _rebuild() {
@@ -424,7 +405,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           var has2 = !!(this.text2 && this.fontJson2 && this.atlas2 && this.material2);
           this._line1Has = !!(this.text1 && this.text1.length);
           this._line2Has = !!(this.text2 && this.text2.length);
-          var mr = this.node.getComponent(MeshRenderer);
+          var mr = this.node.getComponent(MeshRenderer); // <-- объявляем ОДИН раз и используем дальше
           if (!has1 && !has2) {
             mr.mesh = null;
             mr.materials = [];
@@ -434,7 +415,6 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           var geo1 = has1 ? this._buildLine(this.text1, this.fontJson1, this.atlas1, this.pixelScale1, this.spacingScale1, +half) : null;
           var geo2 = has2 ? this._buildLine(this.text2, this.fontJson2, this.atlas2, this.pixelScale2, this.spacingScale2, -half) : null;
           var canMerge = has1 && has2 && this.atlas1 === this.atlas2 && this.material1 === this.material2;
-          var oneSub = canMerge || !has2;
           var positions = [];
           var normals = [];
           var uvs = [];
@@ -470,8 +450,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             maxPos.z = Math.max(maxPos.z, geo2.maxPos.z);
           }
 
-          // --- ВАЖНО: фиксируем слоты строк ---
-          // Центрируем по bounds ТОЛЬКО когда обе строки присутствуют.
+          // Центр по высоте — только если 2 строки
           var shouldCenter = this.centerVertByBounds && !!geo1 && !!geo2;
           if (shouldCenter && positions.length >= 3) {
             var vIdx = this.plane === ArcPlane.YZ ? 2 : 1;
@@ -484,8 +463,6 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             }
             var vMid = (vMin + vMax) * 0.5;
             for (var _i = vIdx; _i < positions.length; _i += 3) positions[_i] -= vMid;
-
-            // пересчёт bounds
             var minX = 1e9,
               minY = 1e9,
               minZ = 1e9,
@@ -506,9 +483,8 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             minPos.set(minX, minY, minZ);
             maxPos.set(maxX, maxY, maxZ);
           }
-          // иначе (одна строка) — никаких центровок: верхняя остаётся на +half, нижняя на -half → без «перепрыгивания».
 
-          // ----- vertex buffer (pos3 normal3 uv2)
+          // --- VB
           var stride = 8 * 4;
           var vertCount = positions.length / 3;
           var vbAB = new ArrayBuffer(vertCount * stride);
@@ -527,14 +503,14 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           }
           var vbBytes = new Uint8Array(vbAB);
 
-          // ----- индексы: всегда один общий буфер
+          // --- IB (склеенный)
           var totalIdx = indices0.length + indices1.length;
           var indAll = new Uint32Array(totalIdx);
           indAll.set(indices0, 0);
           if (indices1.length) indAll.set(indices1, indices0.length);
           var ibBytes = new Uint8Array(indAll.buffer);
 
-          // общий data буфер
+          // общий data
           var joined = new Uint8Array(vbBytes.byteLength + ibBytes.byteLength);
           joined.set(vbBytes, 0);
           joined.set(ibBytes, vbBytes.byteLength);
@@ -544,7 +520,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           // атрибуты
           var attrs = [new gfx.Attribute(gfx.AttributeName.ATTR_POSITION, gfx.Format.RGB32F, false, 0, false, 0), new gfx.Attribute(gfx.AttributeName.ATTR_NORMAL, gfx.Format.RGB32F, false, 0, false, 1), new gfx.Attribute(gfx.AttributeName.ATTR_TEX_COORD, gfx.Format.RG32F, false, 0, false, 2)];
 
-          // меш
+          // меш (1 primitive — рендерится материалом 0; второй материал пригодится только если сделаем 2 primitives)
           var mesh = new Mesh();
           mesh.reset({
             struct: {
@@ -557,31 +533,13 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
                   stride: stride
                 }
               }],
-              primitives: oneSub ? [{
+              primitives: [{
                 primitiveMode: gfx.PrimitiveMode.TRIANGLE_LIST,
                 vertexBundelIndices: [0],
                 indexView: {
                   offset: ibOffset,
                   length: ibBytes.byteLength,
                   count: indAll.length,
-                  stride: 4
-                }
-              }] : [{
-                primitiveMode: gfx.PrimitiveMode.TRIANGLE_LIST,
-                vertexBundelIndices: [0],
-                indexView: {
-                  offset: ibOffset + 0,
-                  length: indices0.length * 4,
-                  count: indices0.length,
-                  stride: 4
-                }
-              }, {
-                primitiveMode: gfx.PrimitiveMode.TRIANGLE_LIST,
-                vertexBundelIndices: [0],
-                indexView: {
-                  offset: ibOffset + indices0.length * 4,
-                  length: indices1.length * 4,
-                  count: indices1.length,
                   stride: 4
                 }
               }],
@@ -593,16 +551,16 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
 
           // материалы
           mr.mesh = mesh;
-          mr.materials = oneSub ? [this.material1] : [this.material1, this.material2];
+          mr.materials = indices1.length === 0 ? [this.material1] : [this.material1, this.material2];
           var mi0 = mr.getMaterialInstance(0);
           this._applyMatProps(mi0, this.fontJson1, this.atlas1, this.color1);
-          if (!oneSub) {
+          if (indices1.length) {
             var mi1 = mr.getMaterialInstance(1);
             this._applyMatProps(mi1, this.fontJson2, this.atlas2, this.color2);
           }
         }
 
-        // ---------- геометрия одной строки (с кэшем метрик) ----------
+        // ---------- геометрия одной строки ----------
         ;
 
         _proto._buildLine = function _buildLine(text, json, atlas, pixelScale, spacingScale, baselineOffsetY) {
@@ -633,7 +591,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           for (var i = 0; i < codes.length; i++) {
             var _glyphMap$get;
             var g = (_glyphMap$get = glyphMap.get(codes[i])) != null ? _glyphMap$get : glyphMap.get(63);
-            if (!g) continue; // '?' fallback
+            if (!g) continue;
             var advPx = (g.xadvance + (i > 0 ? kern(codes[i - 1], g.id) : 0)) * S * spacingScale;
             var left = penX + g.xoffset * S;
             var right = left + g.width * S;
@@ -652,10 +610,13 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           }
           var span = Math.max(1e-4, maxX - minX);
 
-          // кривизна
-          var totalArc = 0,
-            R = this.radius;
-          if (this.bendMode === BendMode.Radius) {
+          // кривизна (lockRadius имеет приоритет)
+          var totalArc = 0;
+          var R = this.radius;
+          if (this.lockRadius) {
+            R = Math.max(1e-3, this.fixedRadius);
+            totalArc = span / R;
+          } else if (this.bendMode === BendMode.Radius) {
             R = Math.max(1e-3, this.radius);
             totalArc = span / R;
           } else {
@@ -666,8 +627,6 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           var startAngle = 0;
           if (this.align === ArcAlign.Center) startAngle = -totalArc / 2;else if (this.align === ArcAlign.Right) startAngle = -totalArc;
           var sign = this.bend === ArcBend.Convex ? 1 : -1;
-
-          // помощники без аллокаций
           var C0 = new Vec3(),
             C1 = new Vec3();
           var tmpQ0 = new math.Quat(),
@@ -705,7 +664,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             return a;
           }();
 
-          // вертикальный вектор и оффсет
+          // вертикальный сдвиг слота
           var vAxis = this.plane === ArcPlane.YZ ? new Vec3(0, 0, 1) : new Vec3(0, 1, 0);
           var offX = vAxis.x * baselineOffsetY,
             offY = vAxis.y * baselineOffsetY,
@@ -723,6 +682,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             rb1 = new Vec3();
           var pivot0 = new Vec3(),
             pivot1 = new Vec3();
+          var offN = this.pushAlongNormal;
           for (var _i4 = 0, _infos = infos; _i4 < _infos.length; _i4++) {
             var inf = _infos[_i4];
             var _g = inf.g;
@@ -759,7 +719,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
               Vec3.transformQuat(p2, p2, tmpQ1);
               p2.add(C1).subtract(anchor);
 
-              // вертикальный сдвиг
+              // слот вверх/вниз
               p0.x += offX;
               p0.y += offY;
               p0.z += offZ;
@@ -772,8 +732,26 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
               p3.x += offX;
               p3.y += offY;
               p3.z += offZ;
+
+              // нормали
               Vec3.transformQuat(n0, baseNormal, tmpQ0);
               Vec3.transformQuat(n1, baseNormal, tmpQ1);
+
+              // отступ от поверхности
+              if (offN !== 0) {
+                p0.x += n0.x * offN;
+                p0.y += n0.y * offN;
+                p0.z += n0.z * offN;
+                p1.x += n1.x * offN;
+                p1.y += n1.y * offN;
+                p1.z += n1.z * offN;
+                p2.x += n1.x * offN;
+                p2.y += n1.y * offN;
+                p2.z += n1.z * offN;
+                p3.x += n0.x * offN;
+                p3.y += n0.y * offN;
+                p3.z += n0.z * offN;
+              }
 
               // UV
               var u0 = (_g.x + _g.width * t0) / texW;
@@ -827,11 +805,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
             minPos: min,
             maxPos: max
           };
-        }
-
-        // ---------- материал/юниформы ----------
-        ;
-
+        };
         _proto._applyMatProps = function _applyMatProps(mat, json, atlas, color) {
           if (!atlas) return;
           if (this.autoPxRange && json) {
@@ -842,11 +816,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           mat.setProperty('tintColor', color);
           mat.setProperty('softness', this.msdfSoftness);
           mat.setProperty('alphaClip', this.alphaClip);
-        }
-
-        // ---------- кэш метрик шрифта ----------
-        ;
-
+        };
         _proto._getFontData = function _getFontData(json) {
           var _uuid5, _data$distanceField;
           if (!json) return null;
@@ -876,21 +846,15 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           };
           this._fontCache.set(id, pack);
           return pack;
-        }
-
-        // ---------- внешние сеттеры (без спама ребилдов) ----------
-        /** Установить текст 1-й строки */;
+        };
         _proto.setText1 = function setText1(text) {
           var next = text && text.trim() ? text : '';
           var wasEmpty = !this._line1Has;
           var willEmpty = !(next.length > 0);
           this.text1 = next;
           this._line1Has = !willEmpty;
-          // если сменилась пустота → мгновенный ребилд (иначе — дебаунс)
           wasEmpty !== willEmpty ? this.rebuildNow() : this.requestRebuild();
-        }
-
-        /** Установить текст 2-й строки */;
+        };
         _proto.setText2 = function setText2(text) {
           var next = text && text.trim() ? text : '';
           var wasEmpty = !this._line2Has;
@@ -898,12 +862,9 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
           this.text2 = next;
           this._line2Has = !willEmpty;
           wasEmpty !== willEmpty ? this.rebuildNow() : this.requestRebuild();
-        }
-
-        /** Применить данные из API: title → text1, name → text2 */;
+        };
         _proto.applyApiData = function applyApiData(data) {
           var _data$title, _data$name;
-          // используем setText*, чтобы соблюсти логику instant rebuild при смене пустоты
           this.setText1((_data$title = data.title) != null ? _data$title : '');
           this.setText2((_data$name = data.name) != null ? _data$name : '');
         };
@@ -946,98 +907,98 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
         initializer: function initializer() {
           return 60;
         }
-      }), _applyDecoratedDescriptor(_class2.prototype, "Force_Rebuild", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "Force_Rebuild"), _class2.prototype), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "text1", [_dec9], {
+      }), _applyDecoratedDescriptor(_class2.prototype, "Force_Rebuild", [_dec8], Object.getOwnPropertyDescriptor(_class2.prototype, "Force_Rebuild"), _class2.prototype), _descriptor5 = _applyDecoratedDescriptor(_class2.prototype, "text1", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 'Ура!';
         }
-      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "fontJson1", [_dec10], {
+      }), _descriptor6 = _applyDecoratedDescriptor(_class2.prototype, "fontJson1", [_dec9], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "atlas1", [_dec11], {
+      }), _descriptor7 = _applyDecoratedDescriptor(_class2.prototype, "atlas1", [_dec10], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "material1", [_dec12], {
+      }), _descriptor8 = _applyDecoratedDescriptor(_class2.prototype, "material1", [_dec11], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "pixelScale1", [_dec13], {
+      }), _descriptor9 = _applyDecoratedDescriptor(_class2.prototype, "pixelScale1", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 1.0;
         }
-      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "spacingScale1", [_dec14], {
+      }), _descriptor10 = _applyDecoratedDescriptor(_class2.prototype, "spacingScale1", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 1.0;
         }
-      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "color1", [_dec15], {
+      }), _descriptor11 = _applyDecoratedDescriptor(_class2.prototype, "color1", [_dec12], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return new Color(0, 0, 0, 255);
         }
-      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "text2", [_dec16], {
+      }), _descriptor12 = _applyDecoratedDescriptor(_class2.prototype, "text2", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 'Михалыч';
         }
-      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "fontJson2", [_dec17], {
+      }), _descriptor13 = _applyDecoratedDescriptor(_class2.prototype, "fontJson2", [_dec13], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "atlas2", [_dec18], {
+      }), _descriptor14 = _applyDecoratedDescriptor(_class2.prototype, "atlas2", [_dec14], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "material2", [_dec19], {
+      }), _descriptor15 = _applyDecoratedDescriptor(_class2.prototype, "material2", [_dec15], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return null;
         }
-      }), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "pixelScale2", [_dec20], {
+      }), _descriptor16 = _applyDecoratedDescriptor(_class2.prototype, "pixelScale2", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 1.0;
         }
-      }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "spacingScale2", [_dec21], {
+      }), _descriptor17 = _applyDecoratedDescriptor(_class2.prototype, "spacingScale2", [property], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 1.0;
         }
-      }), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "color2", [_dec22], {
+      }), _descriptor18 = _applyDecoratedDescriptor(_class2.prototype, "color2", [_dec16], {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -1093,7 +1054,7 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
         initializer: function initializer() {
           return 0.1;
         }
-      }), _descriptor26 = _applyDecoratedDescriptor(_class2.prototype, "bendMode", [_dec23], {
+      }), _descriptor26 = _applyDecoratedDescriptor(_class2.prototype, "bendMode", [_dec17], {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -1114,21 +1075,21 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
         initializer: function initializer() {
           return 40;
         }
-      }), _descriptor29 = _applyDecoratedDescriptor(_class2.prototype, "plane", [_dec24], {
+      }), _descriptor29 = _applyDecoratedDescriptor(_class2.prototype, "plane", [_dec18], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return ArcPlane.XZ;
         }
-      }), _descriptor30 = _applyDecoratedDescriptor(_class2.prototype, "align", [_dec25], {
+      }), _descriptor30 = _applyDecoratedDescriptor(_class2.prototype, "align", [_dec19], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return ArcAlign.Center;
         }
-      }), _descriptor31 = _applyDecoratedDescriptor(_class2.prototype, "bend", [_dec26], {
+      }), _descriptor31 = _applyDecoratedDescriptor(_class2.prototype, "bend", [_dec20], {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -1142,28 +1103,49 @@ System.register("chunks:///_virtual/ArcTextMesh.ts", ['./rollupPluginModLoBabelH
         initializer: function initializer() {
           return true;
         }
-      }), _descriptor33 = _applyDecoratedDescriptor(_class2.prototype, "segmentWidthPx", [_dec27], {
+      }), _descriptor33 = _applyDecoratedDescriptor(_class2.prototype, "lockRadius", [_dec21], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return false;
+        }
+      }), _descriptor34 = _applyDecoratedDescriptor(_class2.prototype, "fixedRadius", [_dec22], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 200;
+        }
+      }), _descriptor35 = _applyDecoratedDescriptor(_class2.prototype, "pushAlongNormal", [_dec23], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 0;
+        }
+      }), _descriptor36 = _applyDecoratedDescriptor(_class2.prototype, "segmentWidthPx", [_dec24], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 2;
         }
-      }), _descriptor34 = _applyDecoratedDescriptor(_class2.prototype, "minSegmentsPerGlyph", [_dec28], {
+      }), _descriptor37 = _applyDecoratedDescriptor(_class2.prototype, "minSegmentsPerGlyph", [_dec25], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 2;
         }
-      }), _descriptor35 = _applyDecoratedDescriptor(_class2.prototype, "maxSegmentsPerGlyph", [_dec29], {
+      }), _descriptor38 = _applyDecoratedDescriptor(_class2.prototype, "maxSegmentsPerGlyph", [_dec26], {
         configurable: true,
         enumerable: true,
         writable: true,
         initializer: function initializer() {
           return 6;
         }
-      }), _descriptor36 = _applyDecoratedDescriptor(_class2.prototype, "centerVertByBounds", [_dec30], {
+      }), _descriptor39 = _applyDecoratedDescriptor(_class2.prototype, "centerVertByBounds", [_dec27], {
         configurable: true,
         enumerable: true,
         writable: true,
@@ -4795,9 +4777,9 @@ System.register("chunks:///_virtual/InteractionState.ts", ['cc'], function (expo
   };
 });
 
-System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './AddCake.ts', './AutoScaleCameraPosition.ts', './CakeApiExample.ts', './CameraTuner.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './GlobalClickManager.ts', './InteractionState.ts', './PlatformCameraSwitcher.ts', './PointerIds.ts', './RotateYByKeys.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './DebugPanelToggle.ts', './PieceSpawner.ts', './TowerQueriesTester.ts', './cake.types.ts'], function () {
+System.register("chunks:///_virtual/main", ['./ArcTextMesh.ts', './AddCake.ts', './AutoScaleCameraPosition.ts', './CakeApiExample.ts', './CameraTuner.ts', './ClickMoveBinding.ts', './ColorLibrary.ts', './GlobalClickManager.ts', './InteractionState.ts', './PlatformCameraSwitcher.ts', './PointerIds.ts', './RotateYByKeys.ts', './StartApp.ts', './TVS_SpawnLayout.ts', './TowerScrollController.ts', './DebugPanelToggle.ts', './PieceSpawner.ts', './RemoteTextureToMaterial.ts', './TowerQueriesTester.ts', './cake.types.ts'], function () {
   return {
-    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
+    setters: [null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null],
     execute: function () {}
   };
 });
@@ -5148,6 +5130,262 @@ System.register("chunks:///_virtual/PointerIds.ts", ['cc'], function (exports) {
       cclegacy._RF.push({}, "13922PSQAhJcJjhZ5FF88EN", "PointerIds", undefined);
       // PointerIds.ts
       var MOUSE_ID = exports('MOUSE_ID', -1); // ������ �������� ������
+      cclegacy._RF.pop();
+    }
+  };
+});
+
+System.register("chunks:///_virtual/RemoteTextureToMaterial.ts", ['./rollupPluginModLoBabelHelpers.js', 'cc'], function (exports) {
+  var _applyDecoratedDescriptor, _inheritsLoose, _initializerDefineProperty, _assertThisInitialized, _asyncToGenerator, _regeneratorRuntime, cclegacy, _decorator, RenderableComponent, Component, Material, Texture2D, ImageAsset;
+  return {
+    setters: [function (module) {
+      _applyDecoratedDescriptor = module.applyDecoratedDescriptor;
+      _inheritsLoose = module.inheritsLoose;
+      _initializerDefineProperty = module.initializerDefineProperty;
+      _assertThisInitialized = module.assertThisInitialized;
+      _asyncToGenerator = module.asyncToGenerator;
+      _regeneratorRuntime = module.regeneratorRuntime;
+    }, function (module) {
+      cclegacy = module.cclegacy;
+      _decorator = module._decorator;
+      RenderableComponent = module.RenderableComponent;
+      Component = module.Component;
+      Material = module.Material;
+      Texture2D = module.Texture2D;
+      ImageAsset = module.ImageAsset;
+    }],
+    execute: function () {
+      var _dec, _dec2, _dec3, _dec4, _dec5, _class, _class2, _descriptor, _descriptor2, _descriptor3, _descriptor4;
+      cclegacy._RF.push({}, "eb3cahjlTZI1qWPqNcjurEl", "RemoteTextureToMaterial", undefined);
+      var ccclass = _decorator.ccclass,
+        property = _decorator.property;
+
+      /** ����������� raw base64 � data URL. */
+      function toDataURL(input, mime) {
+        if (mime === void 0) {
+          mime = 'image/png';
+        }
+        if (input.startsWith('data:')) return input; // ��� data URL
+        // ���� �������� ������ �������� base64-������ ��� ���������:
+        return "data:" + mime + ";base64," + input;
+      }
+
+      /** ������ ImageAsset �� data URL, ��� loadRemote (������� CORS ��� WebGL). */
+      function dataURLToImageAsset(_x) {
+        return _dataURLToImageAsset.apply(this, arguments);
+      }
+      /** �������� Texture2D �� data URL. */
+      function _dataURLToImageAsset() {
+        _dataURLToImageAsset = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(dataURL) {
+          var res, blob, bitmap, imgEl;
+          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+            while (1) switch (_context3.prev = _context3.next) {
+              case 0:
+                if (!('createImageBitmap' in window)) {
+                  _context3.next = 11;
+                  break;
+                }
+                _context3.next = 3;
+                return fetch(dataURL);
+              case 3:
+                res = _context3.sent;
+                _context3.next = 6;
+                return res.blob();
+              case 6:
+                blob = _context3.sent;
+                _context3.next = 9;
+                return createImageBitmap(blob);
+              case 9:
+                bitmap = _context3.sent;
+                return _context3.abrupt("return", new ImageAsset(bitmap));
+              case 11:
+                _context3.next = 13;
+                return new Promise(function (resolve, reject) {
+                  var img = new Image();
+                  img.onload = function () {
+                    return resolve(img);
+                  };
+                  img.onerror = reject;
+                  img.src = dataURL;
+                });
+              case 13:
+                imgEl = _context3.sent;
+                return _context3.abrupt("return", new ImageAsset(imgEl));
+              case 15:
+              case "end":
+                return _context3.stop();
+            }
+          }, _callee3);
+        }));
+        return _dataURLToImageAsset.apply(this, arguments);
+      }
+      function dataURLToTexture(_x2) {
+        return _dataURLToTexture.apply(this, arguments);
+      }
+      function _dataURLToTexture() {
+        _dataURLToTexture = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(dataURL) {
+          var imageAsset, tex;
+          return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+            while (1) switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return dataURLToImageAsset(dataURL);
+              case 2:
+                imageAsset = _context4.sent;
+                tex = new Texture2D();
+                tex.image = imageAsset;
+                return _context4.abrupt("return", tex);
+              case 6:
+              case "end":
+                return _context4.stop();
+            }
+          }, _callee4);
+        }));
+        return _dataURLToTexture.apply(this, arguments);
+      }
+      var ReplaceTextureFromBase64 = exports('ReplaceTextureFromBase64', (_dec = ccclass('ReplaceTextureFromBase64'), _dec2 = property({
+        tooltip: '���� ����� �������� data URL ��� �������� base64-������'
+      }), _dec3 = property({
+        tooltip: 'MIME ��� ��� ����� base64 (���� �� data:). �������� image/png, image/jpeg, image/webp'
+      }), _dec4 = property({
+        type: RenderableComponent,
+        tooltip: '������-��������� � ��� ����������� ����������'
+      }), _dec5 = property({
+        tooltip: '��� texture-������� (albedoMap | mainTexture � �.�.)'
+      }), _dec(_class = (_class2 = /*#__PURE__*/function (_Component) {
+        _inheritsLoose(ReplaceTextureFromBase64, _Component);
+        function ReplaceTextureFromBase64() {
+          var _this;
+          for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+          _this = _Component.call.apply(_Component, [this].concat(args)) || this;
+          _initializerDefineProperty(_this, "base64Input", _descriptor, _assertThisInitialized(_this));
+          // ������������ � data:..., � ������ base64
+          _initializerDefineProperty(_this, "mimeHint", _descriptor2, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "target", _descriptor3, _assertThisInitialized(_this));
+          _initializerDefineProperty(_this, "uniformName", _descriptor4, _assertThisInitialized(_this));
+          _this._tex = void 0;
+          return _this;
+        }
+        var _proto = ReplaceTextureFromBase64.prototype;
+        _proto.onLoad = function onLoad() {
+          if (!this.target) {
+            this.target = this.getComponent(RenderableComponent);
+          }
+        };
+        _proto.start = /*#__PURE__*/function () {
+          var _start = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  if (this.base64Input) {
+                    _context.next = 2;
+                    break;
+                  }
+                  return _context.abrupt("return");
+                case 2:
+                  _context.prev = 2;
+                  _context.next = 5;
+                  return this.applyBase64(this.base64Input, this.mimeHint);
+                case 5:
+                  _context.next = 10;
+                  break;
+                case 7:
+                  _context.prev = 7;
+                  _context.t0 = _context["catch"](2);
+                  console.error('[ReplaceTextureFromBase64] failed:', _context.t0);
+                case 10:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee, this, [[2, 7]]);
+          }));
+          function start() {
+            return _start.apply(this, arguments);
+          }
+          return start;
+        }() /** ��������� �����: ����� ������� � �������� � ��������� ��������. */;
+        _proto.applyBase64 = /*#__PURE__*/
+        function () {
+          var _applyBase = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(base64OrDataURL, mime) {
+            var dataURL, mat, _this$target$sharedMa, shared;
+            return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+              while (1) switch (_context2.prev = _context2.next) {
+                case 0:
+                  if (mime === void 0) {
+                    mime = 'image/png';
+                  }
+                  dataURL = toDataURL(base64OrDataURL, mime); // �������� Texture2D ��� assetManager.loadRemote
+                  _context2.next = 4;
+                  return dataURLToTexture(dataURL);
+                case 4:
+                  this._tex = _context2.sent;
+                  // ����������� ������� ���������
+                  mat = this.target.getMaterialInstance(0);
+                  if (mat) {
+                    _context2.next = 12;
+                    break;
+                  }
+                  shared = (_this$target$sharedMa = this.target.sharedMaterials) == null ? void 0 : _this$target$sharedMa[0];
+                  if (shared) {
+                    _context2.next = 10;
+                    break;
+                  }
+                  throw new Error('� ������� ��� ���������');
+                case 10:
+                  mat = new Material(shared); // ��������� ��� 3.x (������ clone)
+                  this.target.setMaterial(mat, 0);
+                case 12:
+                  // ��������� ��������
+                  mat.setProperty(this.uniformName, this._tex);
+                case 13:
+                case "end":
+                  return _context2.stop();
+              }
+            }, _callee2, this);
+          }));
+          function applyBase64(_x3, _x4) {
+            return _applyBase.apply(this, arguments);
+          }
+          return applyBase64;
+        }();
+        _proto.onDestroy = function onDestroy() {
+          if (this._tex) {
+            var img = this._tex.image;
+            if (img != null && img.decRef) img.decRef();
+            this._tex.destroy();
+            this._tex = undefined;
+          }
+        };
+        return ReplaceTextureFromBase64;
+      }(Component), (_descriptor = _applyDecoratedDescriptor(_class2.prototype, "base64Input", [_dec2], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return '';
+        }
+      }), _descriptor2 = _applyDecoratedDescriptor(_class2.prototype, "mimeHint", [_dec3], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 'image/png';
+        }
+      }), _descriptor3 = _applyDecoratedDescriptor(_class2.prototype, "target", [_dec4], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: null
+      }), _descriptor4 = _applyDecoratedDescriptor(_class2.prototype, "uniformName", [_dec5], {
+        configurable: true,
+        enumerable: true,
+        writable: true,
+        initializer: function initializer() {
+          return 'albedoMap';
+        }
+      })), _class2)) || _class));
       cclegacy._RF.pop();
     }
   };
